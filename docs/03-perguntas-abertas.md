@@ -28,11 +28,11 @@ autogestão). O Classificador usa isso como discriminante duro F1 — sem cadast
 bloqueia todo caso. Além da CASSI, quais autogestões já apareceram (GEAP, Camed,
 Petrobras/AMS, Fusex...)?
 
-**A4. Existe uma quinta tese?**
-Seu briefing citou duas skills (empresarial-familiar e CASSI), mas a skill
-`corretor-inicial-empresarial-familiar` mapeia quatro cenários: empresarial familiar,
-**coletivo por adesão** (PF via associação/sindicato), CASSI e **individual comum**.
-Especifiquei os quatro. Confirma que os quatro estão no escopo do elaborador?
+**A4. Existe uma quinta tese?** — ✅ **RESPONDIDA (08/09/2026): sim, as quatro
+teses estão no escopo** — `EMPRESARIAL_FAMILIAR`, `COLETIVO_POR_ADESAO`,
+`CASSI_AUTOGESTAO` e `INDIVIDUAL_COMUM`. A árvore de decisão do §4.2 da spec já as
+cobre. Consequência: **B2 vira bloqueio de primeira ordem** — metade das teses do
+escopo (CASSI e individual comum) não tem modelo DOCX mapeado.
 
 **A5. Planilhas reais, Tipo 1 e Tipo 2.**
 Preciso de 2–3 arquivos reais de cada tipo (podem vir anonimizados) para ver os

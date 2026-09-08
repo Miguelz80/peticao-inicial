@@ -203,6 +203,8 @@ skill não pode inventar o fato que a peça vai afirmar em juízo.
 
 ### 4.4 Mapa tese → modelo → blocos obrigatórios
 
+As quatro teses abaixo estão **confirmadas no escopo** desta fase (08/09/2026).
+
 | Tese | Modelo DOCX | Blocos que a peça **tem** que ter |
 |---|---|---|
 | `EMPRESARIAL_FAMILIAR` | `PETIÇÃO INICIAL-MODELO APENAS RESTITUIÇÃO.docx` | CDC por equiparação (arts. 2º e 29) **+** reconhecimento do plano empresarial como familiar; equiparação a individual para fins de reajuste; sinistralidade sem prova atuarial do grupo; Tema 952/STJ; gratuidade fundamentada **para PJ** |
