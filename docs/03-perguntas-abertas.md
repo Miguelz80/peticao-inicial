@@ -105,9 +105,8 @@ citar o saldo bancário na peça (existe um teto de valor)?
 Sempre domicílio do autor? Na tese CASSI, a skill de referência alerta que, não
 incidindo o CDC, a regra de competência pode ser outra — a skill decide ou pergunta?
 
-**B7. Ordem de assinatura — "na Bahia" significa o quê?**
-Comarca onde a ação será distribuída, domicílio do cliente, ou sede do escritório?
-Determina se Tatiana ou Gabriel assina primeiro.
+**B7. Ordem de assinatura.** — ✅ **RESOLVIDA (ver D2): não importa.** Sem regra
+condicional; mantém-se a ordem do modelo de base.
 
 ---
 
@@ -142,17 +141,15 @@ chega no Claude Desktop da colega — pelo mesmo caminho das skills atuais do es
 
 ## Bloco D — Novas, vindas do caso CASSI real
 
-**D1. CNPJ da CASSI — qual está certo?** 🔴 *urgente*
-O demonstrativo emitido pela própria CASSI e a petição protocolada dizem
-**33.719.485/0001-27**. A skill `corretor-inicial-cassi-revisional` registra
-**33.594.914/0001-24**. Como a skill é a fonte que alimenta a qualificação da ré, se o
-número dela estiver errado, todas as peças CASSI futuras saem com CNPJ errado. Você
-confirma qual é o correto?
+**D1. CNPJ da CASSI.** — ✅ **RESOLVIDA:** não importa qual dos dois é o "certo".
+O CNPJ, o endereço e a razão social da ré são **extraídos do documento do caso** e vão
+para a peça como constam ali. O cadastro `references/operadoras.md` deixa de ser fonte
+desses dados e passa a responder só a `F1` (autogestão × comercial), reconhecendo os
+dois CNPJs como CASSI.
 
-**D2. Ordem de assinatura — a regra está invertida?** 🔴
-A peça real é de **saúde**, comarca de **Salvador/BA**, e está assinada por **Gabriel
-primeiro, Tatiana depois**. O briefing diz "Tatiana antes de Gabriel em saúde/consumidor
-na Bahia". Uma das duas está errada: ou a regra, ou essa peça. Qual?
+**D2. Ordem de assinatura.** — ✅ **RESOLVIDA: não importa.** Some a regra
+condicional; o Gerador mantém a ordem que estiver no modelo DOCX de base, sem lógica
+para decidir quem assina primeiro. (Encerra também a pergunta B7.)
 
 **D3. Valor da causa = 2 × restituição?**
 Na peça real, R$ 43.041,98 é exatamente o dobro da restituição estimada de

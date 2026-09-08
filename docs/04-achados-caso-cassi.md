@@ -165,10 +165,11 @@ não seja Segoe UI". Provavelmente resíduo de colagem.
   Brasília/DF, CEP 70070-030.
 - Natureza: autogestão → `F1 = AUTOGESTAO` → tese `CASSI_AUTOGESTAO`.
 
-> ⚠️ **Divergência a resolver.** A skill `corretor-inicial-cassi-revisional` registra o
-> CNPJ **33.594.914/0001-24**. Os dois documentos reais dizem **33.719.485/0001-27**.
-> Um dos dois está errado, e o da skill é o que vai para a qualificação da ré em toda
-> peça futura. Ver pergunta D1.
+> ✅ **Resolvido (08/09/2026).** A divergência com a skill
+> `corretor-inicial-cassi-revisional` (que registra **33.594.914/0001-24**) deixou de
+> ser um problema: o CNPJ da ré passa a ser **extraído do documento do caso**, nunca
+> lido de cadastro. O `references/operadoras.md` reconhece os dois números como CASSI
+> e responde apenas se a operadora é de autogestão.
 
 **Plano:** CASSI Família II, registro ANS nº 34665-9. Cancelamento após 60 dias de
 inadimplência (Cláusula 22ª do Contrato de Adesão) — fundamento do *periculum in mora*.
@@ -204,5 +205,6 @@ exibição de documentos**, não como tese de abusividade autônoma.
 Fundamentos usados que não estavam mapeados: arts. 113, 187, 421, 421-A e 422 do CC.
 
 **Ordem de assinatura:** Gabriel primeiro, Tatiana em segundo — em ação de **saúde**,
-comarca de **Salvador/BA**. Contraria a regra do briefing ("Tatiana antes de Gabriel em
-saúde/consumidor na Bahia"). Ver pergunta D2.
+comarca de **Salvador/BA**, o inverso do que o briefing previa. ✅ **Resolvido
+(08/09/2026): a ordem não importa.** A regra condicional foi descartada; o Gerador
+mantém a ordem do modelo de base.

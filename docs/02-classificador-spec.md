@@ -149,7 +149,7 @@ vier de narrativa, **citação literal**. Regra absoluta:
 
 | ID | Fato | Fonte preferencial |
 |----|------|--------------------|
-| F1 | Natureza jurídica da operadora ré (autogestão × comercial) | Cadastro `references/operadoras.md`, por CNPJ |
+| F1 | Natureza jurídica da operadora ré (autogestão × comercial) | Cadastro `references/operadoras.md`, por CNPJ ou CNPJ raiz. **Só a natureza vem do cadastro** — CNPJ, endereço e razão social da ré são extraídos do documento do caso |
 | F2 | Quem é o contratante (PJ / PF via associação-sindicato / PF direto) | Contrato do plano, carteirinha, boleto |
 | F3 | A PJ tem atividade econômica real | Contrato social, transcrição, extrato |
 | F4 | Beneficiários são exclusivamente do mesmo núcleo familiar | Carteirinha, transcrição |
