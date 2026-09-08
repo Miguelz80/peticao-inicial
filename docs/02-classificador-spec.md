@@ -1,6 +1,8 @@
 # 02 — Módulo Classificador (especificação)
 
-> Status: **especificação para validação**. Ainda não é código final.
+> Status: **especificação para validação**, revisada após o primeiro caso real.
+> Ainda não é código final. As correções do §10 vieram do dossiê CASSI analisado em
+> `docs/04-achados-caso-cassi.md` e ainda não foram reescritas no corpo das seções 2–4.
 > Objetivo: decidir (a) o regime de cálculo e (b) a tese/modelo aplicável — e,
 > principalmente, **saber quando não decidir**.
 
@@ -155,6 +157,8 @@ vier de narrativa, **citação literal**. Regra absoluta:
 | F6 | Plano ativo ou já cancelado pela parte autora | Transcrição, boletos recentes |
 | F7 | Houve reajuste por faixa etária no período | Planilha (coluna "Tipo de Reajuste") |
 | F8 | Comarca / domicílio do autor | Documento pessoal, contrato |
+| F9 | Idade do autor | Documento pessoal, qualificação |
+| F10 | Houve ação anterior desistida (reajuizamento) | Informação da operadora, autos anexos |
 
 ### 4.2 Árvore de decisão (discriminantes duros primeiro)
 
@@ -315,3 +319,67 @@ O Classificador **nunca**:
 - 1 fixture de operadora fora do cadastro (G4);
 - 1 fixture de transcrição silenciosa sobre vínculo empregatício → tem que perguntar,
   não concluir.
+
+
+---
+
+## 10. Correções pendentes (caso real CASSI — `docs/04-achados-caso-cassi.md`)
+
+O primeiro dossiê real invalidou quatro suposições. Registradas aqui; a reescrita das
+seções 2–4 fica para depois das respostas do Bloco D.
+
+**10.1 Eixo A precisa de um terceiro regime.** O insumo de cálculo chegou como PDF
+digitalizado ("BEN120 — Demonstrativo de Pagamento de Faturas"), não como planilha.
+Pela regra do §3.2 o caso cairia em `AUSENTE` e seria bloqueado sem motivo.
+
+```
+REGIMES = { CALCULO_PRONTO, FATURAMENTO_BRUTO, DEMONSTRATIVO_OPERADORA,
+            AUSENTE, AMBIGUO }
+```
+
+`DEMONSTRATIVO_OPERADORA`: série de competências com um valor por mês, emitida pela
+própria operadora, **sem** colunas de reajuste. Detecção por marcadores de layout
+(`Competência` · `Vencimento` · `Data Baixa` · `Tipo Lançamento` · `Mensalidade`), não
+por cabeçalho de planilha.
+
+**10.2 Documento digitalizado é caminho de primeira classe, não exceção.**
+Metade dos PDFs do caso não tinha camada de texto. Consequências:
+
+- toda extração passa a declarar a **origem** (`texto_nativo` × `ocr` × `imagem`);
+- fato originado de OCR nasce com confiança reduzida e **sempre** vira item de
+  confirmação no Espelho;
+- número lido de OCR **nunca** serve de contraprova para o módulo 4 sem confirmação
+  humana — no caso real o OCR do demonstrativo era ruim demais para isso.
+
+**10.3 Um arquivo pode conter vários documentos.** A triagem do §2 assume um papel por
+arquivo; o caso trouxe demonstrativo (pgs. 1–3) e regulamento (pgs. 4–13) no mesmo PDF.
+A triagem passa a segmentar por página e a devolver **lista** de papéis por arquivo.
+
+**10.4 Os eixos são acoplados.** A spec tratava regime de cálculo e tese como
+independentes. Na tese `CASSI_AUTOGESTAO` a peça real não calcula reajuste devido por
+índice ANS: pede exibição de documentos, remete a apuração à liquidação de
+sentença/perícia e fixa a tutela num **patamar histórico anterior**. Ou seja, a tese
+determina se o módulo 2 roda e com qual método.
+
+```
+se tese == CASSI_AUTOGESTAO:
+    metodo_calculo = ESTIMATIVA_POR_PATAMAR_ANTERIOR   # confirmar — pergunta D8
+senão:
+    metodo_calculo = INDICES_ANS_ANO_A_ANO
+```
+
+**10.5 Blocos condicionais por fato processual.** F9 (idade) dispara prioridade de
+tramitação; F10 (reajuizamento) dispara o capítulo de competência concorrente. Não
+decorrem da tese e precisam de trilho próprio no dossiê.
+
+**10.6 Acréscimos à cobertura de teste do §9.**
+
+- demonstrativo de operadora em PDF digitalizado → tem que dar
+  `DEMONSTRATIVO_OPERADORA`, nunca `AUSENTE`;
+- PDF com dois documentos de papéis diferentes → dois papéis, não um;
+- extrato bancário sem camada de texto → fato de gratuidade marcado como
+  origem-imagem e confirmação obrigatória;
+- **caso CASSI real como fixture de regressão do módulo 4**: duas tabelas com
+  percentuais divergentes (12,79% × 12,88%), valor de tutela ausente da tabela de
+  histórico, valor da causa em desacordo com a própria justificativa. A Conferência
+  tem que acusar os três.

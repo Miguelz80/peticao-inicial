@@ -34,7 +34,11 @@ teses estão no escopo** — `EMPRESARIAL_FAMILIAR`, `COLETIVO_POR_ADESAO`,
 cobre. Consequência: **B2 vira bloqueio de primeira ordem** — metade das teses do
 escopo (CASSI e individual comum) não tem modelo DOCX mapeado.
 
-**A5. Planilhas reais, Tipo 1 e Tipo 2.**
+**A5. Planilhas reais, Tipo 1 e Tipo 2.** — 🟡 **PARCIAL:** o caso CASSI trouxe um
+insumo que não é planilha (demonstrativo BEN120 em PDF digitalizado). Continuo
+precisando de `.xlsx` reais dos Tipos 1 e 2 — o caso recebido não cobre nenhum dos dois.
+
+_(pedido original)_
 Preciso de 2–3 arquivos reais de cada tipo (podem vir anonimizados) para ver os
 cabeçalhos **como eles realmente aparecem**: variações de grafia, linhas de título
 antes do cabeçalho, células mescladas, abas múltiplas, totalizadores no meio da tabela.
@@ -60,12 +64,20 @@ sempre? (Hoje especifiquei como decisão humana obrigatória.)
 
 ## Bloco B — Bloqueiam o Gerador (módulo 3)
 
-**B1. Os DOCX-modelo.**
+**B1. Os DOCX-modelo.** — 🟡 **PARCIAL:** recebi a peça CASSI real em `.docx`, com
+timbre (`image1/image2.png`), margens e `sectPr` conferidos. Faltam os dois modelos
+do escritório citados nas skills.
+
+_(pedido original)_
 Preciso dos arquivos reais para `assets/modelos/`:
 `PETIÇÃO INICIAL-MODELO APENAS RESTITUIÇÃO.docx` e
 `MODELO PETIÇÃO INICIAL COLETIVO POR ADESÃO.docx`. São as versões atuais?
 
-**B2. Falta modelo para duas teses.**
+**B2. Falta modelo para duas teses.** — 🟢 **CASSI RESOLVIDA:** a peça recebida serve
+de base (estrutura em `docs/04-achados-caso-cassi.md` §6). Falta só o modelo do
+**revisional individual comum**.
+
+_(pergunta original)_
 Não há modelo específico mapeado para **CASSI** nem para **revisional individual
 comum**. Adapto a partir de qual base, ou existe arquivo próprio que eu não vi?
 
@@ -76,7 +88,11 @@ ser montado do zero. Já o seu briefing fixa "cabeçalho azul-escuro #2E4057". S
 mesma coisa (a cor é do texto/faixa que acompanha a imagem) ou é um padrão novo que
 substitui o timbre em imagem?
 
-**B4. Como a tabela de cálculo entra na peça.**
+**B4. Como a tabela de cálculo entra na peça.** — 🔴 **RESPONDIDA PELA PRÁTICA, no
+sentido oposto ao requisito:** hoje as duas tabelas centrais vão como **imagem PNG**.
+Ver D5.
+
+_(pergunta original)_
 Tabela completa mês a mês no corpo da petição, resumo no corpo + tabela completa em
 anexo, ou planilha separada? (A tabela é `w:tbl` editável em qualquer caso — a
 pergunta é de layout, não de formato.)
@@ -120,3 +136,56 @@ a operadora adiantar? Risco: rascunho parcial vira peça protocolada por engano.
 **C5. Nome e instalação da skill.**
 `elaborador-inicial` fica no repositório em `skills/elaborador-inicial/`. Como ela
 chega no Claude Desktop da colega — pelo mesmo caminho das skills atuais do escritório?
+
+
+---
+
+## Bloco D — Novas, vindas do caso CASSI real
+
+**D1. CNPJ da CASSI — qual está certo?** 🔴 *urgente*
+O demonstrativo emitido pela própria CASSI e a petição protocolada dizem
+**33.719.485/0001-27**. A skill `corretor-inicial-cassi-revisional` registra
+**33.594.914/0001-24**. Como a skill é a fonte que alimenta a qualificação da ré, se o
+número dela estiver errado, todas as peças CASSI futuras saem com CNPJ errado. Você
+confirma qual é o correto?
+
+**D2. Ordem de assinatura — a regra está invertida?** 🔴
+A peça real é de **saúde**, comarca de **Salvador/BA**, e está assinada por **Gabriel
+primeiro, Tatiana depois**. O briefing diz "Tatiana antes de Gabriel em saúde/consumidor
+na Bahia". Uma das duas está errada: ou a regra, ou essa peça. Qual?
+
+**D3. Valor da causa = 2 × restituição?**
+Na peça real, R$ 43.041,98 é exatamente o dobro da restituição estimada de
+R$ 21.520,99 — mas o texto justifica como "restituição + 12 meses de diferença", que
+daria R$ 34.114,99. Qual é a fórmula que o escritório usa de verdade?
+
+**D4. Documentos digitalizados: quem faz o OCR?**
+Metade dos PDFs do caso não tem camada de texto (extrato bancário e documentação
+pessoal inclusive). Duas saídas: (a) a skill lê essas páginas como imagem, aceitando
+confiança menor e sempre confirmando o dado extraído; ou (b) a operadora passa a enviar
+os arquivos já pesquisáveis. **Recomendo (a)** — não dá para depender de disciplina de
+digitalização. Você concorda?
+
+**D5. Tabelas como imagem — confirma a mudança?**
+Hoje o histórico de reajustes e a tabela da tutela vão como PNG. Isso é o oposto do
+requisito não negociável do projeto, e no caso real as duas imagens traziam percentuais
+divergentes entre si (12,79% × 12,88% para o mesmo reajuste) sem que ninguém pudesse
+corrigir no Word. No `elaborador-inicial` elas passam a ser tabela nativa editável —
+confirma? Muda a aparência da peça em relação ao que o escritório vem protocolando.
+
+**D6. Divergências do caso já protocolado — quer que eu faça alguma coisa?**
+Além das duas tabelas, a tutela pede limitação a R$ 2.526,89, valor que não aparece na
+tabela de histórico da própria peça (2.238,77 · 2.525,09 · 2.886,98 · 3.576,39). Esse
+processo já foi distribuído. Isso é aproveitável numa emenda, ou é só insumo para o
+módulo 4?
+
+**D7. Blocos condicionais.**
+A peça tem um capítulo inteiro de **reajuizamento** (desistência anterior + competência
+concorrente) e um de **prioridade de idoso**. Nenhum dos dois decorre da tese —
+disparam por fato processual e por idade. Confirma que o gerador deve tratá-los como
+blocos condicionais, e existem outros do gênero (doença grave, tutela já indeferida)?
+
+**D8. Em CASSI o módulo 2 roda?**
+A peça real não calcula reajuste devido por índice ANS: remete à liquidação de sentença
+e pede exibição de documentos. Confirma que, na tese de autogestão, o Calculador
+**não** aplica índices ANS — e que o valor da tutela é o patamar histórico anterior?
