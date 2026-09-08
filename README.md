@@ -15,7 +15,7 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 
 | # | Módulo | Papel | Status |
 |---|--------|-------|--------|
-| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | Em especificação — `docs/02-classificador-spec.md` |
+| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
 | 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | Não iniciado |
 | 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | Não iniciado |
 | 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | Não iniciado |
@@ -48,3 +48,15 @@ inteiramente por chat.
 - `docs/01-arquitetura.md` — estrutura de pastas e fronteira Python × modelo
 - `docs/02-classificador-spec.md` — especificação do Classificador (pseudocódigo)
 - `docs/03-perguntas-abertas.md` — o que precisa ser respondido antes de escrever código
+
+
+## Rodar os testes
+
+```
+python3 tests/test_classificar.py
+python3 tests/test_extrair.py
+```
+
+Sem dependências para a lógica de decisão. A extração completa (PDF, XLSX, DOCX) usa
+`pypdf`, `openpyxl` e `python-docx` — faltando alguma, o arquivo é reportado como
+ilegível em vez de derrubar a execução.
