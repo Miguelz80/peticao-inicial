@@ -1,0 +1,19 @@
+# Dados reais de caso NUNCA entram no repositório (LGPD / sigilo profissional).
+# Fixtures de teste só podem ser versionadas depois de anonimizadas.
+/casos/
+/entradas/
+/saidas/
+*.docx
+*.xlsx
+*.xls
+*.pdf
+!skills/elaborador-inicial/assets/modelos/*.docx
+!tests/fixtures/**/anon-*.xlsx
+!tests/fixtures/**/anon-*.docx
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
