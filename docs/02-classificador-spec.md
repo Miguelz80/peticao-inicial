@@ -355,18 +355,19 @@ Metade dos PDFs do caso não tinha camada de texto. Consequências:
 arquivo; o caso trouxe demonstrativo (pgs. 1–3) e regulamento (pgs. 4–13) no mesmo PDF.
 A triagem passa a segmentar por página e a devolver **lista** de papéis por arquivo.
 
-**10.4 Os eixos são acoplados.** A spec tratava regime de cálculo e tese como
-independentes. Na tese `CASSI_AUTOGESTAO` a peça real não calcula reajuste devido por
-índice ANS: pede exibição de documentos, remete a apuração à liquidação de
-sentença/perícia e fixa a tutela num **patamar histórico anterior**. Ou seja, a tese
-determina se o módulo 2 roda e com qual método.
+**10.4 ~~Os eixos são acoplados~~ — descartado (resposta D8, 08/09/2026).**
+A peça CASSI real não calcula reajuste devido: remete à liquidação de sentença. Eu
+tinha lido isso como regra da tese. **Não é** — é característica daquela peça. O
+Calculador roda em **todas** as teses, sempre por índices ANS ano a ano.
 
-```
-se tese == CASSI_AUTOGESTAO:
-    metodo_calculo = ESTIMATIVA_POR_PATAMAR_ANTERIOR   # confirmar — pergunta D8
-senão:
-    metodo_calculo = INDICES_ANS_ANO_A_ANO
-```
+A própria peça de referência sustenta isso: a tabela da tutela afirma que os reajustes
+estão "em manifesta desproporcionalidade com os índices autorizados pela ANS, conforme
+planilha histórica de reajuste". O parâmetro ANS já era usado como régua na autogestão —
+só não havia a tabela calculada.
+
+Consequência prática: a peça de autogestão gerada pelo `elaborador-inicial` passa a ter
+uma tabela de reajuste devido que a peça atual não tem. Os eixos voltam a ser
+independentes.
 
 **10.5 Blocos condicionais por fato processual.** F9 (idade) dispara prioridade de
 tramitação; F10 (reajuizamento) dispara o capítulo de competência concorrente. Não
@@ -383,3 +384,35 @@ decorrem da tese e precisam de trilho próprio no dossiê.
   percentuais divergentes (12,79% × 12,88%), valor de tutela ausente da tabela de
   histórico, valor da causa em desacordo com a própria justificativa. A Conferência
   tem que acusar os três.
+
+**10.7 Faixa etária entra no valor devido (resposta A1/A2).** Confirmado: o valor devido
+acumula **índice ANS e reajuste por faixa etária**, sobre a base já corrigida do ano
+anterior.
+
+```
+devido[ano] = devido[ano-1] × (1 + indice_ans[ano]) × (1 + faixa_etaria[ano])
+                                                       # faixa_etaria = 0 se não houver
+```
+
+Isso cria um problema que o cálculo sozinho não resolve: **só entra no devido a faixa
+etária legítima** (previsão contratual expressa, observância das normas da ANS,
+percentual não desarrazoado — Temas 952 e 1016 do STJ). Um reajuste de faixa etária
+abusivo é justamente o que a peça impugna; incluí-lo no devido apagaria o pedido.
+
+> A legitimidade de cada faixa etária é **decisão jurídica, não cálculo**. O Calculador
+> identifica as competências com reajuste de faixa etária (coluna "Tipo de Reajuste" ou
+> salto fora do aniversário do contrato), e **pergunta** caso a caso antes de incluir.
+> Nunca decide sozinho. Ver pergunta A9.
+
+**10.8 Detecção do Eixo A fica provisória (resposta A5).** Não há planilhas reais dos
+Tipos 1 e 2 disponíveis. Os conjuntos de cabeçalho do §3.1 seguem escritos sobre a
+estrutura descrita no briefing, com sinônimos generosos. Para que isso não vire falha
+silenciosa:
+
+- cabeçalho que não casa **não** é erro fatal: cai em `AMBIGUO` e o Classificador
+  mostra à operadora os cabeçalhos que encontrou, perguntando qual coluna é qual;
+- toda resposta dessas é gravada no log, e vira sinônimo novo em `references/`;
+- a primeira planilha real de cada tipo calibra os conjuntos definitivamente.
+
+Em outras palavras: a falta da amostra deixa de bloquear, ao custo de mais perguntas nas
+primeiras execuções.

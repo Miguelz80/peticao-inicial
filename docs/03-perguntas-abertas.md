@@ -8,25 +8,21 @@ sem isso não dá para escrever código de verdade. **Bloco B** trava o Gerador.
 
 ## Bloco A — Bloqueiam o código dos módulos 1 e 2
 
-**A1. Tabela de índices ANS, ano a ano.**
-Preciso da tabela completa que o escritório usa. Três definições dentro dela:
-- (a) o índice é o **teto de reajuste anual autorizado pela ANS para planos
-  individuais/familiares**, certo? Desde que ano preciso ter na tabela?
-- (b) o período ANS vai de **maio a abril**. Quando o aniversário do contrato cai em
-  outro mês, aplico o índice do período em que o aniversário cai — confirma?
-- (c) o índice do ano incide sobre o **valor devido do ano anterior** (base já
-  corrigida, capitalizando), não sobre o valor pago. Confirma?
+**A1/A2. Índices ANS e faixa etária.** — 🟡 **CONCEITO RESOLVIDO, TABELA PENDENTE.**
+Confirmado que **os dois entram no valor devido**, sobre a base corrigida do ano
+anterior: `devido[ano] = devido[ano-1] × (1 + ANS) × (1 + faixa etária)`.
 
-**A2. Faixa etária entra no cálculo do "devido"?**
-Se, no período, houve reajuste por faixa etária **legítimo** (previsão contratual +
-Tema 952/1016), o valor devido deve incorporá-lo, ou o devido é sempre só ANS e a
-faixa etária é discutida à parte? Isso muda a fórmula do módulo 2 inteira.
+Continua faltando **a tabela de índices ANS em si** — os percentuais por ano. Não vou
+preenchê-la de memória: número de índice errado contamina todo cálculo e é invisível na
+revisão. Preciso da tabela que o escritório usa, ou autorização para montá-la a partir
+da fonte oficial da ANS para você conferir antes de virar código.
 
-**A3. Cadastro de operadoras.**
-Lista das operadoras já mapeadas com **CNPJ, sede e natureza jurídica** (comercial ×
-autogestão). O Classificador usa isso como discriminante duro F1 — sem cadastro, ele
-bloqueia todo caso. Além da CASSI, quais autogestões já apareceram (GEAP, Camed,
-Petrobras/AMS, Fusex...)?
+**A3. Cadastro de operadoras.** — ✅ **RESOLVIDA:** autogestões mais comuns são
+**CASSI, ASSEFAZ e GEAP**, e a lista não é exaustiva. Registrado em
+`references/operadoras.md`, junto com uma lista de **sinais textuais de autogestão**
+para as operadoras fora do cadastro (razão social do tipo "Caixa de Assistência" ou
+"Fundação", vínculo a patrocinador, "participantes" em vez de "segurados", reajuste
+aprovado em assembleia). Sem sinal nenhum, o gate G4 pergunta.
 
 **A4. Existe uma quinta tese?** — ✅ **RESPONDIDA (08/09/2026): sim, as quatro
 teses estão no escopo** — `EMPRESARIAL_FAMILIAR`, `COLETIVO_POR_ADESAO`,
@@ -34,16 +30,11 @@ teses estão no escopo** — `EMPRESARIAL_FAMILIAR`, `COLETIVO_POR_ADESAO`,
 cobre. Consequência: **B2 vira bloqueio de primeira ordem** — metade das teses do
 escopo (CASSI e individual comum) não tem modelo DOCX mapeado.
 
-**A5. Planilhas reais, Tipo 1 e Tipo 2.** — 🟡 **PARCIAL:** o caso CASSI trouxe um
-insumo que não é planilha (demonstrativo BEN120 em PDF digitalizado). Continuo
-precisando de `.xlsx` reais dos Tipos 1 e 2 — o caso recebido não cobre nenhum dos dois.
-
-_(pedido original)_
-Preciso de 2–3 arquivos reais de cada tipo (podem vir anonimizados) para ver os
-cabeçalhos **como eles realmente aparecem**: variações de grafia, linhas de título
-antes do cabeçalho, células mescladas, abas múltiplas, totalizadores no meio da tabela.
-A detecção do Eixo A é feita sobre esses cabeçalhos — hoje ela está escrita sobre os
-nomes idealizados do seu exemplo.
+**A5. Planilhas reais, Tipo 1 e Tipo 2.** — ⚪ **SEM RESPOSTA — deixou de bloquear.**
+A detecção do Eixo A fica provisória, escrita sobre a estrutura do briefing. Cabeçalho
+que não casa cai em `AMBIGUO` e vira pergunta à operadora com os cabeçalhos encontrados,
+em vez de erro. Cada resposta dessas vira sinônimo novo no cadastro. A primeira planilha
+real de cada tipo calibra tudo. Ver §10.8 da spec.
 
 **A6. Valor da causa.**
 Qual é a fórmula do escritório? (restituição total? restituição + 12× diferença
@@ -163,7 +154,13 @@ confiança menor e sempre confirmando o dado extraído; ou (b) a operadora passa
 os arquivos já pesquisáveis. **Recomendo (a)** — não dá para depender de disciplina de
 digitalização. Você concorda?
 
-**D5. Tabelas como imagem — confirma a mudança?**
+**D5. Tabelas como imagem.** — ✅ **RESOLVIDA:** a **aparência não muda**; muda só a
+técnica. As tabelas passam a ser `w:tbl` nativa reproduzindo o mesmo visual — paleta
+extraída pixel a pixel da peça real e registrada em `references/estilo-tabelas.md`
+(cabeçalho `#2C3E6B`, zebra `#F5F8FB`, linha vigente `#FFF8E1`, realce de diferença e
+percentual em `#C0392B`, caixas RESUMO/ANÁLISE em `#EEF5FB`). Cada célula editável.
+
+_(pergunta original)_
 Hoje o histórico de reajustes e a tabela da tutela vão como PNG. Isso é o oposto do
 requisito não negociável do projeto, e no caso real as duas imagens traziam percentuais
 divergentes entre si (12,79% × 12,88% para o mesmo reajuste) sem que ninguém pudesse
@@ -182,7 +179,20 @@ concorrente) e um de **prioridade de idoso**. Nenhum dos dois decorre da tese �
 disparam por fato processual e por idade. Confirma que o gerador deve tratá-los como
 blocos condicionais, e existem outros do gênero (doença grave, tutela já indeferida)?
 
-**D8. Em CASSI o módulo 2 roda?**
-A peça real não calcula reajuste devido por índice ANS: remete à liquidação de sentença
-e pede exibição de documentos. Confirma que, na tese de autogestão, o Calculador
-**não** aplica índices ANS — e que o valor da tutela é o patamar histórico anterior?
+**D8. Em CASSI o módulo 2 roda?** — ✅ **RESOLVIDA: roda.** O Calculador aplica índices
+ANS em **todas** as teses, autogestão inclusive. A peça CASSI gerada passará a ter uma
+tabela de reajuste devido que a peça atual não tem. Ver §10.4 da spec.
+
+
+**A9. Faixa etária legítima × abusiva — quem decide?** 🔴 *nova, decorre de A2*
+Se a faixa etária entra no valor devido, só pode entrar a **legítima** (Temas 952 e 1016
+do STJ). Incluir no devido um aumento de faixa etária que a peça vai impugnar como
+abusivo apagaria o próprio pedido. Especifiquei que o Calculador **identifica** as
+competências com faixa etária e **pergunta** caso a caso antes de incluir. Existe algum
+critério objetivo do escritório que permita decidir sem perguntar (ex.: faixa etária
+após os 60 anos é sempre impugnada), ou pergunta sempre?
+
+**D9. Cor do cabeçalho: `#2E4057` ou `#2C3E6B`?**
+O briefing fixa `#2E4057`; a tabela da peça real usa `#2C3E6B`. São próximos, mas
+diferentes. Como a decisão D5 foi "não mudar a aparência", estou usando `#2C3E6B`.
+Confirma, ou o padrão do escritório é mesmo `#2E4057` e a peça é que saiu fora?

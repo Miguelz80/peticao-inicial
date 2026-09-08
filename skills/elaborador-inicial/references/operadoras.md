@@ -12,12 +12,46 @@ carteira, contrato) e vão para a peça exatamente como constam ali.
 Motivo: cadastro desatualizado é erro silencioso que se propaga para toda peça futura.
 O documento do caso é a fonte, e ele sempre acompanha o caso.
 
+## Autogestões mapeadas
+
+As mais frequentes no escritório. **A lista não é exaustiva** — o escritório trabalha
+com diversas outras.
+
 | Operadora | Natureza | Como reconhecer | Tese |
 |---|---|---|---|
-| CASSI — Caixa de Assistência dos Funcionários do Banco do Brasil | **Autogestão** | CNPJ `33.719.485/0001-27` ou `33.594.914/0001-24`; menção a "Caixa de Assistência dos Funcionários do Banco do Brasil" | `CASSI_AUTOGESTAO` |
+| CASSI — Caixa de Assistência dos Funcionários do Banco do Brasil | Autogestão | CNPJ `33.719.485/0001-27` ou `33.594.914/0001-24`; menção a "Caixa de Assistência dos Funcionários do Banco do Brasil" | `CASSI_AUTOGESTAO` |
+| ASSEFAZ — Fundação Assefaz | Autogestão | menção a "Assefaz" ou "Fundação Assefaz" | `CASSI_AUTOGESTAO` |
+| GEAP — GEAP Autogestão em Saúde | Autogestão | menção a "GEAP" | `CASSI_AUTOGESTAO` |
 
-> Os dois CNPJs acima são reconhecidos como CASSI. Não é preciso decidir qual é o
-> "certo": o que entra na peça é o que estiver no documento do caso.
+> Os dois CNPJs da CASSI são reconhecidos como a mesma operadora. Não é preciso decidir
+> qual é o "certo": o que entra na peça é o que estiver no documento do caso.
+
+> A tese `CASSI_AUTOGESTAO` vale para **qualquer** autogestão, não só a CASSI — o nome
+> é histórico. O que muda entre elas é a qualificação da ré (extraída do documento) e o
+> estatuto/regulamento citado.
+
+## Operadora fora da lista — sinais de autogestão
+
+A lista nunca vai estar completa, então o Classificador não pode tratar "não está no
+cadastro" como "é comercial". Antes de acionar o gate G4, procurar nos documentos do
+caso estes sinais, que costumam aparecer nos papéis da própria operadora:
+
+- as palavras **"autogestão"**, "entidade de autogestão", "plano de autogestão";
+- razão social do tipo **"Caixa de Assistência"**, "Fundação", "Instituto",
+  "Associação de Beneficência", "Fundo de Assistência";
+- vínculo a um **patrocinador/mantenedor** (banco, estatal, órgão público, categoria
+  profissional) como condição de elegibilidade;
+- beneficiários chamados de **"participantes"**, "associados", "assistidos" em vez de
+  "segurados"/"clientes";
+- reajuste aprovado por **assembleia, conselho deliberativo ou conselho de
+  administração**, e não simplesmente "comunicado" ao beneficiário;
+- ausência de finalidade lucrativa declarada no estatuto.
+
+Encontrando sinais, o Classificador **propõe** autogestão com a citação literal do
+trecho e pede confirmação. Não encontrando nada, dispara G4 e pergunta direto.
+
+Confirmada uma operadora nova, ela entra na tabela acima com a fonte documental
+indicada — o cadastro cresce com o uso.
 
 ## Regras de uso
 
