@@ -15,9 +15,10 @@ description: >
 
 # Elaborador de Petição Inicial — BM Advocacia
 
-> **Estado atual: módulos 1 (Classificador) e 2 (Calculador) implementados.** Geração
-> de DOCX e conferência ainda não existem. A skill classifica o caso, monta a tabela de
-> reajuste devido e apresenta o Espelho, mas **não gera a peça**.
+> **Estado atual: módulos 1 (Classificador), 2 (Calculador) e 4 (Conferência)
+> implementados.** Falta o módulo 3, a geração do DOCX — então a skill classifica o
+> caso, monta a tabela de reajuste devido e sabe conferir uma peça pronta, mas ainda
+> **não gera a peça**.
 
 ## Escopo
 
@@ -51,7 +52,11 @@ escritório correspondente.
    previsão (fica de fora, é o que se impugna) — e essa distinção é jurídica, o script
    não decide.
 
-6. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
+6. **Conferir** — `scripts/conferir.py` compara os valores da peça com os de origem e
+   verifica se o DOCX pode ser editado no Word. Achado `BLOQUEIA` **impede a entrega**
+   do documento; não existe avisar e seguir. Catálogo em `references/conferencia.md`.
+
+7. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
    verificar", e essa resposta **para o processo**. Não insista, não reformule para
    obter um palpite.
 
@@ -84,3 +89,5 @@ escritório correspondente.
 | `references/classificador.md` | fatos discriminantes, árvore de decisão, gates |
 | `references/operadoras.md` | autogestão × comercial (fato `F1`) |
 | `references/estilo-tabelas.md` | paleta e layout das tabelas em formato nativo |
+| `references/indices-ans.md` | série de índices ANS e a fórmula do valor devido |
+| `references/conferencia.md` | catálogo das verificações e o que cada uma bloqueia |
