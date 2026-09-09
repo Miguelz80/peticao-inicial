@@ -15,10 +15,9 @@ description: >
 
 # Elaborador de Petição Inicial — BM Advocacia
 
-> **Estado atual: módulos 1 (Classificador), 2 (Calculador) e 4 (Conferência)
-> implementados.** Falta o módulo 3, a geração do DOCX — então a skill classifica o
-> caso, monta a tabela de reajuste devido e sabe conferir uma peça pronta, mas ainda
-> **não gera a peça**.
+> **Os quatro módulos estão implementados.** Falta ligar o texto jurídico de cada tese
+> aos blocos do Gerador — hoje a redação da peça é montada bloco a bloco por quem usa a
+> skill, não por catálogo de tese. Falta também o modelo DOCX do revisional individual.
 
 ## Escopo
 
@@ -52,11 +51,16 @@ escritório correspondente.
    previsão (fica de fora, é o que se impugna) — e essa distinção é jurídica, o script
    não decide.
 
-6. **Conferir** — `scripts/conferir.py` compara os valores da peça com os de origem e
+6. **Gerar** — `scripts/gerar_peticao.py` monta a peça a partir do **modelo DOCX real
+   do escritório**, trocando só o conteúdo e reaproveitando o `sectPr` original, que é o
+   que carrega o timbre. A tabela de reajuste sai do Calculador como `w:tbl` nativa, com
+   a paleta de `references/estilo-tabelas.md`. Imagem órfã do modelo é podada.
+
+7. **Conferir** — `scripts/conferir.py` compara os valores da peça com os de origem e
    verifica se o DOCX pode ser editado no Word. Achado `BLOQUEIA` **impede a entrega**
    do documento; não existe avisar e seguir. Catálogo em `references/conferencia.md`.
 
-7. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
+8. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
    verificar", e essa resposta **para o processo**. Não insista, não reformule para
    obter um palpite.
 
@@ -74,13 +78,15 @@ escritório correspondente.
 - **Documento que você não identificou vira pergunta**, jamais é descartado em silêncio.
 - **Fato lido de documento digitalizado sempre volta para confirmação.**
 
-## Quando a geração existir
+## Formato de saída
 
-- O DOCX tem que ser **nativo e 100% editável**: sem proteção, sem content control, sem
+- O DOCX é **nativo e 100% editável**: sem proteção, sem content control, sem
   tabela em imagem. A operadora precisa conseguir corrigir qualquer valor no Word.
 - As tabelas mantêm a aparência atual do escritório, mas como `w:tbl` — a paleta está
   em `references/estilo-tabelas.md`.
-- O timbre vem das imagens do DOCX-modelo original; nunca montar o arquivo do zero.
+- O timbre vem das imagens do DOCX-modelo original; **nunca montar o arquivo do zero**.
+- Para checar o XML do arquivo gerado, a skill `docx` traz um validador de schema:
+  `python3 validate.py <gerado> --original <modelo>` acusa qualquer erro introduzido.
 
 ## Referências
 

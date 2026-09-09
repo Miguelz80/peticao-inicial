@@ -277,10 +277,19 @@ def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
                 "content control travado — o conteúdo não pode ser corrigido no Word",
                 esperado="nenhum w:lock", encontrado=", ".join(sorted(set(travas)))))
 
-        # C8 — imagem grande no corpo é, quase sempre, tabela renderizada.
+        # C8 — imagem grande **referenciada pelo corpo** é, quase sempre, tabela
+        # renderizada. O timbre é referenciado por cabeçalho e rodapé, não pelo corpo,
+        # e por isso não cai aqui nem quando é pesado.
+        do_corpo = set(re.findall(r'r:(?:id|embed)="([^"]+)"', doc))
+        alvos = set()
+        if "word/_rels/document.xml.rels" in nomes:
+            rels = z.read("word/_rels/document.xml.rels").decode("utf-8", "replace")
+            for bloco in re.findall(r"<Relationship\b[^>]*/>", rels):
+                attrs = dict(re.findall(r'(\w+)="([^"]*)"', bloco))
+                if attrs.get("Id") in do_corpo and "media/" in attrs.get("Target", ""):
+                    alvos.add("word/" + attrs["Target"].lstrip("./").replace("../", ""))
         grandes = [(n, z.getinfo(n).file_size) for n in nomes
-                   if n.startswith("word/media/")
-                   and z.getinfo(n).file_size > TAMANHO_IMAGEM_DE_TABELA]
+                   if n in alvos and z.getinfo(n).file_size > TAMANHO_IMAGEM_DE_TABELA]
         corpo = len(re.findall(r"<w:drawing>", doc))
         for nome, tamanho in grandes:
             achados.append(Achado(
@@ -288,7 +297,7 @@ def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
                 "imagem grande embutida — se for tabela, os valores não podem ser "
                 "corrigidos no Word",
                 esperado="tabela nativa (w:tbl)", encontrado=f"{tamanho//1024} KB"))
-        if corpo and not re.search(r"<w:tbl>", doc):
+        if corpo and not re.search(r"<w:tbl[\s>/]", doc):
             achados.append(Achado("C8", ALERTA, "document.xml",
                                   "há imagens no corpo e nenhuma tabela nativa"))
 

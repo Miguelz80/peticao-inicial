@@ -142,14 +142,28 @@ def test_formula_desconhecida_alerta_mas_nao_bloqueia():
 
 # ------------------------------------------------------- editabilidade ----
 
-def docx_falso(diretorio, document_xml, settings_xml="<w:settings/>", media=None):
+REL = ('<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/'
+       'package/2006/relationships">{}</Relationships>')
+
+
+def docx_falso(diretorio, document_xml, settings_xml="<w:settings/>", media=None,
+               rels_corpo="", rels_cabecalho=""):
+    """`rels_corpo` liga imagens ao document.xml; `rels_cabecalho`, ao header —
+    é essa diferença que separa tabela em imagem de timbre."""
     caminho = os.path.join(diretorio, "peca.docx")
     with zipfile.ZipFile(caminho, "w") as z:
         z.writestr("word/document.xml", document_xml)
         z.writestr("word/settings.xml", settings_xml)
+        z.writestr("word/_rels/document.xml.rels", REL.format(rels_corpo))
+        z.writestr("word/_rels/header1.xml.rels", REL.format(rels_cabecalho))
         for nome, tamanho in (media or {}).items():
             z.writestr(f"word/media/{nome}", b"\x00" * tamanho)
     return caminho
+
+
+def imagem(rid, alvo):
+    return (f'<Relationship Id="{rid}" Type="http://schemas.openxmlformats.org/'
+            f'officeDocument/2006/relationships/image" Target="media/{alvo}"/>')
 
 
 def test_documento_protegido_bloqueia():
@@ -185,18 +199,33 @@ def test_content_control_destravado_nao_bloqueia():
 
 
 def test_tabela_em_imagem_bloqueia():
-    """As duas tabelas centrais da peça CASSI eram PNG de 155 KB e 137 KB."""
+    """As duas tabelas centrais da peça CASSI eram PNG de 155 KB e 137 KB,
+    referenciadas pelo corpo do documento."""
     with tempfile.TemporaryDirectory() as t:
-        c = docx_falso(t, "<w:document><w:drawing/></w:document>",
-                       media={"image4.png": 155_000})
+        c = docx_falso(t, '<w:document><w:drawing><w:blip r:embed="rId9"/>'
+                          "</w:drawing></w:document>",
+                       media={"image4.png": 155_000},
+                       rels_corpo=imagem("rId9", "image4.png"))
         achados = [a for a in conferir_editabilidade(c) if a.codigo == "C8"]
         assert achados and achados[0].gravidade == BLOQUEIA
 
 
-def test_timbre_pequeno_nao_e_confundido_com_tabela():
+def test_timbre_pesado_no_cabecalho_nao_e_confundido_com_tabela():
+    """O timbre é referenciado pelo cabeçalho, não pelo corpo — não pode bloquear
+    nem quando é pesado."""
     with tempfile.TemporaryDirectory() as t:
-        c = docx_falso(t, "<w:document><w:tbl/><w:drawing/></w:document>",
-                       media={"image1.png": 44_000, "image2.png": 220})
+        c = docx_falso(t, "<w:document><w:tbl/></w:document>",
+                       media={"timbre.png": 200_000},
+                       rels_cabecalho=imagem("rId1", "timbre.png"))
+        assert "C8" not in codigos(conferir_editabilidade(c))
+
+
+def test_imagem_pequena_no_corpo_nao_bloqueia():
+    with tempfile.TemporaryDirectory() as t:
+        c = docx_falso(t, '<w:document><w:tbl/><w:drawing><w:blip r:embed="rId9"/>'
+                          "</w:drawing></w:document>",
+                       media={"icone.png": 3_000},
+                       rels_corpo=imagem("rId9", "icone.png"))
         assert "C8" not in codigos(conferir_editabilidade(c))
 
 
