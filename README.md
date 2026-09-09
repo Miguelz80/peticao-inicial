@@ -16,7 +16,7 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 | # | Módulo | Papel | Status |
 |---|--------|-------|--------|
 | 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
-| 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | Não iniciado |
+| 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
 | 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | Não iniciado |
 | 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | Não iniciado |
 
@@ -55,6 +55,7 @@ inteiramente por chat.
 ```
 python3 tests/test_classificar.py
 python3 tests/test_extrair.py
+python3 tests/test_calcular.py
 ```
 
 Sem dependências para a lógica de decisão. A extração completa (PDF, XLSX, DOCX) usa

@@ -119,3 +119,28 @@ peça CASSI já listava.
 - Módulo 4: comparar `Total Pago − Total Devido` com `Total Diferença`, e a soma da
   coluna com o total impresso. Este caso reprova nas duas.
 - Novo fato **F11 — doença grave** (laudo médico), para prioridade de tramitação.
+
+
+## 8. A janela da restituição da planilha foi identificada (pergunta A7)
+
+Reconstruindo a série no Calculador, **todos os valores mensais reproduzem a planilha
+exatamente**. Só a restituição diverge:
+
+| | |
+|---|---|
+| 36 meses até a última competência (julho/2026) | R$ 38.576,42 |
+| **37 competências, maio/2023 a maio/2026** | **R$ 36.738,93** — bate com a planilha |
+
+Duas coisas explicam a diferença, e as duas são a pergunta A7:
+
+1. **O marco está dois meses atrás do fim da série.** A janela termina em maio/2026, mas
+   a planilha vai até julho/2026. Parece marco congelado na data em que se calculou, com
+   a série estendida depois sem atualizar a restituição — **a peça saiu com a restituição
+   desatualizada em dois meses**.
+2. **São 37 competências, não 36.** Contar do mesmo mês três anos antes incluindo as duas
+   pontas dá 37. É o off-by-one clássico.
+
+Entre as convenções possíveis o pedido varia de R$ 36.554,70 a R$ 39.176,48 — **mais de
+R$ 2.600**. Por isso `restituicao()` recebe `meses` e `ate` como parâmetros, com 36 e
+"última competência" por padrão, e a autoconferência acusa quando o marco não coincide
+com o fim da série.

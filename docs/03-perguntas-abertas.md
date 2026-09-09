@@ -39,10 +39,16 @@ Qual é a fórmula do escritório? (restituição total? restituição + 12× di
 mensal? proveito econômico pretendido?) O Classificador precisa saber quais dados são
 obrigatórios para fechar o dossiê.
 
-**A7. Corte dos 3 anos (Tema 610).**
-O marco é a **data de distribuição** (que ainda não existe quando a peça é gerada), a
-data de geração da peça, ou uma data que a operadora informa? E o mês de corte é
-inclusivo ou exclusivo?
+**A7. Corte dos 3 anos (Tema 610).** 🔴 *agora vale mais de R$ 2.600 no pedido*
+Identifiquei a convenção da planilha real: **37 competências, maio/2023 a maio/2026** —
+que reproduz exatamente o R$ 36.738,93 pedido na peça. Duas questões saem daí:
+- o marco terminou **dois meses antes** do fim da série (julho/2026), ou seja, a peça foi
+  protocolada com a restituição desatualizada. O marco é a data do cálculo, a da
+  distribuição, ou a última competência paga?
+- são **37 competências**, não 36 — contar do mesmo mês três anos antes incluindo as duas
+  pontas. É proposital ou é off-by-one?
+
+Dependendo da convenção o pedido vai de R$ 36.554,70 a R$ 39.176,48.
 
 **A8. Restituição simples × dobro — padrão do escritório.**
 A skill empresarial-familiar diz que a dobra é a regra salvo engano justificável. A

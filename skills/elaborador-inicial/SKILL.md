@@ -15,9 +15,9 @@ description: >
 
 # Elaborador de Petição Inicial — BM Advocacia
 
-> **Estado atual: apenas o módulo 1 (Classificador) está implementado.** Os módulos de
-> cálculo, geração de DOCX e conferência ainda não existem. Enquanto isso, a skill
-> classifica o caso e apresenta o Espelho, mas **não gera a peça**.
+> **Estado atual: módulos 1 (Classificador) e 2 (Calculador) implementados.** Geração
+> de DOCX e conferência ainda não existem. A skill classifica o caso, monta a tabela de
+> reajuste devido e apresenta o Espelho, mas **não gera a peça**.
 
 ## Escopo
 
@@ -44,7 +44,14 @@ escritório correspondente.
    confiança alta, a tese nunca é assumida em silêncio: peça errada protocolada é o
    pior cenário deste projeto.
 
-5. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
+5. **Calcular** — quando o regime for `FATURAMENTO_BRUTO` ou
+   `DEMONSTRATIVO_OPERADORA`, `scripts/calcular_reajuste.py` monta a tabela de reajuste
+   devido. Precisa do **mês de aniversário do contrato**. Todo reajuste fora desse mês
+   vira pendência: pode ser faixa etária legítima (entra no devido) ou aumento sem
+   previsão (fica de fora, é o que se impugna) — e essa distinção é jurídica, o script
+   não decide.
+
+6. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
    verificar", e essa resposta **para o processo**. Não insista, não reformule para
    obter um palpite.
 
