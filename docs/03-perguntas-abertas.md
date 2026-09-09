@@ -8,14 +8,13 @@ sem isso não dá para escrever código de verdade. **Bloco B** trava o Gerador.
 
 ## Bloco A — Bloqueiam o código dos módulos 1 e 2
 
-**A1/A2. Índices ANS e faixa etária.** — 🟡 **CONCEITO RESOLVIDO, TABELA PENDENTE.**
-Confirmado que **os dois entram no valor devido**, sobre a base corrigida do ano
-anterior: `devido[ano] = devido[ano-1] × (1 + ANS) × (1 + faixa etária)`.
-
-Continua faltando **a tabela de índices ANS em si** — os percentuais por ano. Não vou
-preenchê-la de memória: número de índice errado contamina todo cálculo e é invisível na
-revisão. Preciso da tabela que o escritório usa, ou autorização para montá-la a partir
-da fonte oficial da ANS para você conferir antes de virar código.
+**A1/A2. Índices ANS e faixa etária.** — ✅ **RESOLVIDA.** Série 2015–2026 montada em
+`references/indices-ans.md`, a partir da coluna "Índices ANS" da planilha do escritório,
+com sete anos corroborados em publicações da ANS. A fórmula foi confirmada contra a
+planilha real: a cadeia de 9 anos bate nos 9 passos. Pendente só a série anterior a 2015
+— e `gov.br`/`ans.gov.br` estão **bloqueados pela política de egresso desta sessão**, então
+a página da ANS não pôde ser lida direto. Baixando o `.xlsx` da série histórica da ANS e
+enviando aqui, fecha com procedência oficial direta.
 
 **A3. Cadastro de operadoras.** — ✅ **RESOLVIDA:** autogestões mais comuns são
 **CASSI, ASSEFAZ e GEAP**, e a lista não é exaustiva. Registrado em
@@ -30,11 +29,10 @@ teses estão no escopo** — `EMPRESARIAL_FAMILIAR`, `COLETIVO_POR_ADESAO`,
 cobre. Consequência: **B2 vira bloqueio de primeira ordem** — metade das teses do
 escopo (CASSI e individual comum) não tem modelo DOCX mapeado.
 
-**A5. Planilhas reais, Tipo 1 e Tipo 2.** — ⚪ **SEM RESPOSTA — deixou de bloquear.**
-A detecção do Eixo A fica provisória, escrita sobre a estrutura do briefing. Cabeçalho
-que não casa cai em `AMBIGUO` e vira pergunta à operadora com os cabeçalhos encontrados,
-em vez de erro. Cada resposta dessas vira sinônimo novo no cadastro. A primeira planilha
-real de cada tipo calibra tudo. Ver §10.8 da spec.
+**A5. Planilhas reais, Tipo 1 e Tipo 2.** — ✅ **TIPO 1 RESOLVIDO.** O caso SulAmérica
+trouxe o cálculo pronto com as colunas exatas do briefing, incluindo "Reajuste Aplicado"
+e "Reajuste Devido" lado a lado. Os conjuntos de cabeçalho do Classificador estavam
+certos. Falta ainda uma amostra de **Tipo 2** (faturamento bruto em planilha).
 
 **A6. Valor da causa.**
 Qual é a fórmula do escritório? (restituição total? restituição + 12× diferença
@@ -184,7 +182,10 @@ ANS em **todas** as teses, autogestão inclusive. A peça CASSI gerada passará 
 tabela de reajuste devido que a peça atual não tem. Ver §10.4 da spec.
 
 
-**A9. Faixa etária legítima × abusiva — quem decide?** 🔴 *nova, decorre de A2*
+**A9. Faixa etária legítima × abusiva — quem decide?** 🔴 *agora com caso concreto*
+Na planilha real há duas competências com reajuste fora do mês de aniversário e a coluna
+"Tipo de Reajuste" **em branco**: abril/2018 (9,10%) e janeiro/2021 (21,72%). Nenhuma
+entrou no valor devido. Se alguma for faixa etária legítima, deveria ter entrado.
 Se a faixa etária entra no valor devido, só pode entrar a **legítima** (Temas 952 e 1016
 do STJ). Incluir no devido um aumento de faixa etária que a peça vai impugnar como
 abusivo apagaria o próprio pedido. Especifiquei que o Calculador **identifica** as
