@@ -196,22 +196,162 @@ A parte Autora manifesta expressa concordância com a tramitação do feito em f
 ---
 
 ## TESE: COLETIVO_POR_ADESAO
-@pendente: falta o texto do escritório. O modelo `MODELO PETIÇÃO INICIAL COLETIVO POR ADESÃO.docx` não foi disponibilizado.
+
+Texto extraído de peça real do escritório, protocolada — pessoa física aderente a plano
+coletivo por adesão via administradora de benefícios. As ementas vêm da própria peça;
+o que começa com `>` sai recuado e em itálico, no padrão do escritório para julgados.
 
 ### BLOCO: I | Dos fatos
 @condicao: sempre
-@fundamentos: pessoa física aderente via associação ou sindicato
-@pendente: texto do escritório
+@fundamentos: adesão ao plano, ausência de poder de negociação, reajustes sucessivos
+A parte Autora é beneficiária do plano **{plano}** desde {inicio_contrato}, tendo aderido a contrato formalmente classificado como coletivo por adesão, intermediado por administradora de benefícios.
 
-### BLOCO: II | Do falso coletivo por adesão
+Ao longo da contratualidade, a mensalidade sofreu majorações sucessivas e expressivas, alcançando **{valor_pago_atual}** em {competencia_atual}, valor incompatível com a capacidade econômica da Autora e com os parâmetros de reajuste autorizados pela ANS para planos individuais.
+
+A Autora jamais recebeu memória de cálculo, demonstração atuarial, relatório de sinistralidade do seu grupo ou qualquer elemento técnico que permitisse aferir a legalidade dos percentuais aplicados.
+
+### BLOCO: II | Da aplicabilidade do CDC e da natureza de falso coletivo
 @condicao: sempre
-@fundamentos: ausência de vínculo associativo real; equiparação a individual para fins de reajuste. NÃO confundir com falso coletivo empresarial
-@pendente: texto do escritório
+@fundamentos: Súmula 608/STJ; adesão sem poder de negociação; equiparação a individual para fins de reajuste. NÃO confundir com falso coletivo empresarial (PJ contratante)
 
-### BLOCO: III | Da tutela de urgência para readequação
+A relação jurídica entre as partes é inequivocamente de consumo, atraindo a incidência do Código de Defesa do Consumidor (CDC), conforme pacificado pela Súmula 608 do STJ:
+
+STJ Aplica-se o Código de Defesa do Consumidor aos contratos de plano de saúde, salvo os administrados por entidades de autogestão.
+
+O contrato em tela, embora formalmente classificado como "coletivo por adesão", na prática, funciona como um plano individual. A Autora aderiu ao plano, sem qualquer poder de negociação sobre as cláusulas contratuais, caracterizando-se como um contrato "falso coletivo". Tal artifício é frequentemente utilizado pelas operadoras para se esquivar da fiscalização da ANS, que estabelece tetos para os reajustes de planos individuais.
+
+A jurisprudência pátria é uníssona em reconhecer a abusividade dessa prática, determinando que tais contratos sejam equiparados aos planos individuais para fins de reajuste, aplicando-se, por analogia, os índices anuais fixados pela ANS.
+
+### BLOCO: III | Da abusividade dos reajustes
+@condicao: sempre
+@fundamentos: arts. 6º, III e V, e 51 do CDC; ausência de comprovação atuarial do grupo; substituição pelos índices ANS
+@tabela: reajuste
+
+Conforme demonstrado pelos documentos anexados, as Rés vêm aplicando sucessivos reajustes nas mensalidades do plano de saúde da parte autora sem apresentar qualquer comprovação técnica idônea que justifique os percentuais adotados, o que revela evidente abusividade na execução do contrato.
+
+Embora a Agência Nacional de Saúde Suplementar – ANS não estabeleça limites objetivos para os reajustes aplicáveis aos planos coletivos, tal circunstância não autoriza a majoração unilateral e desarrazoada das mensalidades pelas operadoras, sobretudo quando inexistem elementos técnicos que comprovem a efetiva variação de custos ou de sinistralidade do grupo de beneficiários.
+
+Isso porque, nos termos da Súmula 608 do Superior Tribunal de Justiça, os contratos de plano de saúde coletivo submetem-se às normas do Código de Defesa do Consumidor, impondo-se a observância dos princípios da boa-fé objetiva, da transparência e do equilíbrio contratual.
+
+Assim, ainda que seja admitida, em tese, a aplicação de reajustes com base na sinistralidade ou na variação dos custos médico-hospitalares, a validade desses aumentos depende da demonstração técnica específica da base atuarial utilizada, com dados concretos e individualizados referentes ao grupo de beneficiários do contrato.
+
+A ausência dessa comprovação caracteriza manifesta abusividade, pois impede o controle da razoabilidade dos percentuais aplicados e impõe ao consumidor desvantagem excessiva, em afronta aos arts. 6º, III e V, e 51 do Código de Defesa do Consumidor.
+
+Nesse sentido, a jurisprudência tem reconhecido que, na ausência de comprovação técnica idônea da necessidade dos reajustes, mostra-se legítima a substituição dos índices aplicados pelos percentuais divulgados pela ANS para planos individuais, utilizados como parâmetro de razoabilidade e controle da abusividade contratual.
+
+Legislação e jurisprudência:
+
+> DIREITO CIVIL E DO CONSUMIDOR. PLANO DE SAÚDE COLETIVO POR ADESÃO. REAJUSTES ANUAIS POR SINISTRALIDADE E VCMH. AUSÊNCIA DE TRANSPARÊNCIA E DE COMPROVAÇÃO ATUARIAL ESPECÍFICA. ABUSIVIDADE RECONHECIDA. SUBSTITUIÇÃO PELOS ÍNDICES DA ANS. RESPONSABILIDADE SOLIDÁRIA DA ADMINISTRADORA DE BENEFÍCIOS. RECURSOS DESPROVIDOS. (...) III. RAZÕES DE DECIDIR 3- A administradora de benefícios integra a cadeia de fornecimento do serviço e responde solidariamente por eventuais abusividades contratuais, nos termos do art . 7º, parágrafo único, do Código de Defesa do Consumidor (CDC). Sua atuação não é meramente intermediária, pois participa ativamente da negociação, comunicação e execução dos reajustes aplicados aos beneficiários. 4- A relação jurídica de plano de saúde coletivo por adesão está sujeita às normas do CDC, conforme a Súmula nº 608 do Superior Tribunal de Justiça, impondo a aplicação dos princípios da boa-fé objetiva, transparência e informação adequada ao consumidor. 5- Embora o reajuste por sinistralidade e VCMH seja admitido em contratos coletivos (art . 17-A, § 2º, II, da Lei nº 9.656/98), sua validade depende da comprovação técnica específica da base atuarial utilizada, com dados referentes ao grupo de beneficiários efetivo do contrato. 6- As rés não comprovaram, por meio de documentação idônea e individualizada, que os índices aplicados entre 2020 e 2023 correspondiam à variação real da sinistralidade e dos custos do grupo da autora (UNE). Os relatórios apresentados referiam-se a outras coletividades, inviabilizando a aferição da necessidade e razoabilidade dos percentuais. 7- A falta de transparência e de prova atuarial específica caracteriza abusividade, por violar os arts. 6º, III e V, e 47 do CDC, impondo desvantagem excessiva ao consumidor e impedindo o controle da onerosidade contratual. 8- A substituição dos índices aplicados pelos percentuais divulgados pela ANS para planos individuais não equipara juridicamente as modalidades contratuais, mas funciona como parâmetro de razoabilidade e sanção pela falta de transparência do fornecedor, conforme consolidado na jurisprudência do TJSP. 9- A manutenção da sentença assegura o equilíbrio contratual, protege o consumidor hipossuficiente e respeita a boa-fé e a função social do contrato de saúde suplementar. IV. DISPOSITIVO E TESE 10- Recursos desprovidos. Sentença mantida. Tese de julgamento: 1- A administradora de benefícios integra a cadeia de consumo e responde solidariamente por abusividades na execução do contrato de plano de saúde coletivo por adesão. 2- É abusivo o reajuste anual por sinistralidade e VCMH quando a operadora não comprova, de forma clara e por meio de documentação atuarial idônea, a variação de custos e a frequência de utilização que justificaram os percentuais aplicados. 3- Na ausência de prova técnica específica, é legítima a substituição dos reajustes pelos índices anuais máximos divulgados pela ANS para planos individuais, como parâmetro de controle de razoabilidade e transparência. (...) (TJ-SP - Apelação Cível: 10271919720238260001 São Paulo, Relator.: Marcio Bonetti, Data de Julgamento: 27/11/2025, Núcleo de Justiça 4.0 em Segundo Grau – Turma II (Direito Privado 1), Data de Publicação: 27/11/2025) (Grifo nosso).
+
+> DIREITO DO CONSUMIDOR. PLANO DE SAÚDE COLETIVO POR ADESÃO. REAJUSTE POR SINISTRALIDADE. ABUSIVIDADE. AUSÊNCIA DE COMPROVAÇÃO DA NECESSIDADE E RAZOABILIDADE DOS AUMENTOS. SUBSTITUIÇÃO PELOS ÍNDICES AUTORIZADOS PELA ANS. DEVOLUÇÃO DOS VALORES PAGOS A MAIOR. RECURSO PROVIDO. (...) III. Razões de decidir A aplicação do Código de Defesa do Consumidor aos contratos de plano de saúde, conforme entendimento consolidado pelo STJ (Súmula 608), exige transparência e justificativa adequada para os reajustes praticados. A operadora não apresentou provas idôneas da necessidade dos reajustes, limitando-se a argumentar a legalidade dos aumentos sem respaldo documental. A jurisprudência majoritária reconhece que, na ausência de comprovação objetiva dos reajustes, os aumentos devem ser limitados aos índices da ANS. Impõe-se a devolução dos valores pagos a maior, de forma simples, nos últimos três anos, corrigidos pelo IPCA-E e acrescidos de juros de mora de 1% ao mês. (...) (TJ-PE - APELAÇÃO CÍVEL: 00665466320248172001, Relator.: AIRTON MOZART VALADARES VIEIRA PIRES, Data de Julgamento: 03/07/2025, 8ª Câmara Cível Especializada - 3º (8CCE-3º)) (Grifo nosso).
+
+Dessa forma, resta evidente que os reajustes aplicados no contrato da parte autora foram realizados sem transparência e sem comprovação técnica adequada, transferindo indevidamente ao consumidor o risco inerente à atividade econômica exercida pelas operadoras de plano de saúde.
+
+Assim, requer o reconhecimento da abusividade dos reajustes aplicados, com a consequente revisão das mensalidades mediante a aplicação dos índices autorizados pela ANS, bem como a restituição dos valores pagos a maior pela parte autora.
+
+### BLOCO: IV | Da abusividade do reajuste de faixa etária
+@condicao: F7==SIM
+@fundamentos: Temas 952 e 1016/STJ — previsão contratual expressa, normas da ANS, ausência de percentuais desarrazoados; exibição do instrumento contratual
+
+Conforme é cediço, a apresentação do instrumento contratual é imprescindível para versar sobre a aplicabilidade correta dos índices a título de reajuste por faixa etária.
+
+Diante dessa omissão, impõe-se que as Rés apresentem expressamente o percentual contratual previsto para o reajuste por faixa etária aplicável ao contrato da Autora, a fim de que este Juízo possa aferir a legalidade e a razoabilidade do índice eventualmente utilizado. A ausência dessa informação impede o controle jurisdicional da abusividade e caracteriza violação ao dever de transparência e informação adequada previsto no Código de Defesa do Consumidor.
+
+Assim se extrai de trecho extraído do site da ANS, onde percebe-se que a normativa é taxativa, uma vez que versa, expressamente, sobre a necessidade de estar disposto em contrato. Assim vejamos:
+
+Isso acontece porque, em geral, por questões naturais, quanto mais idosa a pessoa, mais necessários e mais frequentes se tornam os cuidados com a saúde. As faixas etárias variam conforme a data de contratação do plano e os percentuais de variação precisam estar expressos no contrato.
+
+As faixas etárias para correção variam conforme a data de contratação do plano, sendo que os percentuais de variação têm que estar expressos no contrato.
+
+Ato contínuo, chama atenção para o entendimento do STJ, em relação ao quanto aludido nesta exordial, senão vejamos:
+
+(I) haja previsão contratual,
+
+(II) sejam observadas as normas expedidas pelos órgãos governamentais reguladores e
+
+(III) não sejam aplicados percentuais desarrazoados ou aleatórios que, concretamente e sem base atuarial idônea, onerem excessivamente o consumidor ou discriminem o idoso.
+
+Em questões semelhantes à aqui tratada, a jurisprudência pátria tem entendimento consolidado no sentido de que os referidos reajustes podem ser retirados da base de cálculo, tendo em vista a sua abusividade, quando as seguradoras não apresentam a informação devidamente. Nesse sentido:
+
+> DIREITO CIVIL. APELAÇÃO. PLANO DE SAÚDE. REAJUSTE POR FAIXA ETÁRIA . ABUSIVIDADE RECONHECIDA. (...) III. Razões de Decidir: 3. O recurso não comporta conhecimento com relação à existência e legalidade dos reajustes em razão a idade do contratante, pois tais questões restaram decididas em decisão pregressa desta C. Câmara, já transitada em julgado. 4 . Na parte conhecida, o apelo comporta acolhimento, pois a operadora não apresentou a documentação atuarial necessária para verificar a razoabilidade dos reajustes, conforme exigido pelo acórdão anterior. 5. A falta de base atuarial impede a aplicação dos reajustes, conforme precedentes do TJSP, reconhecendo a abusividade dos aumentos. IV . Dispositivo e Tese 6. Recurso provido em sua parte conhecida para declarar a abusividade dos reajustes por faixa etária, com devolução simples dos valores pagos a maior nos três anos anteriores ao ajuizamento da ação. Tese de julgamento: 1. A ausência de documentação atuarial impede a aplicação de reajustes por faixa etária, sendo reconhecida a abusividade dos reajustes . (TJ-SP - Apelação Cível: 10887395420228260100 São Paulo, Relator.: Lucilia Alcione Prata, Data de Julgamento: 16/04/2025, 6ª Câmara de Direito Privado, Data de Publicação: 16/04/2025) (Grifo nosso).
+
+Assim sendo, é imprescindível a apresentação do referido instrumento devidamente outorgado pelas partes a fim de constatar os fatores aplicados ao plano de saúde da parte autora, pelo que se requer.
+
+### BLOCO: V | Da abusividade dos reajustes por sinistralidade e VCMH
+@condicao: sempre
+@fundamentos: art. 17-A, §2º, II, da Lei 9.656/98; art. 51, IV e X, do CDC; exige base atuarial do grupo, não da carteira
+
+O Superior Tribunal de Justiça pacificou o entendimento de que os reajustes por sinistralidade ou VCMH em planos coletivos não podem ser aplicados de forma arbitrária ou por meros relatórios genéricos da carteira. Exige-se das operadoras a comprovação técnica e idônea da base atuarial específica do grupo do contratante.
+
+Na hipótese em tela, as Réus aplicaram reajustes exorbitantes de até {maior_reajuste} ao ano sem apresentar os demonstrativos analíticos de cálculo atuarial, nem os relatórios de sinistralidade individualizados do grupo em questão. Tal postura configura flagrante violação aos princípios da boa-fé objetiva, transparência e ao art. 51, IV e X, do CDC.  Nesse sentido, vejamos jurisprudência:
+
+> APELAÇÃO CÍVEL. DIREITO DO CONSUMIDOR. PLANO DE SAÚDE COLETIVO. SENTENÇA QUE JULGOU PROCEDENTE O PEDIDO PARA DECLARAR A ABUSIVIDADE E A NULIDADE DO AUMENTO DE SINISTRALIDADE EM 43,64% APLICADO NO ANO DE 2020, NA MENSALIDADE DE 03 .2020; CONDENAR A RÉ A PROCEDER AOS REAJUSTES NOS ÍNDICES FIXADOS PELA ANS, SENDO DE 10% (DEZ POR CENTO) O PERCENTUAL PARA O ANO DE 2020; CONDENAR A RÉ A DEVOLVER A QUANTIA PAGA A MAIS, EM DOBRO, NA FORMA DO ART. 42, PARÁGRAFO ÚNICO, DO CDC; E CONDENAR A RÉ A PAGAR INDENIZAÇÃO POR DANOS MORAIS NO VALOR DE R$ 2.000,00 (DOIS MIL REAIS). REAJUSTE EM PERCENTUAL ABUSIVO À LUZ DO CDC . DESEQUILÍBRIO DO CONTRATO. ONEROSIDADE EXCESSIVA. OPERADORA DO PLANO DE SAÚDE QUE NÃO PROVOU A LEGALIDADE DOS AUMENTOS. ÔNUS QUE COMPETE AO REU, NA FORMA DO ARTIGO 373, II, DO CPC . FALHA NA PRESTAÇÃO DE SERVIÇO CONFIGURADA. DEVOLUÇÃO EM DOBRO ANTE À VIOLAÇÃO À BOA-FÉ OBJETIVA. DANO MORAL CONFIGURADO. VERBA FIXADA QUE ESTÁ ATÉ MESMO ABAIXO DA NORMALMENTE ARBITRADA NO TJRJ . RECURSO CONHECIDO A QUE SE NEGA PROVIMENTO. (TJ-RJ - APELAÇÃO: 01742301820208190001, Relator.: Des(a). LUCIA HELENA DO PASSO, Data de Julgamento: 17/03/2022, DECIMA PRIMEIRA CAMARA DE DIREITO PRIVADO (ANTIGA 27ª CÂMARA CÍVEL), Data de Publicação: 22/03/2022) (Grifo nosso)
+
+Diante da ausência de demonstração cabal do cálculo atuarial pelas Rés, impõe-se a declaração de abusividade dos reajustes aplicados e a substituição dos percentuais pelos índices oficiais fixados pela ANS para os contratos individuais/familiares
+
+### BLOCO: VI | Do direito à restituição dos valores pagos a maior
+@condicao: sempre
+@fundamentos: art. 876 do CC; Tema 610/STJ (prescrição trienal); restituição simples ou em dobro é decisão humana
+
+Uma vez reconhecida a abusividade dos reajustes (tanto anuais quanto por faixa etária), surge para a Autora o direito à devolução dos valores pagos a maior ao longo de toda a contratualidade, nos termos do art. 876 do Código Civil.
+
+Conforme demonstrado nas linhas acima, a parte Autora efetuou o pagamento de valores indevidamente em razão do reajuste abusivo das mensalidades.
+
+Sendo assim, observa-se que a Autora pagou o total de {restituicao}, a mais do que realmente era devido, nos últimos 3 anos, uma grande quantia a ser cobrada de forma indevida e ilegal.
+
+Considerando o princípio da razoabilidade e a celeridade processual, a Autora requer a restituição dos valores, devidamente corrigida monetariamente desde cada desembolso e acrescida de juros de mora a partir da citação.
+
+### BLOCO: VII | Da tutela de urgência
 @condicao: F6==ATIVO
-@fundamentos: art. 300 do CPC
-@pendente: texto do escritório
+@fundamentos: art. 300 do CPC; probabilidade do direito e perigo da demora; risco de cancelamento por inadimplência
+
+A probabilidade do direito encontra-se demonstrada pelos documentos anexados, que comprovam a existência da relação contratual entre as partes, bem como a aplicação de reajustes manifestamente excessivos nas mensalidades do plano de saúde.
+
+Tais aumentos mostram-se desproporcionais e incompatíveis com os parâmetros de razoabilidade adotados pela jurisprudência e pelos princípios que regem as relações de consumo, notadamente a boa-fé objetiva e o equilíbrio contratual, previstos no Código de Defesa do Consumidor.
+
+Assim, os elementos constantes nos autos evidenciam, em sede de cognição sumária, a plausibilidade do direito invocado pela parte autora.
+
+O perigo da demora igualmente se faz presente, uma vez que a manutenção das cobranças em valores abusivos compromete significativamente a capacidade financeira da parte autora, expondo-a ao risco concreto de inadimplência e consequente cancelamento do plano de saúde.
+
+Considerando tratar-se de serviço essencial, cuja continuidade é indispensável para a preservação da assistência médica, eventual interrupção da cobertura pode gerar prejuízos graves e de difícil reparação, além de esvaziar o resultado útil do processo caso a autora seja compelida a suportar os valores excessivos até o julgamento final da demanda.
+
+Diante do exposto, requer a concessão da tutela de urgência, inaudita altera pars, para determinar que as Rés emitam o próximo boleto de cobrança da Autora recalculando a mensalidade, expurgando os reajustes por faixa etária e aplicando apenas os reajustes anuais autorizados pela ANS, o que resultará em um valor a ser apurado por cálculo contábil, mas que se estima em torno de {valor_devido_atual}.
+
+A interrupção da assistência médica em decorrência de aumentos ilegítimos na mensalidade representaria risco iminente à sua saúde e ao seu bem-estar, configurando situação de periculum in mora que justifica, com sobras, a imperiosa necessidade de preservação do contrato nas condições devidas.
+
+Assim, estando presentes os requisitos da probabilidade do direito e do perigo da demora, resta plenamente justificada a intervenção jurisdicional imediata.
+
+### BLOCO: VIII | Da exibição de documentos
+@condicao: sempre
+@fundamentos: arts. 396 a 404 do CPC; art. 6º, VIII, do CDC; art. 400 do CPC; Tema 610/STJ
+
+A Parte Autora não possui acesso integral aos documentos necessários à apuração da evolução das mensalidades, dos índices de reajuste aplicados e da composição das cobranças realizadas pela Ré, os quais permanecem sob guarda exclusiva da operadora.
+
+Trata-se de evidente assimetria informacional, própria da relação de consumo, razão pela qual se impõe a exibição documental pela Ré, nos termos dos arts. 396 a 404 do CPC e do art. 6º, VIII, do CDC.
+
+Além disso, o Superior Tribunal de Justiça, no julgamento do Tema 610, firmou entendimento de que, na vigência dos contratos de plano ou seguro de assistência à saúde, a pretensão condenatória decorrente da declaração de nulidade de cláusula de reajuste prescreve em 20 anos ou em 3 anos, conforme o regime jurídico aplicável, observada a regra de transição do art. 2.028 do Código Civil.
+
+Assim, a apresentação do histórico de cobranças e reajustes é indispensável para permitir a correta análise da abusividade alegada, a identificação da mensalidade efetivamente devida e a apuração dos valores eventualmente cobrados a maior.
+
+Diante disso, requer  a intimação da parte Ré para apresentar os extratos mensais de cobrança e do histórico de reajustes aplicados desde o início da vigência contratual, com indicação dos índices utilizados em cada período, sob pena de aplicação do art. 400 do CPC.
+
+### BLOCO: IX | Da gratuidade de justiça
+@condicao: sempre
+@fundamentos: art. 5º, LXXIV, da CF; arts. 98 e 99 do CPC; presunção do art. 99, §3º; advogado particular não obsta (§4º); miserabilidade não é requisito. A narrativa concreta de renda e despesa é do caso, não do modelo
+A Autora requer a concessão dos benefícios da gratuidade de justiça, nos termos do art. 5º, LXXIV, da Constituição Federal e dos arts. 98 e 99 do Código de Processo Civil, uma vez que, consideradas as particularidades concretas de sua situação econômico-financeira, o recolhimento das custas e despesas processuais importará comprometimento relevante dos recursos destinados à sua subsistência, à manutenção de sua saúde e ao cumprimento de obrigações familiares essenciais.
+
+Com efeito, o art. 98 do Código de Processo Civil assegura a gratuidade à pessoa natural que não disponha de recursos suficientes para arcar com as custas, despesas processuais e honorários advocatícios. Por sua vez, o art. 99, § 3º, estabelece presunção de veracidade da alegação de insuficiência formulada por pessoa natural, sendo certo, ainda, que a contratação de advogado particular não constitui óbice à concessão do benefício, conforme expressamente dispõe o § 4º do mesmo dispositivo.
+
+Importante registrar que a concessão do benefício não pressupõe estado de miserabilidade ou absoluta ausência de patrimônio, exigindo-se, efetivamente, a demonstração de insuficiência de recursos para suportar os encargos do processo. O Superior Tribunal de Justiça já assentou que a miserabilidade não constitui requisito legal para a concessão da gratuidade, sendo suficiente a insuficiência econômica prevista no art. 98 do CPC.
+
+{narrativa_hipossuficiencia}
+
+Soma-se a isso o custo do plano de saúde da própria Autora, cuja mensalidade alcançou **{valor_pago_atual}** em {competencia_atual}.
+
+### BLOCO: X | Do processo 100% digital
+@condicao: sempre
+@fundamentos: padrão do escritório
+A parte Autora manifesta expressa concordância com a tramitação do feito em formato 100% digital.
 
 ---
 

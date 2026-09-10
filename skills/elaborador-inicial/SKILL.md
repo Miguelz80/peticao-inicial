@@ -16,11 +16,12 @@ description: >
 # Elaborador de Petição Inicial — BM Advocacia
 
 > **Os quatro módulos estão implementados e o texto jurídico está ligado às teses.**
-> A tese de **autogestão** tem o texto do escritório e gera peça completa. As outras
-> três (**empresarial familiar**, **coletivo por adesão**, **individual comum**) têm o
-> roteiro de capítulos e os fundamentos de cada um, mas **não têm o texto** — os
-> modelos DOCX correspondentes não foram disponibilizados. Nesses casos a peça sai com
-> marcador visível de pendência e a Conferência não libera.
+> As teses de **autogestão** e de **coletivo por adesão** têm o texto do escritório,
+> extraído de peças reais protocoladas, e geram petição completa. As outras duas
+> (**empresarial familiar** e **individual comum**) têm o roteiro de capítulos e os
+> fundamentos de cada um, mas **não têm o texto** — falta uma peça ou modelo dessas
+> teses. Nesses casos a peça sai com marcador visível de pendência e a Conferência não
+> libera.
 
 ## Escopo
 

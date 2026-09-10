@@ -21,7 +21,7 @@ import re
 from dataclasses import dataclass, field
 
 from gerar_peticao import (
-    Peca, Titulo, Paragrafo, Espaco, tabela_de_reajuste, caixa_de_resumo,
+    Peca, Titulo, Paragrafo, Citacao, Espaco, tabela_de_reajuste, caixa_de_resumo,
 )
 
 CATALOGO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -113,7 +113,7 @@ def carregar(caminho: str = CATALOGO) -> dict[str, Tese]:
         if bloco is None:
             continue
         # separadores e outros títulos do arquivo não são texto da peça
-        if linha.strip().startswith(("---", "#", "> ")):
+        if linha.strip().startswith(("---", "#")):
             fechar_paragrafo()
             continue
         if linha.strip():
@@ -233,9 +233,12 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
             continue
 
         for paragrafo in bloco.paragrafos:
-            texto, faltando = preencher(paragrafo, dados)
+            # "> " marca ementa de julgado: sai recuada e em itálico, como no padrão
+            # do escritório, e não como parágrafo comum de argumentação.
+            citacao = paragrafo.startswith("> ")
+            texto, faltando = preencher(paragrafo[2:] if citacao else paragrafo, dados)
             faltando_geral |= faltando
-            r.peca.add(Paragrafo(texto))
+            r.peca.add(Citacao(texto) if citacao else Paragrafo(texto))
 
         if bloco.tabela == "reajuste" and resultado_calculo is not None:
             r.peca.add(caixa_de_resumo(resultado_calculo),

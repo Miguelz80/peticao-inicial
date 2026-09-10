@@ -33,6 +33,15 @@ def dados_completos(res):
             "restituicao": _brl(res.restituicao())}
 
 
+def dados_adesao(res):
+    return {"plano": "PLANO X", "inicio_contrato": "março/2018",
+            "competencia_atual": "julho de 2026", "maior_reajuste": "29,90%",
+            "valor_pago_atual": _brl(res.valor_pago_atual),
+            "valor_devido_atual": _brl(res.valor_devido_atual),
+            "restituicao": _brl(res.restituicao()),
+            "narrativa_hipossuficiencia": "Renda variável."}
+
+
 def titulos(peca):
     """Devolve "numeral\ttítulo", como o bloco é renderizado na peça."""
     return [f"{b.numeral}\t{b.texto}" for b in peca.blocos if isinstance(b, Titulo)]
@@ -52,11 +61,45 @@ def test_separadores_do_arquivo_nao_viram_texto_da_peca():
                 assert not p.startswith(("---", "#")), (tese.nome, bloco.titulo, p)
 
 
-def test_so_a_tese_de_autogestao_tem_texto_do_escritorio():
+def test_teses_com_texto_do_escritorio_e_teses_pendentes():
+    """Autogestão e coletivo por adesão vieram de peças reais protocoladas. As outras
+    duas seguem sem texto até os modelos chegarem."""
     t = carregar()
-    assert all(b.paragrafos for b in t["CASSI_AUTOGESTAO"].blocos)
-    for nome in ("EMPRESARIAL_FAMILIAR", "COLETIVO_POR_ADESAO", "INDIVIDUAL_COMUM"):
+    for nome in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO"):
+        assert all(b.paragrafos for b in t[nome].blocos), nome
+        assert not t[nome].pendente, nome
+    for nome in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
         assert t[nome].pendente, f"{nome} deveria estar marcada como pendente"
+
+
+def test_ementa_de_julgado_vira_citacao_recuada():
+    from gerar_peticao import Citacao
+    res = resultado()
+    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+                    dados_adesao(res), resultado_calculo=res)
+    citacoes = [b for b in r.peca.blocos if isinstance(b, Citacao)]
+    assert len(citacoes) == 4, len(citacoes)
+    assert 'w:left="720"' in citacoes[0].xml()
+    assert not citacoes[0].texto.startswith("> "), "a marca não pode vazar para o texto"
+
+
+def test_coletivo_por_adesao_monta_pronta_com_tabela():
+    res = resultado()
+    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+                    dados_adesao(res), resultado_calculo=res)
+    assert r.pronto
+    corpo = "".join(b.xml() for b in r.peca.blocos)
+    assert "<w:tbl>" in corpo and "julho/2024" in corpo
+
+
+def test_faixa_etaria_condiciona_o_capitulo_na_adesao():
+    res = resultado()
+    com = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+                      dados_adesao(res), resultado_calculo=res)
+    sem = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "NAO"},
+                      dados_adesao(res), resultado_calculo=res)
+    assert any("FAIXA ETÁRIA" in t.upper() for t in titulos(com.peca))
+    assert not any("FAIXA ETÁRIA" in t.upper() for t in titulos(sem.peca))
 
 
 # --------------------------------------------------------------- condições ----
