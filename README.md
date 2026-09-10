@@ -17,17 +17,18 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 |---|--------|-------|--------|
 | 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
 | 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
-| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 38 testes |
+| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 45 testes |
 | 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | **Implementado** — `scripts/conferir.py`, 22 testes |
 
 A ordem é deliberada: o Classificador é o módulo de maior risco (uma tese errada numa
 peça protocolada é o pior cenário do projeto) e é validado primeiro.
 
 O texto jurídico de cada tese fica em `skills/elaborador-inicial/references/teses.md` —
-editável pela advogada, sem tocar em código. Hoje as teses de **autogestão** e de
-**coletivo por adesão** têm o texto do escritório, extraído de peças reais; as outras
-duas têm o roteiro de capítulos e os fundamentos, mas geram peça com marcador de
-pendência até que uma peça ou modelo dessas teses chegue.
+editável pela advogada, sem tocar em código. As quatro teses geram petição completa, com
+procedências distintas: **autogestão** e **coletivo por adesão** vieram de peças reais
+protocoladas; **empresarial familiar** e **individual comum** foram redigidas a partir
+dos fundamentos documentados e ficam marcadas para revisão da advogada até que uma peça
+real dessas teses substitua o texto.
 
 ## Requisito não negociável: DOCX 100% editável
 

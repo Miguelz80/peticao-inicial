@@ -42,6 +42,15 @@ def dados_adesao(res):
             "narrativa_hipossuficiencia": "Renda variável."}
 
 
+def dados_todas(res):
+    d = dados_adesao(res)
+    d.update({"idade": "81", "comarca": "Salvador/BA",
+              "processo_anterior": "0000000-00.0000.0.00.0000",
+              "comarca_anterior": "Outra/BA",
+              "diferenca_mensal": _brl(res.diferenca_mensal)})
+    return d
+
+
 def titulos(peca):
     """Devolve "numeral\ttítulo", como o bloco é renderizado na peça."""
     return [f"{b.numeral}\t{b.texto}" for b in peca.blocos if isinstance(b, Titulo)]
@@ -61,15 +70,22 @@ def test_separadores_do_arquivo_nao_viram_texto_da_peca():
                 assert not p.startswith(("---", "#")), (tese.nome, bloco.titulo, p)
 
 
-def test_teses_com_texto_do_escritorio_e_teses_pendentes():
-    """Autogestão e coletivo por adesão vieram de peças reais protocoladas. As outras
-    duas seguem sem texto até os modelos chegarem."""
+def test_toda_tese_do_catalogo_tem_texto_em_todos_os_blocos():
+    t = carregar()
+    for nome, tese in t.items():
+        assert not tese.pendente, f"{nome} está sem texto"
+        for b in tese.blocos:
+            assert b.paragrafos, f"{nome} · {b.titulo} sem texto"
+
+
+def test_procedencia_do_texto_esta_declarada():
+    """Duas teses vieram de peça real protocolada; duas foram redigidas a partir dos
+    fundamentos. A diferença não pode ficar implícita."""
     t = carregar()
     for nome in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO"):
-        assert all(b.paragrafos for b in t[nome].blocos), nome
-        assert not t[nome].pendente, nome
+        assert not t[nome].revisar, f"{nome} veio de peça real, não deveria pedir revisão"
     for nome in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
-        assert t[nome].pendente, f"{nome} deveria estar marcada como pendente"
+        assert t[nome].revisar, f"{nome} foi redigida e precisa declarar isso"
 
 
 def test_ementa_de_julgado_vira_citacao_recuada():
@@ -180,24 +196,38 @@ def test_tese_de_autogestao_monta_pronta():
     assert r.pronto and not r.pendencias
 
 
+CATALOGO_SEM_TEXTO = """## TESE: TESTE_PENDENTE
+@pendente: falta a peça de referência
+
+### BLOCO: I | Do capítulo sem texto
+@condicao: sempre
+@fundamentos: inexistência de vínculo empregatício entre os beneficiários e a empresa
+@pendente: texto do escritório
+"""
+
+
+def catalogo_sintetico(diretorio):
+    caminho = os.path.join(diretorio, "teses.md")
+    open(caminho, "w", encoding="utf-8").write(CATALOGO_SEM_TEXTO)
+    return caminho
+
+
 def test_tese_sem_texto_marca_pendencia_em_vez_de_improvisar():
-    res = resultado()
-    r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
-                    dados_completos(res), resultado_calculo=res)
-    assert not r.pronto
-    assert any("modelo" in p.lower() or "texto do escritório" in p.lower()
-               for p in r.pendencias)
-    corpo = "".join(b.xml() for b in r.peca.blocos)
-    assert MARCA_PENDENTE in corpo
-    assert "reconhecimento do plano empresarial" in corpo.lower() or True
+    """O mecanismo de pendência continua valendo para qualquer tese que entre no
+    catálogo sem texto — testado com catálogo sintético para não depender de o
+    arquivo real ter buraco."""
+    with tempfile.TemporaryDirectory() as t:
+        r = montar_peca("TESTE_PENDENTE", {}, {},
+                        catalogo=catalogo_sintetico(t))
+        assert not r.pronto and r.pendencias
+        assert MARCA_PENDENTE in "".join(b.xml() for b in r.peca.blocos)
 
 
 def test_marcador_de_pendencia_traz_os_fundamentos_do_capitulo():
-    res = resultado()
-    r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
-                    dados_completos(res), resultado_calculo=res)
-    corpo = "".join(b.xml() for b in r.peca.blocos)
-    assert "vínculo empregatício" in corpo, "o marcador tem que dizer o que falta provar"
+    with tempfile.TemporaryDirectory() as t:
+        r = montar_peca("TESTE_PENDENTE", {}, {}, catalogo=catalogo_sintetico(t))
+        corpo = "".join(b.xml() for b in r.peca.blocos)
+        assert "vínculo empregatício" in corpo, "o marcador tem que dizer o que falta"
 
 
 def test_tese_fora_do_catalogo_nomeia_as_disponiveis():
@@ -222,10 +252,8 @@ def test_peca_de_autogestao_gerada_passa_na_conferencia():
 
 def test_peca_com_capitulo_pendente_e_barrada_na_conferencia():
     """O marcador não pode passar despercebido até o protocolo."""
-    res = resultado()
-    r = montar_peca("INDIVIDUAL_COMUM", {}, dados_completos(res),
-                    resultado_calculo=res)
     with tempfile.TemporaryDirectory() as t:
+        r = montar_peca("TESTE_PENDENTE", {}, {}, catalogo=catalogo_sintetico(t))
         saida = os.path.join(t, "peca.docx")
         montar(modelo(t), r.peca, saida)
         achados = conferir_editabilidade(saida)
@@ -243,6 +271,80 @@ def test_valores_do_calculo_chegam_ao_texto():
 
 def test_romano():
     assert [romano(n) for n in (1, 4, 9, 11, 14)] == ["I", "IV", "IX", "XI", "XIV"]
+
+
+
+
+
+# ------------------------------------------------- procedência do texto ----
+
+def test_as_quatro_teses_geram_peca_completa():
+    res = resultado()
+    for tese in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO", "EMPRESARIAL_FAMILIAR",
+                 "INDIVIDUAL_COMUM"):
+        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
+                        dados_todas(res), resultado_calculo=res)
+        assert r.pronto, (tese, r.pendencias, r.perguntas)
+        assert len(titulos(r.peca)) >= 8, tese
+
+
+def test_teses_redigidas_avisam_que_precisam_de_revisao():
+    """Autogestão e adesão vieram de peça real; as outras duas foram redigidas a
+    partir dos fundamentos e não podem sair como se tivessem a mesma procedência."""
+    res = resultado()
+    for tese in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO"):
+        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
+                        dados_todas(res), resultado_calculo=res)
+        assert not r.precisa_revisao, tese
+    for tese in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
+        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM"}, dados_todas(res),
+                        resultado_calculo=res)
+        assert r.precisa_revisao, tese
+        assert any("peça real" in a for a in r.revisoes), tese
+
+
+def test_aviso_de_revisao_nao_vira_marcador_no_documento():
+    """Diferente da pendência: o texto está completo, o aviso é para a advogada."""
+    res = resultado()
+    r = montar_peca("INDIVIDUAL_COMUM", {"F6": "ATIVO", "F7": "NAO"},
+                    dados_todas(res), resultado_calculo=res)
+    corpo = "".join(b.xml() for b in r.peca.blocos)
+    assert MARCA_PENDENTE not in corpo
+    assert r.revisoes
+
+
+def test_capitulos_excludentes_do_empresarial_familiar():
+    """Rescisão indireta e tutela de urgência são caminhos alternativos: nunca os
+    dois na mesma peça."""
+    res = resultado()
+    ativo = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
+                        dados_todas(res), resultado_calculo=res)
+    cancelado = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "CANCELADO", "F7": "NAO"},
+                            dados_todas(res), resultado_calculo=res)
+    t_ativo = " ".join(titulos(ativo.peca)).upper()
+    t_canc = " ".join(titulos(cancelado.peca)).upper()
+    assert "TUTELA" in t_ativo and "RESCISÃO" not in t_ativo
+    assert "RESCISÃO" in t_canc and "TUTELA" not in t_canc
+
+
+def test_empresarial_familiar_fundamenta_o_cdc_por_equiparacao():
+    """A incidência não vem da Súmula 608 isolada — vem dos arts. 2º e 29 do CDC."""
+    res = resultado()
+    r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
+                    dados_todas(res), resultado_calculo=res)
+    corpo = "".join(b.xml() for b in r.peca.blocos)
+    assert "art. 2º" in corpo and "art. 29" in corpo
+    assert "equipara" in corpo.lower()
+
+
+def test_nenhuma_tese_redigida_cita_julgado():
+    """Escolher julgado é da advogada. Texto redigido aqui não inventa citação."""
+    t = carregar()
+    for nome in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
+        for bloco in t[nome].blocos:
+            for p in bloco.paragrafos:
+                assert not p.startswith("> "), (nome, bloco.titulo)
+                assert "TJ-" not in p and "Relator" not in p, (nome, bloco.titulo)
 
 
 if __name__ == "__main__":

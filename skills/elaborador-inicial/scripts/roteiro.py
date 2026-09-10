@@ -49,6 +49,7 @@ class BlocoTese:
     condicao: str = "sempre"
     fundamentos: str = ""
     pendente: str = ""
+    revisar: str = ""
     tabela: str = ""
     paragrafos: list[str] = field(default_factory=list)
 
@@ -57,6 +58,7 @@ class BlocoTese:
 class Tese:
     nome: str
     pendente: str = ""
+    revisar: str = ""
     blocos: list[BlocoTese] = field(default_factory=list)
 
 
@@ -190,10 +192,18 @@ class Roteiro:
     peca: Peca
     pendencias: list[str] = field(default_factory=list)
     perguntas: list[str] = field(default_factory=list)
+    revisoes: list[str] = field(default_factory=list)
 
     @property
     def pronto(self) -> bool:
         return not self.pendencias and not self.perguntas
+
+    @property
+    def precisa_revisao(self) -> bool:
+        """Texto redigido a partir dos fundamentos documentados, não extraído de peça
+        real do escritório. Gera peça completa, mas exige leitura da advogada antes do
+        primeiro protocolo — e o aviso tem que aparecer no Espelho."""
+        return bool(self.revisoes)
 
 
 def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
@@ -208,6 +218,8 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
     r = Roteiro(peca=Peca())
     if tese.pendente:
         r.pendencias.append(f"{tese_nome}: {tese.pendente}")
+    if tese.revisar:
+        r.revisoes.append(f"{tese_nome}: {tese.revisar}")
 
     faltando_geral: set[str] = set()
     numero = 0
@@ -224,6 +236,9 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
 
         numero += 1
         r.peca.add(Titulo(f"{romano(numero)}.", bloco.titulo))
+
+        if bloco.revisar:
+            r.revisoes.append(f"{tese_nome} · {bloco.titulo}: {bloco.revisar}")
 
         if bloco.pendente:
             r.pendencias.append(f"{tese_nome} · {bloco.titulo}: {bloco.pendente}")

@@ -16,12 +16,19 @@ description: >
 # Elaborador de Petição Inicial — BM Advocacia
 
 > **Os quatro módulos estão implementados e o texto jurídico está ligado às teses.**
-> As teses de **autogestão** e de **coletivo por adesão** têm o texto do escritório,
-> extraído de peças reais protocoladas, e geram petição completa. As outras duas
-> (**empresarial familiar** e **individual comum**) têm o roteiro de capítulos e os
-> fundamentos de cada um, mas **não têm o texto** — falta uma peça ou modelo dessas
-> teses. Nesses casos a peça sai com marcador visível de pendência e a Conferência não
-> libera.
+> **As quatro teses geram petição completa**, mas com procedências diferentes, e essa
+> diferença precisa chegar a quem opera:
+>
+> - **Autogestão** e **coletivo por adesão** — texto extraído de peças reais
+>   protocoladas do escritório.
+> - **Empresarial familiar** e **individual comum** — texto **redigido a partir dos
+>   fundamentos documentados**, sem peça de referência. Gera peça completa e o Roteiro
+>   devolve avisos em `revisoes`. **Esses avisos vão no Espelho** e a peça precisa de
+>   leitura da advogada antes do primeiro protocolo. Substituir assim que houver uma
+>   peça real dessas teses.
+>
+> Nenhuma tese redigida cita julgado: escolher jurisprudência é decisão da advogada, e
+> os capítulos indicam onde ela entra.
 
 ## Escopo
 
@@ -59,7 +66,10 @@ escritório correspondente.
    capítulos da tese confirmada, ligando o texto jurídico aos blocos. Capítulo
    condicional entra ou sai conforme os fatos (`F6` plano ativo, `F9` idade, `F10`
    reajuizamento, `F7` faixa etária), e a numeração é recontada para não deixar buraco.
-   Campo sem valor **interrompe a geração**; capítulo sem texto vira marcador visível.
+   Campo sem valor **interrompe a geração**; capítulo sem texto vira marcador visível;
+   tese redigida a partir dos fundamentos devolve avisos em `revisoes`, que **têm que
+   aparecer no Espelho** — a operadora precisa saber que aquele texto ainda não foi lido
+   por advogado.
 
 7. **Gerar** — `scripts/gerar_peticao.py` monta a peça a partir do **modelo DOCX real
    do escritório**, trocando só o conteúdo e reaproveitando o `sectPr` original, que é o
