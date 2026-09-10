@@ -15,9 +15,12 @@ description: >
 
 # Elaborador de Petição Inicial — BM Advocacia
 
-> **Os quatro módulos estão implementados.** Falta ligar o texto jurídico de cada tese
-> aos blocos do Gerador — hoje a redação da peça é montada bloco a bloco por quem usa a
-> skill, não por catálogo de tese. Falta também o modelo DOCX do revisional individual.
+> **Os quatro módulos estão implementados e o texto jurídico está ligado às teses.**
+> A tese de **autogestão** tem o texto do escritório e gera peça completa. As outras
+> três (**empresarial familiar**, **coletivo por adesão**, **individual comum**) têm o
+> roteiro de capítulos e os fundamentos de cada um, mas **não têm o texto** — os
+> modelos DOCX correspondentes não foram disponibilizados. Nesses casos a peça sai com
+> marcador visível de pendência e a Conferência não libera.
 
 ## Escopo
 
@@ -51,16 +54,22 @@ escritório correspondente.
    previsão (fica de fora, é o que se impugna) — e essa distinção é jurídica, o script
    não decide.
 
-6. **Gerar** — `scripts/gerar_peticao.py` monta a peça a partir do **modelo DOCX real
+6. **Montar o roteiro** — `scripts/roteiro.py` lê `references/teses.md` e escolhe os
+   capítulos da tese confirmada, ligando o texto jurídico aos blocos. Capítulo
+   condicional entra ou sai conforme os fatos (`F6` plano ativo, `F9` idade, `F10`
+   reajuizamento, `F7` faixa etária), e a numeração é recontada para não deixar buraco.
+   Campo sem valor **interrompe a geração**; capítulo sem texto vira marcador visível.
+
+7. **Gerar** — `scripts/gerar_peticao.py` monta a peça a partir do **modelo DOCX real
    do escritório**, trocando só o conteúdo e reaproveitando o `sectPr` original, que é o
    que carrega o timbre. A tabela de reajuste sai do Calculador como `w:tbl` nativa, com
    a paleta de `references/estilo-tabelas.md`. Imagem órfã do modelo é podada.
 
-7. **Conferir** — `scripts/conferir.py` compara os valores da peça com os de origem e
+8. **Conferir** — `scripts/conferir.py` compara os valores da peça com os de origem e
    verifica se o DOCX pode ser editado no Word. Achado `BLOQUEIA` **impede a entrega**
    do documento; não existe avisar e seguir. Catálogo em `references/conferencia.md`.
 
-8. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
+9. **Responder as perguntas bloqueantes.** Toda pergunta oferece "Não sei / vou
    verificar", e essa resposta **para o processo**. Não insista, não reformule para
    obter um palpite.
 
@@ -97,3 +106,4 @@ escritório correspondente.
 | `references/estilo-tabelas.md` | paleta e layout das tabelas em formato nativo |
 | `references/indices-ans.md` | série de índices ANS e a fórmula do valor devido |
 | `references/conferencia.md` | catálogo das verificações e o que cada uma bloqueia |
+| `references/teses.md` | **o texto jurídico de cada tese**, capítulo a capítulo — é aqui que a advogada ajusta a redação |

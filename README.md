@@ -17,11 +17,16 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 |---|--------|-------|--------|
 | 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
 | 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
-| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py`, 17 testes |
+| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 35 testes |
 | 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | **Implementado** — `scripts/conferir.py`, 22 testes |
 
 A ordem é deliberada: o Classificador é o módulo de maior risco (uma tese errada numa
 peça protocolada é o pior cenário do projeto) e é validado primeiro.
+
+O texto jurídico de cada tese fica em `skills/elaborador-inicial/references/teses.md` —
+editável pela advogada, sem tocar em código. Hoje só a tese de **autogestão** tem o
+texto do escritório; as outras três têm o roteiro de capítulos e os fundamentos, mas
+geram peça com marcador de pendência até que os modelos DOCX correspondentes cheguem.
 
 ## Requisito não negociável: DOCX 100% editável
 
@@ -58,6 +63,7 @@ python3 tests/test_extrair.py
 python3 tests/test_calcular.py
 python3 tests/test_conferir.py
 python3 tests/test_gerar.py
+python3 tests/test_roteiro.py
 ```
 
 Sem dependências para a lógica de decisão. A extração completa (PDF, XLSX, DOCX) usa

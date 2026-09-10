@@ -301,6 +301,15 @@ def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
             achados.append(Achado("C8", ALERTA, "document.xml",
                                   "há imagens no corpo e nenhuma tabela nativa"))
 
+        # C15 — capítulo sem texto do escritório. O Roteiro marca o buraco em vez de
+        # improvisar fundamentação; a peça não sai enquanto o marcador estiver lá.
+        if "⟦PENDENTE" in doc:
+            achados.append(Achado(
+                "C15", BLOQUEIA, "document.xml",
+                "há capítulo sem texto do escritório, marcado como pendente",
+                esperado="todos os capítulos redigidos",
+                encontrado=f"{doc.count('⟦PENDENTE')} marcador(es)"))
+
         # C14 — fonte fora do padrão do escritório.
         fontes = set(re.findall(r'w:ascii="([^"]+)"', doc))
         estranhas = {f for f in fontes if not f.startswith("Segoe UI")}
