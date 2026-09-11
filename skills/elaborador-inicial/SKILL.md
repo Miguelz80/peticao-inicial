@@ -63,7 +63,10 @@ módulo a módulo quando necessário.
 1. **Extrair** — `python3 scripts/extrair_evidencias.py <arquivos...>` devolve, para
    cada arquivo: o papel do documento, a origem do texto (nativo × digitalizado) e as
    planilhas encontradas. Um arquivo pode conter mais de um documento; o script
-   segmenta por página.
+   segmenta por página. A planilha de cálculo do escritório costuma chegar em **PDF**,
+   não em xlsx — `scripts/ler_tabela.py` lê a tabela do texto e devolve as competências
+   mês a mês, avisando quando há buraco na série, competência repetida ou linha
+   ilegível.
 
 2. **Levantar os fatos discriminantes.** O script não interpreta narrativa — isso é
    leitura sua, da transcrição e dos documentos. Preencha os fatos `F1` a `F10`
@@ -77,9 +80,10 @@ módulo a módulo quando necessário.
    confiança alta, a tese nunca é assumida em silêncio: peça errada protocolada é o
    pior cenário deste projeto.
 
-5. **Calcular** — quando o regime for `FATURAMENTO_BRUTO` ou
-   `DEMONSTRATIVO_OPERADORA`, `scripts/calcular_reajuste.py` monta a tabela de reajuste
-   devido. Precisa do **mês de aniversário do contrato**. Todo reajuste fora desse mês
+5. **Calcular** — `scripts/calcular_reajuste.py` monta a tabela de reajuste devido.
+   Roda **em todos os regimes**, inclusive em `CALCULO_PRONTO`: recontar é a única
+   verificação independente da planilha que o cliente mandou, e o resultado é comparado
+   linha a linha com os valores importados. Precisa do **mês de aniversário do contrato**. Todo reajuste fora desse mês
    vira pendência: pode ser faixa etária legítima (entra no devido) ou aumento sem
    previsão (fica de fora, é o que se impugna) — e essa distinção é jurídica, o script
    não decide.

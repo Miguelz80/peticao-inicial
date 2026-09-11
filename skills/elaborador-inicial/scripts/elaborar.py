@@ -31,6 +31,7 @@ import classificar as cls
 import conferir as conf
 import extrair_evidencias as extr
 import gerar_peticao as ger
+import ler_tabela as tab
 import roteiro as rot
 
 
@@ -98,6 +99,18 @@ def elaborar(caso: Caso) -> Etapa:
     documentos = extr.para_documentos(extracao)
     planilhas = [cls.Planilha(**p) for p in extracao.planilhas]
 
+    # Planilha reconhecida vira série automaticamente. Sem isto o orquestrador pedia
+    # as competências mês a mês mesmo tendo o arquivo em mãos.
+    avisos_da_serie: list[str] = []
+    if planilhas and not caso.competencias:
+        for pl in planilhas:
+            comps, avisos = tab.competencias_de(
+                {"linhas": pl.linhas, "texto_solto": pl.texto_solto})
+            if comps:
+                caso.competencias = comps
+                avisos_da_serie = avisos
+                break
+
     # Série informada direto pela operadora vale como base de cálculo: o Eixo A não
     # pode ficar em AUSENTE só porque o dado não veio por arquivo.
     if caso.competencias and not planilhas:
@@ -107,7 +120,7 @@ def elaborar(caso: Caso) -> Etapa:
             linhas=[[c.rotulo, c.valor_pago] for c in caso.competencias])]
 
     dossie = cls.classificar(documentos, planilhas, caso.fatos)
-    etapa = Etapa(fase=TRIAGEM, dossie=dossie)
+    etapa = Etapa(fase=TRIAGEM, dossie=dossie, avisos=list(avisos_da_serie))
 
     pendentes = [p for p in dossie["perguntas"] if p["id"] not in caso.respostas]
     bloqueantes = [p for p in pendentes if p["bloqueante"]]
@@ -131,7 +144,9 @@ def elaborar(caso: Caso) -> Etapa:
     regime = dossie["eixo_a"]["regime"]
     resultado = None
 
-    if regime in PRECISA_CALCULO or caso.competencias:
+    # Calcula sempre que houver série, inclusive em CALCULO_PRONTO: recontar é a
+    # única verificação independente da planilha que o cliente mandou.
+    if caso.competencias:
         if caso.mes_aniversario is None:
             etapa.perguntas = ["Em que mês cai o aniversário do contrato? "
                                "É ele que define qual índice ANS se aplica a cada ano."]
@@ -151,6 +166,10 @@ def elaborar(caso: Caso) -> Etapa:
             etapa.perguntas = [p.pergunta for p in resultado.pendencias]
             return etapa
         resultado.restituicao()
+        if regime == "CALCULO_PRONTO":
+            for pl in planilhas:
+                etapa.avisos += tab.conferir_importado(
+                    {"linhas": pl.linhas, "texto_solto": pl.texto_solto}, resultado)
         caso.dados.setdefault("valor_pago_atual", calc._brl(resultado.valor_pago_atual))
         caso.dados.setdefault("valor_devido_atual",
                               calc._brl(resultado.valor_devido_atual))
@@ -166,7 +185,7 @@ def elaborar(caso: Caso) -> Etapa:
         etapa.perguntas = [str(erro)]
         return etapa
 
-    etapa.avisos = list(roteiro.revisoes)
+    etapa.avisos = list(avisos_da_serie) + list(roteiro.revisoes)
     if roteiro.perguntas:
         etapa.perguntas = list(roteiro.perguntas)
         return etapa

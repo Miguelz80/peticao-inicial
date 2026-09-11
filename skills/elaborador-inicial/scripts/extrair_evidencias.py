@@ -57,6 +57,12 @@ MARCADORES = {
     "PROPOSTA_ADESAO":  ["proposta de adesao", "declaro que", "corretor"],
 }
 
+# Colunas da planilha de cálculo do escritório. O arquivo costuma chegar em PDF, não
+# em xlsx, e sem isto o cálculo pronto passava como documento indefinido e nunca
+# chegava ao Calculador.
+COLUNAS_CALCULO = ["mes/ano", "valor pago", "reajuste aplicado", "tipo de reajuste",
+                   "reajuste devido", "valor devido", "diferenca"]
+
 # Peça processual compartilha vocabulário com o contrato do plano ("cláusula",
 # "cobertura"), então é reconhecida por estrutura própria e testada primeiro —
 # ler uma inicial como se fosse contrato do cliente seria erro grave.
@@ -82,6 +88,10 @@ def identificar_papel(texto: str) -> tuple[str, list[str]]:
     achados_peca = [m for m in MARCADORES_PECA if m in n]
     if len(achados_peca) >= 2:
         return "PECA_PROCESSUAL", [f"estrutura de peça: {', '.join(achados_peca)}"]
+
+    colunas = [c for c in COLUNAS_CALCULO if c in n]
+    if len(colunas) >= 3:
+        return "CALCULO_PRONTO", [f"colunas de cálculo: {', '.join(colunas)}"]
     melhor, achados_melhor = "INDEFINIDO", []
     for papel, marcas in MARCADORES.items():
         achados = [m for m in marcas if m in n]
@@ -150,9 +160,14 @@ def _fechar(ex, caminho, ini, fim, chave, textos) -> None:
     papel, origem = chave
     texto = "\n".join(textos)
     ex.trechos.append(Trecho(caminho, (ini + 1, fim + 1), texto, origem, papel))
-    if papel == "DEMONSTRATIVO_OPERADORA":
-        ex.planilhas.append({"arquivo": f"{os.path.basename(caminho)} (pgs {ini+1}-{fim+1})",
-                             "cabecalhos": [], "linhas": [], "texto_solto": texto})
+    if papel in ("DEMONSTRATIVO_OPERADORA", "CALCULO_PRONTO"):
+        # cabeçalhos reconhecidos no texto, para o Classificador decidir o Eixo A
+        from ler_tabela import linhas_de_texto
+        n = _normalizar(texto)
+        ex.planilhas.append({
+            "arquivo": f"{os.path.basename(caminho)} (pgs {ini+1}-{fim+1})",
+            "cabecalhos": [c for c in COLUNAS_CALCULO if c in n],
+            "linhas": linhas_de_texto(texto), "texto_solto": texto})
 
 
 def _ler_xlsx(caminho: str, ex: Extracao) -> None:
