@@ -38,6 +38,28 @@ escritório correspondente.
 
 ## Fluxo
 
+**O caminho curto:** `scripts/elaborar.py` faz tudo isso numa chamada só. Ele avança
+até o próximo ponto que exige decisão humana, devolve o que precisa ser respondido e
+para. A resposta volta no mesmo `Caso` e a chamada seguinte continua de onde parou —
+é o que torna o fluxo utilizável por chat, uma pergunta de cada vez.
+
+```python
+from elaborar import Caso, elaborar
+caso = Caso(arquivos=[...], modelo_docx="...", cliente="...")
+etapa = elaborar(caso)          # para na primeira pergunta
+# ... a operadora responde, os dados entram no `caso` ...
+etapa = elaborar(caso)          # continua
+```
+
+`etapa.fase` diz onde parou (TRIAGEM · CONFIRMACAO · CALCULO · REDACAO · GERACAO ·
+CONFERENCIA · CONCLUIDO), `etapa.perguntas` o que falta, `etapa.avisos` o que precisa
+de olhar humano mesmo sem travar, e `etapa.espelho` o retrato completo do caso.
+Gate que não se resolve preenchendo um fato é respondido em `caso.respostas`, pelo id
+da pergunta.
+
+Os passos abaixo descrevem o que cada fase faz — úteis para entender e para operar
+módulo a módulo quando necessário.
+
 1. **Extrair** — `python3 scripts/extrair_evidencias.py <arquivos...>` devolve, para
    cada arquivo: o papel do documento, a origem do texto (nativo × digitalizado) e as
    planilhas encontradas. Um arquivo pode conter mais de um documento; o script

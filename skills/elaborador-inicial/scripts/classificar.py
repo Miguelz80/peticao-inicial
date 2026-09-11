@@ -489,7 +489,8 @@ ROTULO_TESE = {
 }
 
 
-def espelho(dossie: dict, cliente: str = "") -> str:
+def espelho(dossie: dict, cliente: str = "",
+            pedir_confirmacao: bool = True) -> str:
     """Texto apresentado à operadora ANTES de gerar qualquer coisa.
 
     Guardado junto com o .docx: se uma peça sair com tese errada, dá para auditar
@@ -498,6 +499,8 @@ def espelho(dossie: dict, cliente: str = "") -> str:
     L: list[str] = [f"ESPELHO DE CLASSIFICAÇÃO — {cliente or 'caso sem nome'}", ""]
 
     L.append("Documentos reconhecidos")
+    if not dossie["documentos"]:
+        L.append("    (nenhum arquivo enviado — os dados vieram direto da operadora)")
     for doc in dossie["documentos"]:
         marca = "  ?" if doc.get("papel") == "INDEFINIDO" else "   "
         origem = doc.get("origem", "")
@@ -540,9 +543,9 @@ def espelho(dossie: dict, cliente: str = "") -> str:
 
     if dossie["status"] == "BLOQUEADO":
         L.append("NÃO vou gerar a peça enquanto os itens marcados com ! não forem respondidos.")
-    else:
+    elif pedir_confirmacao:
         L.append("Confirma a tese acima para eu gerar a peça? (sim / corrigir)")
-    return "\n".join(L)
+    return "\n".join(L).rstrip()
 
 
 def main(caminho_json: str) -> int:
