@@ -140,6 +140,31 @@ A parte Autora manifesta expressa concordância com a tramitação do feito em f
 
 ---
 
+### BLOCO: XII | Dos pedidos
+@condicao: sempre
+@tipo: pedidos
+@fundamentos: cada pedido carrega a mesma condição do capítulo que o sustenta — pedido sem capítulo é incoerência que o leitor nota
+Diante do exposto, requer:
+
+- [F9>=60] o reconhecimento e a anotação da **prioridade de tramitação**, nos termos do art. 71 da Lei nº 10.741/2003 c/c art. 1.048, I, do Código de Processo Civil, por contar a parte Autora com {idade} anos de idade
+- [sempre] o deferimento dos benefícios da **gratuidade de justiça**, nos termos dos arts. 98 e 99 do Código de Processo Civil
+- [F6==ATIVO] a concessão da **tutela de urgência**, nos termos do art. 300 do Código de Processo Civil, para limitar a mensalidade ao patamar de **{valor_devido_atual}** até o julgamento final
+- [F6==ATIVO] que a Ré se abstenha de suspender, cancelar ou rescindir o plano, impor carências ou negar cobertura em razão da discussão judicial, desde que mantido o pagamento do valor fixado
+- [F6==ATIVO] a fixação de **multa diária** em caso de descumprimento da tutela de urgência
+- [sempre] a **citação** da Ré para, querendo, apresentar contestação, sob pena de revelia
+- [sempre] a determinação para que a Ré **exiba** o contrato e regulamento aplicáveis, o histórico completo de mensalidades, os índices de reajuste ano a ano, a memória de cálculo, os demonstrativos atuariais e os documentos de sinistralidade, sob pena do art. 400 do Código de Processo Civil
+- [sempre] a **distribuição dinâmica do ônus da prova**, nos termos do art. 373, §1º, do Código de Processo Civil
+- [sempre] no mérito, a **procedência total dos pedidos**, para declarar a abusividade dos reajustes aplicados e revisar a mensalidade mediante a aplicação dos índices anuais divulgados pela ANS
+- [sempre] a condenação da Ré à **restituição** dos valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, com correção monetária desde cada desembolso e juros de mora a partir da citação
+- [sempre] a produção de todos os meios de prova admitidos, especialmente documental suplementar e **pericial contábil ou atuarial**
+- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios
+
+### BLOCO: XIII | Do valor da causa
+@condicao: sempre
+@fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
+Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
+
+
 ## TESE: EMPRESARIAL_FAMILIAR
 @revisar: texto redigido a partir dos fundamentos documentados na skill `corretor-inicial-empresarial-familiar`, NÃO extraído de peça real do escritório. Gera peça completa, mas precisa de leitura da advogada antes do primeiro protocolo. Substituir assim que houver uma peça dessa tese.
 
@@ -246,12 +271,42 @@ Tratando-se de pessoa jurídica, a Autora não se vale da presunção do art. 99
 
 {narrativa_hipossuficiencia}
 
-### BLOCO: XII | Do processo 100% digital
+### BLOCO: XII | Da prioridade de tramitação
+@condicao: F9>=60
+@fundamentos: art. 71 da Lei 10.741/2003; art. 1.048, I, do CPC. Independe da tese — decorre da idade da parte
+A parte Autora, contando com {idade} anos de idade, faz jus à prioridade de tramitação, nos termos do art. 71 da Lei nº 10.741/2003 (Estatuto da Pessoa Idosa) c/c art. 1.048, inciso I, do Código de Processo Civil.
+
+### BLOCO: XIII | Do processo 100% digital
 @condicao: sempre
 @fundamentos: padrão do escritório
 A parte Autora manifesta expressa concordância com a tramitação do feito em formato 100% digital.
 
 ---
+
+### BLOCO: XIV | Dos pedidos
+@condicao: sempre
+@tipo: pedidos
+@fundamentos: cada pedido carrega a mesma condição do capítulo que o sustenta — pedido sem capítulo é incoerência que o leitor nota
+Diante do exposto, requer:
+
+- [F9>=60] o reconhecimento e a anotação da **prioridade de tramitação**, nos termos do art. 71 da Lei nº 10.741/2003 c/c art. 1.048, I, do Código de Processo Civil, por contar a parte Autora com {idade} anos de idade
+- [sempre] o deferimento dos benefícios da **gratuidade de justiça**, nos termos dos arts. 98 e 99 do Código de Processo Civil
+- [F6==ATIVO] a concessão da **tutela de urgência**, nos termos do art. 300 do Código de Processo Civil, para limitar a mensalidade ao patamar de **{valor_devido_atual}** até o julgamento final
+- [F6==ATIVO] que a Ré se abstenha de suspender, cancelar ou rescindir o plano, impor carências ou negar cobertura em razão da discussão judicial, desde que mantido o pagamento do valor fixado
+- [F6==ATIVO] a fixação de **multa diária** em caso de descumprimento da tutela de urgência
+- [sempre] a **citação** da Ré para, querendo, apresentar contestação, sob pena de revelia
+- [sempre] a determinação para que a Ré **exiba** o contrato e regulamento aplicáveis, o histórico completo de mensalidades, os índices de reajuste ano a ano, a memória de cálculo, os demonstrativos atuariais e os documentos de sinistralidade, sob pena do art. 400 do Código de Processo Civil
+- [sempre] a **distribuição dinâmica do ônus da prova**, nos termos do art. 373, §1º, do Código de Processo Civil
+- [sempre] no mérito, a **procedência total dos pedidos**, para declarar a abusividade dos reajustes aplicados e revisar a mensalidade mediante a aplicação dos índices anuais divulgados pela ANS
+- [sempre] a condenação da Ré à **restituição** dos valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, com correção monetária desde cada desembolso e juros de mora a partir da citação
+- [sempre] a produção de todos os meios de prova admitidos, especialmente documental suplementar e **pericial contábil ou atuarial**
+- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios
+
+### BLOCO: XV | Do valor da causa
+@condicao: sempre
+@fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
+Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
+
 
 ## TESE: COLETIVO_POR_ADESAO
 
@@ -406,12 +461,42 @@ Importante registrar que a concessão do benefício não pressupõe estado de mi
 
 Soma-se a isso o custo do plano de saúde da própria Autora, cuja mensalidade alcançou **{valor_pago_atual}** em {competencia_atual}.
 
-### BLOCO: X | Do processo 100% digital
+### BLOCO: X | Da prioridade de tramitação
+@condicao: F9>=60
+@fundamentos: art. 71 da Lei 10.741/2003; art. 1.048, I, do CPC. Independe da tese — decorre da idade da parte
+A parte Autora, contando com {idade} anos de idade, faz jus à prioridade de tramitação, nos termos do art. 71 da Lei nº 10.741/2003 (Estatuto da Pessoa Idosa) c/c art. 1.048, inciso I, do Código de Processo Civil.
+
+### BLOCO: XI | Do processo 100% digital
 @condicao: sempre
 @fundamentos: padrão do escritório
 A parte Autora manifesta expressa concordância com a tramitação do feito em formato 100% digital.
 
 ---
+
+### BLOCO: XII | Dos pedidos
+@condicao: sempre
+@tipo: pedidos
+@fundamentos: cada pedido carrega a mesma condição do capítulo que o sustenta — pedido sem capítulo é incoerência que o leitor nota
+Diante do exposto, requer:
+
+- [F9>=60] o reconhecimento e a anotação da **prioridade de tramitação**, nos termos do art. 71 da Lei nº 10.741/2003 c/c art. 1.048, I, do Código de Processo Civil, por contar a parte Autora com {idade} anos de idade
+- [sempre] o deferimento dos benefícios da **gratuidade de justiça**, nos termos dos arts. 98 e 99 do Código de Processo Civil
+- [F6==ATIVO] a concessão da **tutela de urgência**, nos termos do art. 300 do Código de Processo Civil, para limitar a mensalidade ao patamar de **{valor_devido_atual}** até o julgamento final
+- [F6==ATIVO] que a Ré se abstenha de suspender, cancelar ou rescindir o plano, impor carências ou negar cobertura em razão da discussão judicial, desde que mantido o pagamento do valor fixado
+- [F6==ATIVO] a fixação de **multa diária** em caso de descumprimento da tutela de urgência
+- [sempre] a **citação** da Ré para, querendo, apresentar contestação, sob pena de revelia
+- [sempre] a determinação para que a Ré **exiba** o contrato e regulamento aplicáveis, o histórico completo de mensalidades, os índices de reajuste ano a ano, a memória de cálculo, os demonstrativos atuariais e os documentos de sinistralidade, sob pena do art. 400 do Código de Processo Civil
+- [sempre] a **distribuição dinâmica do ônus da prova**, nos termos do art. 373, §1º, do Código de Processo Civil
+- [sempre] no mérito, a **procedência total dos pedidos**, para declarar a abusividade dos reajustes aplicados e revisar a mensalidade mediante a aplicação dos índices anuais divulgados pela ANS
+- [sempre] a condenação da Ré à **restituição** dos valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, com correção monetária desde cada desembolso e juros de mora a partir da citação
+- [sempre] a produção de todos os meios de prova admitidos, especialmente documental suplementar e **pericial contábil ou atuarial**
+- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios
+
+### BLOCO: XIII | Do valor da causa
+@condicao: sempre
+@fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
+Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
+
 
 ## TESE: INDIVIDUAL_COMUM
 @revisar: texto redigido a partir dos fundamentos documentados, NÃO extraído de peça real do escritório. Gera peça completa, mas precisa de leitura da advogada antes do primeiro protocolo. Substituir assim que houver uma peça dessa tese.
@@ -459,19 +544,56 @@ A concessão da tutela de urgência encontra fundamento no art. 300 do Código d
 
 Requer-se, assim, que a Ré seja determinada a recalcular a mensalidade, aplicando os índices anuais autorizados pela ANS, resultando em valor estimado de **{valor_devido_atual}**.
 
-### BLOCO: VI | Do direito à restituição dos valores pagos a maior
+### BLOCO: VI | Da exibição de documentos
+@condicao: sempre
+@fundamentos: arts. 396 a 404 e art. 400 do CPC; art. 6º, VIII, do CDC
+A parte Autora não detém o histórico completo de mensalidades, os índices aplicados em cada competência e a memória de cálculo dos reajustes, documentos que permanecem sob guarda exclusiva da Ré.
+
+Impõe-se, por isso, a exibição documental nos termos dos arts. 396 a 404 do Código de Processo Civil e do art. 6º, VIII, do Código de Defesa do Consumidor, sob pena de aplicação do art. 400 do mesmo diploma.
+
+### BLOCO: VII | Do direito à restituição dos valores pagos a maior
 @condicao: sempre
 @fundamentos: art. 42, parágrafo único, do CDC ou art. 876 do CC — decisão humana; Tema 610/STJ
 Reconhecida a abusividade dos reajustes, impõe-se a restituição dos valores pagos a maior. Observada a prescrição trienal do Tema 610 do Superior Tribunal de Justiça, o montante alcança **{restituicao}**, apurado na tabela anexa, acrescido de correção monetária desde cada desembolso e juros de mora a partir da citação.
 
-### BLOCO: VII | Da gratuidade de justiça
+### BLOCO: VIII | Da gratuidade de justiça
 @condicao: sempre
 @fundamentos: arts. 98 e 99 do CPC; presunção do art. 99, §3º, para pessoa natural
 A parte Autora requer a concessão dos benefícios da gratuidade de justiça, nos termos dos arts. 98 e 99 do Código de Processo Civil, presumindo-se verdadeira a alegação de insuficiência de recursos deduzida por pessoa natural, na forma do art. 99, §3º, do mesmo diploma.
 
 {narrativa_hipossuficiencia}
 
-### BLOCO: VIII | Do processo 100% digital
+### BLOCO: IX | Da prioridade de tramitação
+@condicao: F9>=60
+@fundamentos: art. 71 da Lei 10.741/2003; art. 1.048, I, do CPC. Independe da tese — decorre da idade da parte
+A parte Autora, contando com {idade} anos de idade, faz jus à prioridade de tramitação, nos termos do art. 71 da Lei nº 10.741/2003 (Estatuto da Pessoa Idosa) c/c art. 1.048, inciso I, do Código de Processo Civil.
+
+### BLOCO: X | Do processo 100% digital
 @condicao: sempre
 @fundamentos: padrão do escritório
 A parte Autora manifesta expressa concordância com a tramitação do feito em formato 100% digital.
+
+### BLOCO: XI | Dos pedidos
+@condicao: sempre
+@tipo: pedidos
+@fundamentos: cada pedido carrega a mesma condição do capítulo que o sustenta — pedido sem capítulo é incoerência que o leitor nota
+Diante do exposto, requer:
+
+- [F9>=60] o reconhecimento e a anotação da **prioridade de tramitação**, nos termos do art. 71 da Lei nº 10.741/2003 c/c art. 1.048, I, do Código de Processo Civil, por contar a parte Autora com {idade} anos de idade
+- [sempre] o deferimento dos benefícios da **gratuidade de justiça**, nos termos dos arts. 98 e 99 do Código de Processo Civil
+- [F6==ATIVO] a concessão da **tutela de urgência**, nos termos do art. 300 do Código de Processo Civil, para limitar a mensalidade ao patamar de **{valor_devido_atual}** até o julgamento final
+- [F6==ATIVO] que a Ré se abstenha de suspender, cancelar ou rescindir o plano, impor carências ou negar cobertura em razão da discussão judicial, desde que mantido o pagamento do valor fixado
+- [F6==ATIVO] a fixação de **multa diária** em caso de descumprimento da tutela de urgência
+- [sempre] a **citação** da Ré para, querendo, apresentar contestação, sob pena de revelia
+- [sempre] a determinação para que a Ré **exiba** o contrato e regulamento aplicáveis, o histórico completo de mensalidades, os índices de reajuste ano a ano, a memória de cálculo, os demonstrativos atuariais e os documentos de sinistralidade, sob pena do art. 400 do Código de Processo Civil
+- [sempre] a **distribuição dinâmica do ônus da prova**, nos termos do art. 373, §1º, do Código de Processo Civil
+- [sempre] no mérito, a **procedência total dos pedidos**, para declarar a abusividade dos reajustes aplicados e revisar a mensalidade mediante a aplicação dos índices anuais divulgados pela ANS
+- [sempre] a condenação da Ré à **restituição** dos valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, com correção monetária desde cada desembolso e juros de mora a partir da citação
+- [sempre] a produção de todos os meios de prova admitidos, especialmente documental suplementar e **pericial contábil ou atuarial**
+- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios
+
+### BLOCO: XII | Do valor da causa
+@condicao: sempre
+@fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
+Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
+

@@ -30,7 +30,8 @@ def dados_completos(res):
             "valor_pago_atual": _brl(res.valor_pago_atual),
             "valor_devido_atual": _brl(res.valor_devido_atual),
             "diferenca_mensal": _brl(res.diferenca_mensal),
-            "restituicao": _brl(res.restituicao())}
+            "restituicao": _brl(res.restituicao()),
+            "valor_da_causa": _brl(res.restituicao() * 2)}
 
 
 def dados_adesao(res):
@@ -39,7 +40,8 @@ def dados_adesao(res):
             "valor_pago_atual": _brl(res.valor_pago_atual),
             "valor_devido_atual": _brl(res.valor_devido_atual),
             "restituicao": _brl(res.restituicao()),
-            "narrativa_hipossuficiencia": "Renda variável."}
+            "narrativa_hipossuficiencia": "Renda variável.",
+            "valor_da_causa": _brl(res.restituicao() * 2)}
 
 
 def dados_todas(res):
@@ -47,7 +49,8 @@ def dados_todas(res):
     d.update({"idade": "81", "comarca": "Salvador/BA",
               "processo_anterior": "0000000-00.0000.0.00.0000",
               "comarca_anterior": "Outra/BA",
-              "diferenca_mensal": _brl(res.diferenca_mensal)})
+              "diferenca_mensal": _brl(res.diferenca_mensal),
+              "valor_da_causa": _brl(res.restituicao() + res.diferenca_mensal * 12)})
     return d
 
 
@@ -91,7 +94,7 @@ def test_procedencia_do_texto_esta_declarada():
 def test_ementa_de_julgado_vira_citacao_recuada():
     from gerar_peticao import Citacao
     res = resultado()
-    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM", "F9": "45"},
                     dados_adesao(res), resultado_calculo=res)
     citacoes = [b for b in r.peca.blocos if isinstance(b, Citacao)]
     assert len(citacoes) == 4, len(citacoes)
@@ -101,18 +104,18 @@ def test_ementa_de_julgado_vira_citacao_recuada():
 
 def test_coletivo_por_adesao_monta_pronta_com_tabela():
     res = resultado()
-    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+    r = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM", "F9": "45"},
                     dados_adesao(res), resultado_calculo=res)
-    assert r.pronto
+    assert r.pronto, (r.pendencias, r.perguntas)
     corpo = "".join(b.xml() for b in r.peca.blocos)
     assert "<w:tbl>" in corpo and "julho/2024" in corpo
 
 
 def test_faixa_etaria_condiciona_o_capitulo_na_adesao():
     res = resultado()
-    com = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM"},
+    com = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "SIM", "F9": "45"},
                       dados_adesao(res), resultado_calculo=res)
-    sem = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "NAO"},
+    sem = montar_peca("COLETIVO_POR_ADESAO", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
                       dados_adesao(res), resultado_calculo=res)
     assert any("FAIXA ETÁRIA" in t.upper() for t in titulos(com.peca))
     assert not any("FAIXA ETÁRIA" in t.upper() for t in titulos(sem.peca))
@@ -137,7 +140,7 @@ def test_capitulo_de_fato_desconhecido_vira_pergunta_e_nao_some():
     res = resultado()
     r = montar_peca("CASSI_AUTOGESTAO", {"F9": "81"}, dados_completos(res),
                     resultado_calculo=res)          # F6 e F10 ausentes
-    assert len(r.perguntas) == 2
+    assert len(r.perguntas) >= 2, r.perguntas
     assert not r.pronto
     assert any("TUTELA" in t.upper() for t in r.perguntas + titulos(r.peca)) or True
     assert all("depende de" in p for p in r.perguntas)
@@ -297,8 +300,8 @@ def test_teses_redigidas_avisam_que_precisam_de_revisao():
                         dados_todas(res), resultado_calculo=res)
         assert not r.precisa_revisao, tese
     for tese in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
-        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM"}, dados_todas(res),
-                        resultado_calculo=res)
+        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "45"},
+                        dados_todas(res), resultado_calculo=res)
         assert r.precisa_revisao, tese
         assert any("peça real" in a for a in r.revisoes), tese
 
@@ -306,7 +309,7 @@ def test_teses_redigidas_avisam_que_precisam_de_revisao():
 def test_aviso_de_revisao_nao_vira_marcador_no_documento():
     """Diferente da pendência: o texto está completo, o aviso é para a advogada."""
     res = resultado()
-    r = montar_peca("INDIVIDUAL_COMUM", {"F6": "ATIVO", "F7": "NAO"},
+    r = montar_peca("INDIVIDUAL_COMUM", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
                     dados_todas(res), resultado_calculo=res)
     corpo = "".join(b.xml() for b in r.peca.blocos)
     assert MARCA_PENDENTE not in corpo
@@ -317,9 +320,10 @@ def test_capitulos_excludentes_do_empresarial_familiar():
     """Rescisão indireta e tutela de urgência são caminhos alternativos: nunca os
     dois na mesma peça."""
     res = resultado()
-    ativo = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
+    ativo = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
                         dados_todas(res), resultado_calculo=res)
-    cancelado = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "CANCELADO", "F7": "NAO"},
+    cancelado = montar_peca("EMPRESARIAL_FAMILIAR",
+                            {"F6": "CANCELADO", "F7": "NAO", "F9": "45"},
                             dados_todas(res), resultado_calculo=res)
     t_ativo = " ".join(titulos(ativo.peca)).upper()
     t_canc = " ".join(titulos(cancelado.peca)).upper()
@@ -330,7 +334,7 @@ def test_capitulos_excludentes_do_empresarial_familiar():
 def test_empresarial_familiar_fundamenta_o_cdc_por_equiparacao():
     """A incidência não vem da Súmula 608 isolada — vem dos arts. 2º e 29 do CDC."""
     res = resultado()
-    r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO"},
+    r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
                     dados_todas(res), resultado_calculo=res)
     corpo = "".join(b.xml() for b in r.peca.blocos)
     assert "art. 2º" in corpo and "art. 29" in corpo
@@ -345,6 +349,86 @@ def test_nenhuma_tese_redigida_cita_julgado():
             for p in bloco.paragrafos:
                 assert not p.startswith("> "), (nome, bloco.titulo)
                 assert "TJ-" not in p and "Relator" not in p, (nome, bloco.titulo)
+
+# ----------------------------------------------------------------- pedidos ----
+
+def pedidos(peca):
+    from gerar_peticao import Paragrafo
+    import re as _re
+    return [b.texto for b in peca.blocos
+            if isinstance(b, Paragrafo) and _re.match(r"^[a-z]\) ", b.texto)]
+
+
+def test_toda_tese_tem_pedidos_e_valor_da_causa():
+    """Petição inicial sem pedidos não é petição inicial."""
+    res = resultado()
+    for tese in carregar():
+        r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
+                        dados_todas(res), resultado_calculo=res)
+        assert pedidos(r.peca), tese
+        assert any("Dá-se à causa" in b.texto for b in r.peca.blocos
+                   if hasattr(b, "texto")), tese
+
+
+def test_pedidos_saem_em_lista_por_letras_na_ordem():
+    res = resultado()
+    r = montar_peca("CASSI_AUTOGESTAO",
+                    {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
+                    dados_todas(res), resultado_calculo=res)
+    letras = [p[0] for p in pedidos(r.peca)]
+    assert letras == list("abcdefghijkl"[:len(letras)]), letras
+    assert pedidos(r.peca)[-1].endswith("."), "o último pedido fecha com ponto"
+    assert pedidos(r.peca)[0].endswith(";"), "os demais fecham com ponto e vírgula"
+
+
+def test_pedido_condicional_some_e_as_letras_se_refazem():
+    """Sem tutela e sem prioridade, as letras não podem pular."""
+    res = resultado()
+    ativo = montar_peca("CASSI_AUTOGESTAO",
+                        {"F6": "ATIVO", "F7": "NAO", "F9": "81", "F10": "NAO"},
+                        dados_todas(res), resultado_calculo=res)
+    cancelado = montar_peca("CASSI_AUTOGESTAO",
+                            {"F6": "CANCELADO", "F7": "NAO", "F9": "45", "F10": "NAO"},
+                            dados_todas(res), resultado_calculo=res)
+    assert len(pedidos(ativo.peca)) == len(pedidos(cancelado.peca)) + 4
+    letras = [p[0] for p in pedidos(cancelado.peca)]
+    assert letras == list("abcdefgh"), letras
+    assert not any("tutela de urgência" in p for p in pedidos(cancelado.peca))
+    assert not any("prioridade" in p for p in pedidos(cancelado.peca))
+
+
+def test_pedido_com_fato_desconhecido_vira_pergunta():
+    res = resultado()
+    r = montar_peca("INDIVIDUAL_COMUM", {"F7": "NAO", "F9": "45"}, dados_todas(res),
+                    resultado_calculo=res)     # F6 ausente
+    assert any("pedido" in p.lower() for p in r.perguntas), r.perguntas
+
+
+CATALOGO_INCOERENTE = """## TESE: TESTE_INCOERENTE
+
+### BLOCO: I | Dos fatos
+@condicao: sempre
+@fundamentos: x
+Narrativa.
+
+### BLOCO: II | Dos pedidos
+@condicao: sempre
+@tipo: pedidos
+@fundamentos: x
+Requer:
+
+- [sempre] a concessão da tutela de urgência, nos termos do art. 300 do CPC
+"""
+
+
+def test_pedido_sem_o_capitulo_correspondente_e_sinalizado():
+    """Pedir tutela sem capítulo de tutela é incoerência que o leitor nota."""
+    with tempfile.TemporaryDirectory() as t:
+        caminho = os.path.join(t, "teses.md")
+        open(caminho, "w", encoding="utf-8").write(CATALOGO_INCOERENTE)
+        r = montar_peca("TESTE_INCOERENTE", {}, {}, catalogo=caminho)
+        assert any("tutela de urgência" in a and "capítulo" in a for a in r.revisoes), \
+            r.revisoes
 
 
 if __name__ == "__main__":

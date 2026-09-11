@@ -66,6 +66,11 @@ escritório correspondente.
    capítulos da tese confirmada, ligando o texto jurídico aos blocos. Capítulo
    condicional entra ou sai conforme os fatos (`F6` plano ativo, `F9` idade, `F10`
    reajuizamento, `F7` faixa etária), e a numeração é recontada para não deixar buraco.
+   Os **pedidos** saem em lista por letras, cada item com a mesma condição do capítulo
+   que o sustenta — sem tutela no capítulo, sem pedido de tutela —, e as letras se
+   refazem quando um item não se aplica. O **valor da causa** é informado, não calculado
+   (pergunta A6 em aberto).
+
    Campo sem valor **interrompe a geração**; capítulo sem texto vira marcador visível;
    tese redigida a partir dos fundamentos devolve avisos em `revisoes`, que **têm que
    aparecer no Espelho** — a operadora precisa saber que aquele texto ainda não foi lido

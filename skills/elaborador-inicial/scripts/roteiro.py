@@ -51,6 +51,7 @@ class BlocoTese:
     pendente: str = ""
     revisar: str = ""
     tabela: str = ""
+    tipo: str = ""              # "" = capítulo comum | "pedidos" = lista por letras
     paragrafos: list[str] = field(default_factory=list)
 
 
@@ -118,7 +119,10 @@ def carregar(caminho: str = CATALOGO) -> dict[str, Tese]:
         if linha.strip().startswith(("---", "#")):
             fechar_paragrafo()
             continue
-        if linha.strip():
+        if linha.strip().startswith("- "):
+            fechar_paragrafo()
+            bloco.paragrafos.append(linha.strip())
+        elif linha.strip():
             buffer.append(linha.strip())
         else:
             fechar_paragrafo()
@@ -158,6 +162,10 @@ def avaliar(condicao: str, fatos: dict[str, str]) -> bool | None:
 # --------------------------------------------------------------------------- #
 # Preenchimento
 # --------------------------------------------------------------------------- #
+
+RE_ITEM = re.compile(r"^-\s*\[([^\]]+)\]\s*(.+)$")
+LETRAS = "abcdefghijklmnopqrstuvwxyz"
+
 
 ROMANOS = [(1000, "M"), (900, "CM"), (500, "D"), (400, "CD"), (100, "C"), (90, "XC"),
            (50, "L"), (40, "XL"), (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")]
@@ -247,17 +255,23 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
                 f"sustentar: {bloco.fundamentos}⟧"))
             continue
 
-        for paragrafo in bloco.paragrafos:
-            # "> " marca ementa de julgado: sai recuada e em itálico, como no padrão
-            # do escritório, e não como parágrafo comum de argumentação.
-            citacao = paragrafo.startswith("> ")
-            texto, faltando = preencher(paragrafo[2:] if citacao else paragrafo, dados)
-            faltando_geral |= faltando
-            r.peca.add(Citacao(texto) if citacao else Paragrafo(texto))
+        if bloco.tipo == "pedidos":
+            faltando_geral |= _pedidos(r, bloco, fatos, dados)
+        else:
+            for paragrafo in bloco.paragrafos:
+                # "> " marca ementa de julgado: sai recuada e em itálico, como no
+                # padrão do escritório, não como parágrafo de argumentação.
+                citacao = paragrafo.startswith("> ")
+                texto, faltando = preencher(paragrafo[2:] if citacao else paragrafo,
+                                            dados)
+                faltando_geral |= faltando
+                r.peca.add(Citacao(texto) if citacao else Paragrafo(texto))
 
         if bloco.tabela == "reajuste" and resultado_calculo is not None:
             r.peca.add(caixa_de_resumo(resultado_calculo),
                        tabela_de_reajuste(resultado_calculo))
+
+    _conferir_coerencia(r)
 
     if faltando_geral:
         raise CampoAusente(
@@ -268,3 +282,62 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
 
     r.peca.add(Espaco())
     return r
+
+
+def _pedidos(r: Roteiro, bloco: BlocoTese, fatos: dict[str, str],
+             dados: dict[str, str]) -> set[str]:
+    """Lista por letras, no padrão do escritório: a), b), c)...
+
+    Cada item carrega a própria condição, pelos mesmos fatos dos capítulos — é o que
+    impede a peça de pedir tutela num capítulo que não existe.
+    """
+    faltando: set[str] = set()
+    itens: list[str] = []
+
+    for linha in bloco.paragrafos:
+        m = RE_ITEM.match(linha)
+        if not m:
+            texto, falta = preencher(linha, dados)
+            faltando |= falta
+            r.peca.add(Paragrafo(texto))
+            continue
+        condicao, texto = m.group(1), m.group(2)
+        aplica = avaliar(condicao, fatos)
+        if aplica is False:
+            continue
+        if aplica is None:
+            r.perguntas.append(
+                f"O pedido “{texto[:60]}…” depende de “{condicao}”, e esse dado não "
+                f"está definido. Ele entra na peça ou não?")
+            continue
+        preenchido, falta = preencher(texto, dados)
+        faltando |= falta
+        itens.append(preenchido)
+
+    for i, texto in enumerate(itens):
+        letra = LETRAS[i] if i < len(LETRAS) else f"a{i}"
+        final = "." if i == len(itens) - 1 else ";"
+        r.peca.add(Paragrafo(f"{letra}) {texto}{final}", recuo=False))
+    return faltando
+
+
+PEDIDOS_ATRELADOS = {
+    "tutela de urgência": "tutela",
+    "exibição": "exibi",
+    "prioridade de tramitação": "priorid",
+    "gratuidade": "gratuid",
+}
+
+
+def _conferir_coerencia(r: Roteiro) -> None:
+    """Pedido sem o capítulo que o sustenta é incoerência que salta aos olhos de quem
+    lê a peça, e o gerador não pode produzi-la sozinho."""
+    corpo = " ".join(b.texto for b in r.peca.blocos
+                     if isinstance(b, Paragrafo)).lower()
+    titulos = " ".join(b.texto for b in r.peca.blocos
+                       if isinstance(b, Titulo)).lower()
+    for rotulo, marca in PEDIDOS_ATRELADOS.items():
+        if rotulo in corpo and marca not in titulos:
+            r.revisoes.append(
+                f"a peça pede {rotulo} mas não tem o capítulo correspondente — "
+                f"conferir antes de protocolar")
