@@ -19,7 +19,7 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 | 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
 | 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 50 testes |
 | — | **Leitor de tabela** | Lê a tabela de cálculo do texto do PDF e devolve as competências mês a mês | **Implementado** — `scripts/ler_tabela.py`, 11 testes |
-| — | **Orquestrador** | Costura os quatro módulos numa máquina de estados retomável, com porteiro humano em cada fase | **Implementado** — `scripts/elaborar.py`, 15 testes |
+| — | **Orquestrador** | Costura os quatro módulos numa máquina de estados retomável, com porteiro humano em cada fase; dirigido por um `caso.json` de texto simples | **Implementado** — `scripts/elaborar.py`, 28 testes |
 | 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | **Implementado** — `scripts/conferir.py`, 22 testes |
 
 A ordem é deliberada: o Classificador é o módulo de maior risco (uma tese errada numa

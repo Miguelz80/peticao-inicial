@@ -23,6 +23,7 @@ módulo tem em decoração.
 from __future__ import annotations
 
 import os
+import sys
 from dataclasses import dataclass, field
 from decimal import Decimal
 
@@ -280,3 +281,164 @@ def espelho_completo(dossie: dict, resultado, roteiro, conferencia,
         L.append(conferencia.relatorio())
 
     return "\n".join(L)
+
+
+# --------------------------------------------------------------------------- #
+# Interface por arquivo JSON
+# --------------------------------------------------------------------------- #
+#
+# Quem dirige a skill no chat não constrói objeto Python: escreve um JSON de tipos
+# simples e roda um comando. Tudo aqui é string — fato, decisão de faixa etária,
+# resposta de gate — porque é o que atravessa uma conversa sem se perder.
+
+import json  # noqa: E402
+
+# Campo em branco é campo por preencher. O menu de opções vive em "_ajuda", que a
+# skill ignora — antes as opções ficavam no próprio valor e a primeira delas era lida
+# como resposta.
+EXEMPLO = {
+    "cliente": "",
+    "arquivos": [],
+    "modelo_docx": "",
+    "saida_docx": "",
+    "mes_aniversario": None,
+    "tese_confirmada": "",
+    "fatos": {"F1": "", "F2": "", "F6": "", "F7": "", "F9": "", "F10": ""},
+    "dados": {"plano": "", "inicio_contrato": "", "comarca": "", "idade": "",
+              "competencia_atual": "", "maior_reajuste": "", "valor_da_causa": "",
+              "narrativa_hipossuficiencia": ""},
+    "faixa_etaria_aceita": {},
+    "respostas": {},
+    "_ajuda": {
+        "arquivos": "caminhos dos documentos do caso",
+        "modelo_docx": "DOCX do escritório de onde vêm timbre, margens e rodapé",
+        "mes_aniversario": "número do mês, 1 a 12 — define o índice ANS de cada ano",
+        "F1": "AUTOGESTAO ou COMERCIAL",
+        "F2": "PJ, PF_VIA_ASSOCIACAO ou PF_DIRETO",
+        "F6": "ATIVO ou CANCELADO",
+        "F7": "SIM ou NAO — houve reajuste por faixa etária",
+        "F9": "idade da parte autora, em anos",
+        "F10": "SIM ou NAO — houve ação anterior desistida",
+        "faixa_etaria_aceita": "ANO-MÊS para o percentual que entra no devido, "
+                               "ex.: {\"2021-01\": \"10,50\"}",
+        "respostas": "gate respondido, pelo id da pergunta",
+    },
+}
+
+CAMPOS_CONHECIDOS = set(EXEMPLO) | {"competencias"}
+
+
+class CasoInvalido(Exception):
+    pass
+
+
+def caso_de_json(bruto: dict) -> Caso:
+    bruto = {k: v for k, v in bruto.items() if k != "_ajuda"}
+    desconhecidos = set(bruto) - CAMPOS_CONHECIDOS
+    if desconhecidos:
+        raise CasoInvalido(
+            f"campos que não reconheço no arquivo: {', '.join(sorted(desconhecidos))}. "
+            f"Os aceitos são: {', '.join(sorted(CAMPOS_CONHECIDOS))}")
+
+    caso = Caso(
+        cliente=bruto.get("cliente", ""),
+        arquivos=list(bruto.get("arquivos") or []),
+        modelo_docx=bruto.get("modelo_docx", ""),
+        saida_docx=bruto.get("saida_docx", ""),
+        mes_aniversario=bruto.get("mes_aniversario"),
+        tese_confirmada=bruto.get("tese_confirmada", ""),
+        dados={k: str(v) for k, v in (bruto.get("dados") or {}).items() if v != ""},
+        respostas={k: str(v) for k, v in (bruto.get("respostas") or {}).items()},
+    )
+
+    for chave, valor in (bruto.get("fatos") or {}).items():
+        if valor in (None, ""):
+            continue
+        if isinstance(valor, dict):
+            caso.fatos[chave] = cls.Fato(**valor)
+        else:
+            # informado pela operadora: alta confiança, origem declarada
+            caso.fatos[chave] = cls.Fato(valor=str(valor), fonte="informado pela operadora",
+                                         confianca=0.95, origem="informado")
+
+    for chave, valor in (bruto.get("faixa_etaria_aceita") or {}).items():
+        try:
+            ano, mes = (int(x) for x in str(chave).split("-"))
+        except ValueError:
+            raise CasoInvalido(
+                f"chave de faixa etária inválida: “{chave}”. Use ANO-MÊS, como 2021-01.")
+        caso.faixa_etaria_aceita[(ano, mes)] = calc.d(valor)
+
+    return caso
+
+
+def json_do_caso(caso: Caso) -> dict:
+    return {
+        "cliente": caso.cliente,
+        "arquivos": caso.arquivos,
+        "modelo_docx": caso.modelo_docx,
+        "saida_docx": caso.saida_docx,
+        "mes_aniversario": caso.mes_aniversario,
+        "tese_confirmada": caso.tese_confirmada,
+        "fatos": {k: v.valor for k, v in sorted(caso.fatos.items())},
+        "dados": dict(sorted(caso.dados.items())),
+        "faixa_etaria_aceita": {f"{a}-{m:02d}": str(v) for (a, m), v
+                                in sorted(caso.faixa_etaria_aceita.items())},
+        "respostas": dict(sorted(caso.respostas.items())),
+    }
+
+
+def relatorio(etapa: Etapa) -> str:
+    L = [f"FASE: {etapa.fase}", ""]
+    if etapa.espelho:
+        L += [etapa.espelho, ""]
+    if etapa.avisos:
+        L.append("AVISOS — não travam, mas precisam de olhar humano:")
+        L += [f"  · {a}" for a in etapa.avisos]
+        L.append("")
+    if etapa.perguntas:
+        L.append("PRECISO QUE VOCÊ RESPONDA:")
+        for p in etapa.perguntas:
+            L.append("  " + p.replace("\n", "\n  "))
+        L.append("")
+        L.append("Responda editando o arquivo do caso e rode de novo.")
+    if etapa.concluido:
+        L.append(f"PETIÇÃO GERADA: {etapa.docx}")
+        L.append("Revise antes de protocolar — a skill erra, e o documento é editável.")
+    return "\n".join(L)
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) < 2 or argv[1] in ("-h", "--ajuda"):
+        print("uso: python3 elaborar.py <caso.json>\n"
+              "     python3 elaborar.py --exemplo > caso.json")
+        return 0
+    if argv[1] == "--exemplo":
+        print(json.dumps(EXEMPLO, ensure_ascii=False, indent=2))
+        return 0
+
+    caminho = argv[1]
+    if not os.path.exists(caminho):
+        print(f"não achei {caminho}. Comece com: "
+              f"python3 elaborar.py --exemplo > {caminho}")
+        return 2
+    with open(caminho, encoding="utf-8") as fh:
+        bruto = json.load(fh)
+
+    try:
+        caso = caso_de_json(bruto)
+    except CasoInvalido as erro:
+        print(f"ERRO no arquivo do caso: {erro}")
+        return 2
+
+    etapa = elaborar(caso)
+    print(relatorio(etapa))
+
+    # devolve o caso enriquecido: o que a skill descobriu não se perde entre rodadas
+    with open(caminho, "w", encoding="utf-8") as fh:
+        json.dump(json_do_caso(caso), fh, ensure_ascii=False, indent=2)
+    return 0 if etapa.concluido else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

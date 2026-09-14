@@ -43,14 +43,21 @@ até o próximo ponto que exige decisão humana, devolve o que precisa ser respo
 para. A resposta volta no mesmo `Caso` e a chamada seguinte continua de onde parou —
 é o que torna o fluxo utilizável por chat, uma pergunta de cada vez.
 
-```python
-from elaborar import Caso, elaborar
-caso = Caso(arquivos=[...], modelo_docx="...", cliente="...")
-etapa = elaborar(caso)          # para na primeira pergunta
-# ... a operadora responde, os dados entram no `caso` ...
-etapa = elaborar(caso)          # continua
+```
+python3 scripts/elaborar.py --exemplo > caso.json     # cria o arquivo do caso
+# preenche cliente, arquivos e modelo_docx
+python3 scripts/elaborar.py caso.json                 # roda; para na 1ª pergunta
+# responde editando caso.json
+python3 scripts/elaborar.py caso.json                 # continua de onde parou
 ```
 
+Tudo no `caso.json` é **texto simples** — fato, decisão de faixa etária, resposta de
+gate —, porque é o que atravessa uma conversa sem se perder. O bloco `_ajuda` explica
+cada campo e é ignorado pela skill. A cada rodada o arquivo é regravado com o que já
+foi respondido, então nada se perde entre uma mensagem e outra.
+
+O relatório impresso diz a fase, o Espelho completo, os avisos e o que falta
+responder. Para uso programático, `elaborar(caso)` devolve uma `Etapa`:
 `etapa.fase` diz onde parou (TRIAGEM · CONFIRMACAO · CALCULO · REDACAO · GERACAO ·
 CONFERENCIA · CONCLUIDO), `etapa.perguntas` o que falta, `etapa.avisos` o que precisa
 de olhar humano mesmo sem travar, e `etapa.espelho` o retrato completo do caso.

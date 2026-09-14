@@ -184,6 +184,119 @@ def test_documentos_vazios_nao_somem_em_silencio():
         assert "nenhum arquivo enviado" in e.espelho
 
 
+
+
+
+# ------------------------------------------------------ interface por JSON ----
+
+import json  # noqa: E402
+from elaborar import (  # noqa: E402
+    caso_de_json, json_do_caso, relatorio, main, EXEMPLO, CasoInvalido,
+)
+
+
+def test_fato_como_texto_simples():
+    """Quem dirige a skill no chat escreve string, não constrói objeto."""
+    caso = caso_de_json({"fatos": {"F1": "AUTOGESTAO", "F9": "81"}})
+    assert caso.fatos["F1"].valor == "AUTOGESTAO"
+    assert caso.fatos["F1"].origem == "informado"
+    assert caso.fatos["F9"].valor == "81"
+
+
+def test_fato_detalhado_continua_aceito():
+    caso = caso_de_json({"fatos": {"F1": {"valor": "COMERCIAL", "fonte": "carteira",
+                                          "confianca": 0.8, "origem": "ocr"}}})
+    assert caso.fatos["F1"].origem == "ocr" and caso.fatos["F1"].confianca == 0.8
+
+
+def test_exemplo_vem_em_branco_e_a_ajuda_nao_vira_resposta():
+    """Campo em branco é campo por preencher. O menu de opções fica em _ajuda, que a
+    skill ignora — no formato anterior a primeira opção do menu virava resposta."""
+    caso = caso_de_json(dict(EXEMPLO))
+    assert caso.fatos == {} and caso.dados == {}
+    assert "_ajuda" in EXEMPLO and EXEMPLO["_ajuda"]["F1"] == "AUTOGESTAO ou COMERCIAL"
+
+
+def test_campo_desconhecido_nomeia_o_erro():
+    try:
+        caso_de_json({"clientee": "x"})
+        assert False
+    except CasoInvalido as erro:
+        assert "clientee" in str(erro) and "cliente" in str(erro)
+
+
+def test_chave_de_faixa_etaria_invalida_ensina_o_formato():
+    try:
+        caso_de_json({"faixa_etaria_aceita": {"janeiro/2021": "0"}})
+        assert False
+    except CasoInvalido as erro:
+        assert "2021-01" in str(erro)
+
+
+def test_faixa_etaria_com_virgula_decimal():
+    caso = caso_de_json({"faixa_etaria_aceita": {"2021-01": "10,50"}})
+    assert caso.faixa_etaria_aceita[(2021, 1)] == Decimal("10.50")
+
+
+def test_ida_e_volta_preserva_o_caso():
+    original = {"cliente": "Fulana", "arquivos": [], "modelo_docx": "m.docx",
+                "saida_docx": "s.docx", "mes_aniversario": 7,
+                "tese_confirmada": "CASSI_AUTOGESTAO",
+                "fatos": {"F1": "AUTOGESTAO", "F6": "ATIVO"},
+                "dados": {"plano": "X"}, "faixa_etaria_aceita": {"2021-01": "0"},
+                "respostas": {"G5": "sim"}}
+    volta = json_do_caso(caso_de_json(original))
+    assert volta["fatos"] == original["fatos"]
+    assert volta["faixa_etaria_aceita"] == {"2021-01": "0"}
+    assert volta["mes_aniversario"] == 7 and volta["respostas"] == {"G5": "sim"}
+
+
+def test_dado_vazio_nao_conta_como_preenchido():
+    """O exemplo vem com campos em branco; em branco é ausência, não valor."""
+    caso = caso_de_json({"dados": {"plano": "", "comarca": "Salvador/BA"}})
+    assert "plano" not in caso.dados and caso.dados["comarca"] == "Salvador/BA"
+
+
+def test_relatorio_diz_a_fase_o_que_falta_e_como_responder():
+    with tempfile.TemporaryDirectory() as t:
+        caso = caso_completo(t)
+        caso.tese_confirmada = ""
+        texto = relatorio(elaborar(caso))
+        assert "FASE: CONFIRMACAO" in texto
+        assert "PRECISO QUE VOCÊ RESPONDA" in texto
+        assert "editando o arquivo do caso" in texto
+
+
+def test_relatorio_de_conclusao_lembra_da_revisao_humana():
+    with tempfile.TemporaryDirectory() as t:
+        texto = relatorio(elaborar(caso_completo(t)))
+        assert "PETIÇÃO GERADA" in texto
+        assert "Revise antes de protocolar" in texto
+
+
+def test_cli_grava_o_caso_de_volta_mesmo_travado():
+    """O que a operadora já respondeu não pode se perder entre uma rodada e outra,
+    inclusive quando a rodada parou numa pergunta."""
+    with tempfile.TemporaryDirectory() as t:
+        caminho = os.path.join(t, "caso.json")
+        json.dump(json_do_caso(caso_completo(t)), open(caminho, "w", encoding="utf-8"))
+        codigo = main(["elaborar.py", caminho])
+        volta = json.load(open(caminho, encoding="utf-8"))
+        assert volta["tese_confirmada"] == "CASSI_AUTOGESTAO"
+        assert volta["fatos"]["F1"] == "AUTOGESTAO"
+        assert volta["faixa_etaria_aceita"] == {"2018-04": "0", "2021-01": "0"}
+        assert codigo == 1, "travou porque a série não sobrevive ao JSON — vem do arquivo"
+
+
+def test_cli_sem_arquivo_ensina_o_proximo_passo(capsys=None):
+    with tempfile.TemporaryDirectory() as t:
+        assert main(["elaborar.py", os.path.join(t, "nao-existe.json")]) == 2
+
+
+def test_exemplo_e_um_caso_valido():
+    caso_de_json(dict(EXEMPLO))          # não pode levantar
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())
