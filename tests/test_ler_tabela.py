@@ -116,6 +116,19 @@ def test_divergencia_entre_planilha_e_recalculo_e_acusada():
     assert "999,00" in avisos[0] and "666,00" in avisos[0]
 
 
+
+
+
+def test_conferencia_le_planilha_em_grade_com_numeros():
+    """xlsx e csv trazem número, não texto com R$; sem este caminho a conferência
+    devolvia lista vazia e não conferia nada."""
+    comps, _ = competencias_de({"texto_solto": TEXTO})
+    res = calcular(comps, 7, {(2018, 4): d("0")})
+    grade = {"linhas": [["julho/2018", 762.92, 999999.00, 96.93]]}
+    avisos = conferir_importado(grade, res)
+    assert avisos and "julho/2018" in avisos[0]
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

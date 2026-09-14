@@ -192,6 +192,30 @@ def test_conferencia_acusa_marco_congelado():
     assert any("marco congelado" in e for e in res.conferir())
 
 
+
+
+
+def test_faixa_etaria_declarada_tambem_exige_decisao():
+    """A planilha marcar 'faixa etária' não decide nada: a legitimidade é juízo.
+    Antes, competência já rotulada passava direto e era impugnada por inteiro."""
+    from calcular_reajuste import FAIXA_ETARIA
+    comps = [Competencia(2020, 12, d("1.000,00")),
+             Competencia(2021, 1, d("1.500,00"), tipo_reajuste=FAIXA_ETARIA)]
+    res = calcular(comps, mes_aniversario=7)
+    assert len(res.pendencias) == 1 and res.bloqueado
+    assert "faixa etária" in res.pendencias[0].pergunta
+
+
+def test_faixa_etaria_aceita_nao_e_rotulada_como_anual_na_peca():
+    """Rotular de anual na tabela que vai à peça seria afirmar em juízo algo
+    diferente do que se decidiu."""
+    from calcular_reajuste import FAIXA_ETARIA
+    comps = [Competencia(2020, 12, d("1.000,00")), Competencia(2021, 1, d("1.500,00"))]
+    res = calcular(comps, 7, {(2021, 1): d("0.10")})
+    linha = [l for l in tabela(res) if l[0] == "janeiro/2021"][0]
+    assert linha[3] == "Faixa etária", linha
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

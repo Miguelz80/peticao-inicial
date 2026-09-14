@@ -203,3 +203,14 @@ após os 60 anos é sempre impugnada), ou pergunta sempre?
 O briefing fixa `#2E4057`; a tabela da peça real usa `#2C3E6B`. São próximos, mas
 diferentes. Como a decisão D5 foi "não mudar a aparência", estou usando `#2C3E6B`.
 Confirma, ou o padrão do escritório é mesmo `#2E4057` e a peça é que saiu fora?
+
+
+---
+
+## Bloco E — decisões pendentes que a revisão de código levantou
+
+**E1. C5 não roda no fluxo orquestrado.**
+A verificação do valor da causa contra a fórmula declarada existe e é testada, mas o
+orquestrador não a aciona: sem a resposta de **A6** não há fórmula contra a qual
+conferir. O valor entra como texto livre e vai para a peça sem verificação. Fechando a
+A6, ligo a verificação.

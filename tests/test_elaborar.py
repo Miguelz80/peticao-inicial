@@ -233,9 +233,19 @@ def test_chave_de_faixa_etaria_invalida_ensina_o_formato():
         assert "2021-01" in str(erro)
 
 
-def test_faixa_etaria_com_virgula_decimal():
+def test_faixa_etaria_e_lida_como_percentual_nao_como_fracao():
+    """O arquivo fala em percentual; o cálculo, em fração. Sem a conversão, 10,5%
+    entrava como 1050% e multiplicava a mensalidade por onze."""
     caso = caso_de_json({"faixa_etaria_aceita": {"2021-01": "10,50"}})
-    assert caso.faixa_etaria_aceita[(2021, 1)] == Decimal("10.50")
+    assert caso.faixa_etaria_aceita[(2021, 1)] == Decimal("0.105")
+
+
+def test_faixa_etaria_aceita_chega_correta_ao_calculo():
+    from calcular_reajuste import calcular, Competencia, d, q
+    caso = caso_de_json({"faixa_etaria_aceita": {"2021-01": "10,50"}})
+    comps = [Competencia(2020, 12, d("1000,00")), Competencia(2021, 1, d("1500,00"))]
+    res = calcular(comps, 7, caso.faixa_etaria_aceita)
+    assert q(res.linhas[-1].valor_devido) == d("1.105,00")
 
 
 def test_ida_e_volta_preserva_o_caso():
@@ -247,7 +257,7 @@ def test_ida_e_volta_preserva_o_caso():
                 "respostas": {"G5": "sim"}}
     volta = json_do_caso(caso_de_json(original))
     assert volta["fatos"] == original["fatos"]
-    assert volta["faixa_etaria_aceita"] == {"2021-01": "0"}
+    assert volta["faixa_etaria_aceita"] == {"2021-01": "0,00"}
     assert volta["mes_aniversario"] == 7 and volta["respostas"] == {"G5": "sim"}
 
 
@@ -284,8 +294,51 @@ def test_cli_grava_o_caso_de_volta_mesmo_travado():
         volta = json.load(open(caminho, encoding="utf-8"))
         assert volta["tese_confirmada"] == "CASSI_AUTOGESTAO"
         assert volta["fatos"]["F1"] == "AUTOGESTAO"
-        assert volta["faixa_etaria_aceita"] == {"2018-04": "0", "2021-01": "0"}
+        assert volta["faixa_etaria_aceita"] == {"2018-04": "0,00", "2021-01": "0,00"}
         assert codigo == 1, "travou porque a série não sobrevive ao JSON — vem do arquivo"
+
+
+def test_cli_preserva_a_ajuda_e_os_campos_em_branco():
+    """O arquivo é o formulário que a operadora preenche; a ajuda e os campos vazios
+    sumiam na primeira rodada."""
+    with tempfile.TemporaryDirectory() as t:
+        caminho = os.path.join(t, "caso.json")
+        json.dump(dict(EXEMPLO), open(caminho, "w", encoding="utf-8"))
+        main(["elaborar.py", caminho])
+        volta = json.load(open(caminho, encoding="utf-8"))
+        assert "_ajuda" in volta
+        assert set(volta["dados"]) >= set(EXEMPLO["dados"])
+        assert set(volta["fatos"]) >= set(EXEMPLO["fatos"])
+
+
+def test_serie_informada_a_mao_no_json():
+    """Sem arquivo de planilha, a operadora precisa poder digitar a série."""
+    caso = caso_de_json({"competencias": [
+        {"competencia": "2024-01", "valor": "1.000,00"},
+        {"competencia": "2024-02", "valor": "1.100,00", "tipo": "ANUAL"}]})
+    assert len(caso.competencias) == 2
+    assert caso.competencias[0].valor_pago == Decimal("1000.00")
+    assert caso.competencias[1].tipo_reajuste == "ANUAL"
+
+
+def test_competencia_mal_formada_ensina_o_formato():
+    try:
+        caso_de_json({"competencias": [{"mes": "janeiro", "valor": "1"}]})
+        assert False
+    except CasoInvalido as erro:
+        assert "2024-01" in str(erro)
+
+
+def test_modelo_docx_corrompido_nao_vira_traceback():
+    """Quem opera é a colega do processual, por chat."""
+    with tempfile.TemporaryDirectory() as t:
+        caso = caso_completo(t)
+        ruim = os.path.join(t, "ruim.docx")
+        open(ruim, "wb").write(b"nao sou um docx")
+        caso.modelo_docx = ruim
+        e = elaborar(caso)
+        assert e.fase == GERACAO and e.perguntas
+        assert "ruim.docx" in e.perguntas[0]
 
 
 def test_cli_sem_arquivo_ensina_o_proximo_passo(capsys=None):

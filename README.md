@@ -70,6 +70,7 @@ python3 tests/test_gerar.py
 python3 tests/test_roteiro.py
 python3 tests/test_elaborar.py
 python3 tests/test_ler_tabela.py
+python3 tests/test_suite.py
 ```
 
 Sem dependências para a lógica de decisão. A extração completa (PDF, XLSX, DOCX) usa

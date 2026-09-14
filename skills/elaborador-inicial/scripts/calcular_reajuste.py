@@ -192,6 +192,22 @@ class Resultado:
                                        janela[-1].competencia.rotulo)
         return sum((l.diferenca for l in janela), Decimal(0))
 
+    def restituicao_corrente(self) -> Decimal:
+        """Soma da janela já definida, sem redefini-la. Quem precisa de outra janela
+        chama `restituicao()` com os parâmetros."""
+        if self.janela_restituicao is None:
+            return self.restituicao()
+        inicio, fim = self.janela_restituicao
+        dentro, ativo = [], False
+        for l in self.linhas:
+            if l.competencia.rotulo == inicio:
+                ativo = True
+            if ativo:
+                dentro.append(l)
+            if l.competencia.rotulo == fim:
+                break
+        return sum((l.diferenca for l in dentro), Decimal(0))
+
     def _janela(self, meses: int, ate: tuple[int, int] | None) -> list["Linha"]:
         linhas = self.linhas
         if ate is not None:
@@ -273,14 +289,24 @@ def calcular(competencias: list[Competencia], mes_aniversario: int,
                 extra = aceitas[c.chave]
                 devido = devido * (1 + extra)
                 devido_pct = extra
-            elif c.tipo_reajuste != FAIXA_ETARIA:
+                if c.tipo_reajuste == INDEFINIDO:
+                    c.tipo_reajuste = FAIXA_ETARIA
+            else:
+                # A planilha declarar "faixa etária" não decide nada: a legitimidade
+                # é juízo (Temas 952 e 1016). Antes, competência já rotulada passava
+                # direto e era impugnada por inteiro sem ninguém ser consultado.
+                declarada = c.tipo_reajuste == FAIXA_ETARIA
                 res.pendencias.append(Pendencia(
                     competencia=c.rotulo,
                     percentual=aplicado,
-                    pergunta=(f"Em {c.rotulo} a mensalidade subiu {_pct(aplicado)} "
-                              f"fora do mês de aniversário. É reajuste por faixa etária "
-                              f"previsto em contrato (entra no valor devido) ou aumento "
-                              f"sem previsão (fica de fora e é o que se impugna)?"),
+                    pergunta=(
+                        f"Em {c.rotulo} a mensalidade subiu {_pct(aplicado)} fora do "
+                        f"mês de aniversário"
+                        + (", e a planilha marca como faixa etária. " if declarada
+                           else ". ")
+                        + f"Esse reajuste tem previsão contratual — e portanto entra "
+                          f"no valor devido — ou fica de fora, por ser o que se "
+                          f"impugna?"),
                 ))
 
         res.linhas.append(Linha(
@@ -308,8 +334,11 @@ def tabela(res: Resultado) -> list[list[str]]:
     linhas = [CABECALHOS]
     for l in res.linhas:
         tipo = l.competencia.tipo_reajuste
+        # Só é "Anual" no mês de aniversário. Reajuste aceito fora dele é faixa
+        # etária, e rotulá-lo de anual na tabela que vai à peça seria afirmar
+        # em juízo algo diferente do que se decidiu.
         if not tipo and l.reajuste_devido != 0:
-            tipo = ANUAL
+            tipo = ANUAL if l.competencia.mes == res.mes_aniversario else FAIXA_ETARIA
         linhas.append([
             l.competencia.rotulo,
             _brl(l.competencia.valor_pago),

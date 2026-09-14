@@ -116,10 +116,15 @@ CAMPOS = {
 }
 
 
-def valores_de_origem(res: Resultado, meses_restituicao: int = 36,
-                      ate: tuple[int, int] | None = None) -> dict[str, Decimal]:
+def valores_de_origem(res: Resultado) -> dict[str, Decimal]:
+    """Os valores que a peça deve citar, na janela que o chamador já escolheu.
+
+    Não recalcula a restituição com os padrões: fazer isso apagava a janela definida
+    antes e, quando ela era diferente da padrão, ainda produzia um C6 falso —
+    acusando a peça de divergir de um número que nós mesmos acabávamos de trocar.
+    """
     return {
-        "restituicao": res.restituicao(meses_restituicao, ate),
+        "restituicao": res.restituicao_corrente(),
         "diferenca_mensal": res.diferenca_mensal,
         "valor_pago_atual": res.valor_pago_atual,
         "valor_devido_atual": res.valor_devido_atual,
@@ -153,10 +158,10 @@ def conferir_peca(texto: str, res: Resultado,
 
     # C2 — o mesmo dado citado com números diferentes em pontos diferentes da peça.
     # A peça CASSI trazia 12,79% numa tabela e 12,88% em outra, para o mesmo reajuste.
-    for pct, ocorrencias in _percentuais_conflitantes(texto).items():
+    for ano, ocorrencias in _percentuais_conflitantes(texto).items():
         achados.append(Achado(
             "C2", BLOQUEIA, "corpo da peça",
-            f"percentuais próximos e divergentes para o que parece ser o mesmo reajuste",
+            f"o reajuste de {ano} aparece com percentuais diferentes ao longo do texto",
             esperado="um único percentual por reajuste",
             encontrado=" e ".join(sorted(ocorrencias))))
 
@@ -180,20 +185,27 @@ def conferir_peca(texto: str, res: Resultado,
     return achados
 
 
+RE_PCT_COM_ANO = re.compile(
+    r"(-?\d{1,3},\d{1,2})\s?%[^.]{0,40}?\b(20\d{2})\b"      # "12,79% (2023)"
+    r"|\b(20\d{2})\b[^.]{0,40}?(-?\d{1,3},\d{1,2})\s?%")    # "em 2023, 12,79%"
+
+
 def _percentuais_conflitantes(texto: str) -> dict[str, set[str]]:
-    """Agrupa percentuais que diferem por menos de 0,3 ponto — perto demais para serem
-    reajustes distintos, longe demais para serem o mesmo número."""
-    achados: dict[str, set[str]] = {}
-    vistos = sorted({m.group(1) for m in RE_PCT.finditer(texto)},
-                    key=lambda s: Decimal(s.replace(".", "").replace(",", ".")))
-    for i, a in enumerate(vistos):
-        for b in vistos[i + 1:]:
-            va, vb = d(a), d(b)
-            if va == vb:
-                continue
-            if abs(vb - va) <= Decimal("0.3"):
-                achados.setdefault(a, set()).update({f"{a}%", f"{b}%"})
-    return achados
+    """Mesmo reajuste citado com números diferentes em pontos diferentes da peça.
+
+    O vínculo é o **ano**, não a proximidade numérica. A primeira versão agrupava
+    percentuais que diferissem por menos de 0,3 ponto, e isso bloqueava peça correta:
+    os índices ANS de 2015 e 2016 são 13,55% e 13,57%, distam 0,02 e são legítimos.
+    """
+    por_ano: dict[str, set[str]] = {}
+    for m in RE_PCT_COM_ANO.finditer(texto):
+        pct = m.group(1) or m.group(4)
+        ano = m.group(2) or m.group(3)
+        if pct and ano:
+            por_ano.setdefault(ano, set()).add(pct)
+
+    return {ano: {f"{p}%" for p in pcts}
+            for ano, pcts in por_ano.items() if len(pcts) > 1}
 
 
 PALAVRAS_PATAMAR = re.compile(

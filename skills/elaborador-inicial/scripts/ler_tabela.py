@@ -193,16 +193,25 @@ def conferir_importado(planilha: dict, resultado) -> list[str]:
     calculados = {l.competencia.chave: l.valor_devido for l in resultado.linhas}
     divergentes, sem_par = [], 0
 
-    brutas = (planilha.get("texto_solto") or "").split("\n")
-    if planilha.get("linhas") and not planilha.get("texto_solto"):
+    numeros: dict[int, list[Decimal]] = {}
+    if planilha.get("linhas"):
         brutas = [" ".join(str(c) for c in linha if c is not None)
                   for linha in planilha["linhas"]]
+        numeros = {i: _numeros_soltos(linha)
+                   for i, linha in enumerate(planilha["linhas"])}
+    else:
+        brutas = (planilha.get("texto_solto") or "").split("\n")
 
-    for bruto in brutas:
+    for i, bruto in enumerate(brutas):
         a = analisar(bruto)
-        if not a or len(a["valores"]) < 3:
+        if not a:
             continue
-        importado = a["valores"][-2]
+        # xlsx e csv trazem número, não texto com R$; sem este caminho a conferência
+        # devolvia lista vazia para toda planilha em grade e não conferia nada.
+        valores = a["valores"] or numeros.get(i, [])
+        if len(valores) < 3:
+            continue
+        importado = valores[-2]
         if importado <= VALOR_DE_PLACEHOLDER:
             continue
         nosso = calculados.get((a["ano"], a["mes"]))

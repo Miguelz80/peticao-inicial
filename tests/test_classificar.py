@@ -204,6 +204,45 @@ def test_normalizar():
     assert normalizar("DIFERENÇA") == "diferenca"
 
 
+
+
+
+# ---------------------------------------- regressões da revisão de código ----
+
+def test_tese_indefinida_nunca_passa_como_decidida():
+    """Havia um caminho — PJ com F3/F4/F5 conhecidos mas fora do padrão — em que o
+    bloqueio era sinalizado sem gerar pergunta nenhuma, e o caso seguia para o
+    Espelho com tese INDEFINIDA."""
+    d = classificar([], _planilha_ok(),
+                    _fatos(F1="COMERCIAL", F2="PJ", F3=NAO, F4=NAO, F5=NAO))
+    assert d["eixo_b"]["tese"] == "INDEFINIDA"
+    assert d["status"] == "BLOQUEADO"
+    assert any(p["bloqueante"] for p in d["perguntas"])
+
+
+def test_fora_do_padrao_tambem_bloqueia_o_status():
+    d = classificar([], _planilha_ok(), _fatos(F1="COMERCIAL", F2="PJ", F3=SIM))
+    assert d["status"] == "BLOQUEADO"
+
+
+def test_fato_pouco_confiavel_que_sustenta_a_tese_vira_pergunta():
+    """A regra estava na documentação e no modelo de dados, mas nada a aplicava:
+    um fato com confiança 0,1 fechava a tese com confiança 0,9."""
+    fatos = _fatos(F1="COMERCIAL", F4=SIM, F5=NAO)
+    fatos["F2"] = Fato(valor="PJ", fonte="contrato", citacao="CNPJ ...",
+                       confianca=0.2)
+    fatos["F3"] = Fato(valor=NAO, fonte="transcrição", confianca=0.9)
+    d = classificar([], _planilha_ok(), fatos)
+    assert "CONF-F2" in {p["id"] for p in d["perguntas"]}
+    assert d["status"] == "BLOQUEADO"
+
+
+def test_fato_confiavel_nao_gera_pergunta_extra():
+    d = classificar([], _planilha_ok(),
+                    _fatos(F1="COMERCIAL", F2="PJ", F3=NAO, F4=SIM, F5=NAO))
+    assert not any(p["id"].startswith("CONF-") for p in d["perguntas"])
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

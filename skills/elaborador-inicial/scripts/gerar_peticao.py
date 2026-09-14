@@ -274,7 +274,9 @@ def tabela_de_reajuste(res: Resultado) -> Tabela:
     return Tabela(
         linhas=linhas,
         larguras=[1100, 1250, 1250, 1150, 1250, 1300, 1300],
-        destaque_colunas=(6,),
+        # Diferença e percentual de aumento, como em references/estilo-tabelas.md —
+        # é o realce que dá a leitura da peça.
+        destaque_colunas=(2, 6),
         linha_vigente=len(linhas) - 2,
     )
 

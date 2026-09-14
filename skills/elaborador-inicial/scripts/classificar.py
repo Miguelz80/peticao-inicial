@@ -390,6 +390,33 @@ def aplicar_gates(eixo_a: dict, eixo_b: dict, fatos: dict[str, Fato],
                  "Não precisa entrar no caso"],
                 bloqueante=False))
 
+    # Tese não decidida jamais chega ao Espelho como se estivesse decidida. Havia um
+    # caminho — PJ com F3/F4/F5 conhecidos mas fora do padrão — em que o bloqueio era
+    # sinalizado sem gerar nenhuma pergunta, e o caso seguia com tese INDEFINIDA.
+    if eixo_b.get("tese") == "INDEFINIDA" and not perguntas:
+        perguntas.append(_pergunta(
+            "G3-fallback",
+            "Não consegui fechar a tese com os fatos que tenho. Como o caso deve ser "
+            "enquadrado?",
+            ["Falso coletivo empresarial (empresa sem atividade, plano da família)",
+             "Falso coletivo por adesão (pessoa física via associação ou sindicato)",
+             "Autogestão (CASSI, ASSEFAZ, GEAP e afins)",
+             "Revisional individual comum"],
+            evidencias=eixo_b.get("evidencias")))
+
+    # Fato pouco confiável que sustenta a tese vira pergunta, como manda
+    # references/classificador.md. A regra existia na documentação e no modelo de
+    # dados, mas nada a aplicava.
+    for chave in ("F1", "F2", "F3", "F4", "F5"):
+        fato = fatos.get(chave)
+        if fato and fato.valor != DESCONHECIDO and not fato.confiavel():
+            perguntas.append(_pergunta(
+                f"CONF-{chave}",
+                ROTULO_FATO.get(chave, f"Preciso confirmar o fato {chave}.")
+                + f" Li “{fato.citacao or fato.valor}”, mas com pouca certeza.",
+                OPCOES_FATO.get(chave, ["Confirmo", "Está errado"]),
+                evidencias=[f"{fato.fonte}: {fato.citacao or fato.valor}"]))
+
     # Fato vindo de imagem/OCR sempre confirma — leitura de digitalização erra.
     for chave, fato in sorted(fatos.items()):
         if fato.valor != DESCONHECIDO and fato.origem in ("ocr", "imagem"):
@@ -413,7 +440,7 @@ def classificar(documentos: list[dict], planilhas: list[Planilha],
     perguntas = aplicar_gates(eixo_a, eixo_b, fatos, documentos, tipo_peca)
 
     bloqueantes = [p for p in perguntas if p["bloqueante"]]
-    if bloqueantes:
+    if bloqueantes or eixo_b["tese"] in ("INDEFINIDA", "FORA_DO_PADRAO"):
         status = "BLOQUEADO"
     else:
         # G8: o Eixo B nunca é gerado sem confirmação explícita do Espelho,

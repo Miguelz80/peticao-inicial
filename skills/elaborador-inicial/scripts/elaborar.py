@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import os
 import sys
+import zipfile
 from dataclasses import dataclass, field
 from decimal import Decimal
 
@@ -185,8 +186,12 @@ def elaborar(caso: Caso) -> Etapa:
     except rot.CampoAusente as erro:
         etapa.perguntas = [str(erro)]
         return etapa
+    except rot.TeseSemCatalogo as erro:
+        etapa.perguntas = [f"Problema no catálogo de teses: {erro}"]
+        return etapa
 
-    etapa.avisos = list(avisos_da_serie) + list(roteiro.revisoes)
+    etapa.avisos += list(roteiro.revisoes)   # += : as divergências da planilha já
+                                             # estavam aqui e eram sobrescritas
     if roteiro.perguntas:
         etapa.perguntas = list(roteiro.perguntas)
         return etapa
@@ -204,7 +209,13 @@ def elaborar(caso: Caso) -> Etapa:
 
     saida = caso.saida_docx or os.path.join(
         os.path.dirname(caso.modelo_docx) or ".", "peticao-gerada.docx")
-    ger.montar(caso.modelo_docx, roteiro.peca, saida)
+    try:
+        ger.montar(caso.modelo_docx, roteiro.peca, saida)
+    except (ger.ModeloInvalido, zipfile.BadZipFile, OSError) as erro:
+        # Quem opera é a colega do processual, por chat. Traceback não é resposta.
+        etapa.perguntas = [f"Não consegui usar o modelo {os.path.basename(caso.modelo_docx)}: "
+                           f"{erro}"]
+        return etapa
     etapa.docx = saida
 
     # ---- CONFERENCIA ------------------------------------------------------ #
@@ -319,8 +330,9 @@ EXEMPLO = {
         "F7": "SIM ou NAO — houve reajuste por faixa etária",
         "F9": "idade da parte autora, em anos",
         "F10": "SIM ou NAO — houve ação anterior desistida",
-        "faixa_etaria_aceita": "ANO-MÊS para o percentual que entra no devido, "
-                               "ex.: {\"2021-01\": \"10,50\"}",
+        "faixa_etaria_aceita": "ANO-MÊS para o PERCENTUAL que entra no devido, "
+                               "ex.: {\"2021-01\": \"10,50\"} = 10,5%. Use \"0\" "
+                               "para o reajuste que NÃO entra (é o que se impugna)",
         "respostas": "gate respondido, pelo id da pergunta",
     },
 }
@@ -361,13 +373,29 @@ def caso_de_json(bruto: dict) -> Caso:
             caso.fatos[chave] = cls.Fato(valor=str(valor), fonte="informado pela operadora",
                                          confianca=0.95, origem="informado")
 
+    for item in (bruto.get("competencias") or []):
+        # série informada à mão, quando não há arquivo. O campo era aceito na
+        # validação e nunca lido: não havia como fornecer as competências sem arquivo.
+        try:
+            ano, mes = (int(x) for x in str(item["competencia"]).split("-"))
+        except (KeyError, ValueError):
+            raise CasoInvalido(
+                'cada competência precisa de "competencia" no formato ANO-MÊS e '
+                '"valor", ex.: {"competencia": "2024-01", "valor": "1.234,56"}')
+        caso.competencias.append(calc.Competencia(
+            ano=ano, mes=mes, valor_pago=calc.d(item.get("valor", "0")),
+            tipo_reajuste=item.get("tipo", "")))
+
     for chave, valor in (bruto.get("faixa_etaria_aceita") or {}).items():
         try:
             ano, mes = (int(x) for x in str(chave).split("-"))
         except ValueError:
             raise CasoInvalido(
                 f"chave de faixa etária inválida: “{chave}”. Use ANO-MÊS, como 2021-01.")
-        caso.faixa_etaria_aceita[(ano, mes)] = calc.d(valor)
+        # O arquivo fala em percentual ("10,50"); o cálculo trabalha em fração.
+        # Sem esta conversão, 10,5% entrava como 1050% e multiplicava a mensalidade
+        # por onze.
+        caso.faixa_etaria_aceita[(ano, mes)] = calc.d(valor) / 100
 
     return caso
 
@@ -382,10 +410,15 @@ def json_do_caso(caso: Caso) -> dict:
         "tese_confirmada": caso.tese_confirmada,
         "fatos": {k: v.valor for k, v in sorted(caso.fatos.items())},
         "dados": dict(sorted(caso.dados.items())),
-        "faixa_etaria_aceita": {f"{a}-{m:02d}": str(v) for (a, m), v
+        "faixa_etaria_aceita": {f"{a}-{m:02d}": _pct_texto(v) for (a, m), v
                                 in sorted(caso.faixa_etaria_aceita.items())},
         "respostas": dict(sorted(caso.respostas.items())),
     }
+
+
+def _pct_texto(fracao) -> str:
+    """De volta a percentual, como entrou."""
+    return f"{fracao * 100:.2f}".replace(".", ",")
 
 
 def relatorio(etapa: Etapa) -> str:
@@ -434,9 +467,17 @@ def main(argv: list[str]) -> int:
     etapa = elaborar(caso)
     print(relatorio(etapa))
 
-    # devolve o caso enriquecido: o que a skill descobriu não se perde entre rodadas
+    # devolve o caso enriquecido, preservando o que o arquivo já trazia: a ajuda e os
+    # campos em branco são o formulário que a operadora usa para responder, e antes
+    # sumiam na primeira rodada.
+    atualizado = dict(bruto)
+    atualizado.update(json_do_caso(caso))
+    for chave in ("fatos", "dados"):
+        combinado = dict(bruto.get(chave) or {})
+        combinado.update(atualizado.get(chave) or {})
+        atualizado[chave] = combinado
     with open(caminho, "w", encoding="utf-8") as fh:
-        json.dump(json_do_caso(caso), fh, ensure_ascii=False, indent=2)
+        json.dump(atualizado, fh, ensure_ascii=False, indent=2)
     return 0 if etapa.concluido else 1
 
 

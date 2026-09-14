@@ -256,6 +256,40 @@ def test_caso_integralmente_consistente_libera():
     assert "LIBERADO" in c.relatorio()
 
 
+
+
+
+# ---------------------------------------- regressões da revisão de código ----
+
+def test_c2_nao_bloqueia_indices_ans_de_anos_diferentes():
+    """A regra antiga agrupava percentuais que distassem menos de 0,3 ponto, e os
+    índices ANS de 2015 e 2016 (13,55% e 13,57%) distam 0,02: peça correta era
+    bloqueada."""
+    texto = "os índices da ANS foram de 13,55% em 2015 e 13,57% em 2016"
+    assert "C2" not in codigos(conferir_peca(texto, caso_limpo()))
+
+
+def test_c2_continua_pegando_o_mesmo_ano_com_dois_percentuais():
+    texto = ("reajustes de 12,79% (2023) e 14,33% (2024); adiante, +12,88% (2023) "
+             "e +14,26% (2024)")
+    achados = [a for a in conferir_peca(texto, caso_limpo()) if a.codigo == "C2"]
+    assert achados
+    tudo = " ".join(a.encontrado for a in achados)
+    assert "12,79%" in tudo and "12,88%" in tudo
+
+
+def test_valores_de_origem_nao_reescreve_a_janela_escolhida():
+    """Recalcular com os padrões apagava a evidência do marco congelado e ainda
+    produzia um C6 falso."""
+    res = caso_limpo()
+    res.restituicao(meses=37, ate=(2026, 5))
+    janela = res.janela_restituicao
+    achados = conferir_peca("", res, declarados={"restituicao": "R$ 36.738,93"})
+    assert res.janela_restituicao == janela
+    assert "C6" not in codigos(achados)
+    assert "C4" in codigos(conferir_calculo(res))
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())
