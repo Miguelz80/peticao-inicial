@@ -37,7 +37,13 @@ skill erra, e quem opera precisa poder corrigir no Word na hora.
 
 - **Precisão cheia por dentro, arredondamento só na exibição.** Arredondar entre os
   anos erra centavos que se acumulam ao longo da década.
-- **Ano sem índice ANS bloqueia o caso**, em vez de pular o ano ou estimar.
+- **Ano sem índice ANS nunca é estimado.** Se o aniversário sem índice é anterior à
+  janela de restituição, a cadeia recomeça ali a partir da mensalidade paga, com aviso
+  — só reduz a restituição, nunca a infla. Dentro da janela, bloqueia: é o período que
+  o pedido alcança.
+- **Restituição soma só competências pagas a maior.** Mês pago abaixo do devido não
+  gera crédito para a operadora nesta ação; deixá-lo abater as positivas reduziria o
+  pedido sem base.
 - **O cálculo roda também em `CALCULO_PRONTO`** e é comparado linha a linha com a
   planilha importada. Recontar é a única verificação independente que existe, e as
   duas peças reais analisadas mostraram que planilha pronta também chega errada.
@@ -73,7 +79,10 @@ vez de derrubar a execução.
 
 ## O que ainda depende da advogada
 
-Em `docs/03-perguntas-abertas.md`. As que mais pesam: **A7** (janela da restituição —
-varia mais de R$ 2.600 no pedido), **A9** (critério de faixa etária legítima), a série
-de índices ANS anterior a 2015, e as peças reais de **empresarial familiar** e
-**individual comum** para substituir o texto redigido.
+Em `docs/03-perguntas-abertas.md`. **Nenhuma trava o sistema** — todas degradam com
+aviso. As que mais pesam: **A7** (janela da restituição, varia mais de R$ 2.600 no
+pedido), **A9** (critério de faixa etária legítima) e as peças reais de **empresarial
+familiar** e **individual comum**, para substituir o texto redigido a partir dos
+fundamentos.
+
+A série de índices ANS foi conferida com a advogada em 11/09/2026 e está fechada.

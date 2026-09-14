@@ -21,28 +21,30 @@ incluir no devido um aumento que a peça vai impugnar apagaria o próprio pedido
 
 ## Tabela
 
-| Período (aniversário) | Índice | Confirmado |
-|---|---|---|
-| maio/2015 – abril/2016 | **13,55%** | planilha do escritório |
-| maio/2016 – abril/2017 | **13,57%** | planilha + publicação ANS |
-| maio/2017 – abril/2018 | **13,55%** | planilha do escritório |
-| maio/2018 – abril/2019 | **10,00%** | planilha do escritório |
-| maio/2019 – abril/2020 | **7,35%** | planilha + publicação ANS |
-| maio/2020 – abril/2021 | **8,14%** | planilha do escritório |
-| maio/2021 – abril/2022 | **−8,19%** | planilha do escritório (único índice negativo da série) |
-| maio/2022 – abril/2023 | **15,50%** | planilha + publicação ANS |
-| maio/2023 – abril/2024 | **9,63%** | planilha + publicação ANS |
-| maio/2024 – abril/2025 | **6,91%** | planilha + publicação ANS |
-| maio/2025 – abril/2026 | **6,06%** | planilha + publicação ANS |
-| maio/2026 – abril/2027 | **5,11%** | planilha + publicação ANS |
+| Período (aniversário) | Índice |
+|---|---|
+| maio/2015 – abril/2016 | **13,55%** |
+| maio/2016 – abril/2017 | **13,57%** |
+| maio/2017 – abril/2018 | **13,55%** |
+| maio/2018 – abril/2019 | **10,00%** |
+| maio/2019 – abril/2020 | **7,35%** |
+| maio/2020 – abril/2021 | **8,14%** |
+| maio/2021 – abril/2022 | **−8,19%** (único negativo da série) |
+| maio/2022 – abril/2023 | **15,50%** |
+| maio/2023 – abril/2024 | **9,63%** |
+| maio/2024 – abril/2025 | **6,91%** |
+| maio/2025 – abril/2026 | **6,06%** |
+| maio/2026 – abril/2027 | **5,11%** |
 
-### Anteriores a 2015 — pendentes
+Série **conferida com a advogada em 11/09/2026**: os doze valores batem exatamente com
+a tabela do escritório, e os conjuntos são idênticos — nenhum ano a mais nem a menos.
 
-| Período | Índice | Origem |
-|---|---|---|
-| maio/2010 – abril/2011 | 6,73% | publicação ANS (a confirmar) |
-| maio/2013 – abril/2014 | 9,04% | publicação ANS (a confirmar) |
-| demais anos até 1999 | **pendente** | — |
+### Anteriores a 2015
+
+O escritório trabalha com a série a partir de 2015. Caso cujo histórico alcance antes
+disso **não trava**: a cadeia do valor devido recomeça no primeiro aniversário com
+índice conhecido, a partir da mensalidade efetivamente paga, e o Calculador avisa. Ver
+a seção seguinte.
 
 Não preencher por estimativa. Índice errado contamina toda a cadeia e é invisível na
 revisão da peça. Enquanto um ano estiver pendente, o Calculador **bloqueia** o caso cujo
@@ -50,18 +52,12 @@ histórico o alcance, em vez de pular o ano ou chutar.
 
 ## Procedência desta tabela
 
-A fonte primária é a ANS. **Nesta sessão os domínios `gov.br` e `ans.gov.br` estão
-bloqueados pela política de egresso**, então não foi possível ler a tabela oficial
-diretamente.
+Os valores vieram da **planilha de cálculo do próprio escritório** (coluna "Índices
+ANS" do arquivo `CÁLCULO DE REAJUSTE`), foram corroborados em publicações da ANS para
+sete dos doze anos, e a série inteira foi **conferida com a advogada**, que enviou a
+tabela do escritório: os doze valores coincidem, sem ano a mais nem a menos.
 
-Os valores de 2015 a 2026 vieram da **planilha de cálculo do próprio escritório**
-(coluna "Índices ANS" do arquivo `CÁLCULO DE REAJUSTE`), e sete deles foram
-corroborados em publicações da ANS. Nenhum foi escrito de memória.
-
-Para fechar: a ANS publica a série histórica completa em `.xlsx` na página
-"Histórico de reajuste por variação de custo — pessoa física". Baixando esse arquivo e
-enviando aqui, a tabela passa a ter procedência oficial direta e os anos anteriores a
-2015 são preenchidos de uma vez.
+Nenhum valor foi escrito de memória ou estimado.
 
 ## Atenção ao ano de referência
 

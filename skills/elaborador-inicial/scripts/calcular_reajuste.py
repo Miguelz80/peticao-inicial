@@ -97,6 +97,11 @@ def _brl(v: Decimal) -> str:
     return f"R$ {s}"
 
 
+def _inicio_da_janela(reais: list["Competencia"], meses: int) -> tuple[int, int]:
+    janela = reais[-meses:]
+    return janela[0].chave if janela else reais[0].chave
+
+
 def _pct(v: Decimal) -> str:
     return f"{v*100:.2f}%".replace(".", ",")
 
@@ -142,6 +147,7 @@ class Resultado:
     linhas: list[Linha] = field(default_factory=list)
     pendencias: list[Pendencia] = field(default_factory=list)
     bloqueios: list[str] = field(default_factory=list)
+    avisos: list[str] = field(default_factory=list)
     mes_aniversario: int = 0
     janela_restituicao: tuple[str, str] | None = None
 
@@ -190,7 +196,24 @@ class Resultado:
         if janela:
             self.janela_restituicao = (janela[0].competencia.rotulo,
                                        janela[-1].competencia.rotulo)
-        return sum((l.diferenca for l in janela), Decimal(0))
+        return self._somar_positivas(janela)
+
+    def _somar_positivas(self, linhas: list["Linha"]) -> Decimal:
+        """Soma só as competências pagas **a maior**.
+
+        Mês em que se pagou menos que o devido não gera crédito para a operadora nesta
+        ação: cada pagamento indevido é uma pretensão própria. Deixar a diferença
+        negativa abater as positivas reduziria o pedido sem base — e é o que acontecia
+        antes. Quando há competência negativa, o cálculo avisa.
+        """
+        negativas = [l for l in linhas if l.diferenca < 0]
+        if negativas and not any("pagou menos" in a for a in self.avisos):
+            self.avisos.append(
+                f"{len(negativas)} competência(s) da janela foram pagas ABAIXO do valor "
+                f"devido pelos índices ANS (ex.: {negativas[0].competencia.rotulo}). "
+                f"A restituição soma apenas as competências pagas a maior — conferir "
+                f"com a advogada se é assim que o escritório trata o caso.")
+        return sum((l.diferenca for l in linhas if l.diferenca > 0), Decimal(0))
 
     def restituicao_corrente(self) -> Decimal:
         """Soma da janela já definida, sem redefini-la. Quem precisa de outra janela
@@ -264,6 +287,9 @@ def calcular(competencias: list[Competencia], mes_aniversario: int,
 
     devido = reais[0].valor_pago          # base: primeira competência com valor real
     pago_anterior: Decimal | None = None
+    # Início da janela de restituição: é dentro dela que um índice faltando realmente
+    # compromete o pedido. Antes disso, dá para seguir truncando com aviso.
+    inicio_da_janela = _inicio_da_janela(reais, MESES_RESTITUICAO)
 
     for c in reais:
         aplicado = Decimal(0)
@@ -277,10 +303,24 @@ def calcular(competencias: list[Competencia], mes_aniversario: int,
         if aniversario:
             try:
                 devido_pct = indice_do_aniversario(c.ano, c.mes)
+                devido = devido * (1 + devido_pct)
             except IndiceAusente as erro:
-                res.bloqueios.append(str(erro))
-                return res
-            devido = devido * (1 + devido_pct)
+                # Ano sem índice não estima e não trava o caso inteiro: se o
+                # aniversário é anterior à janela de restituição, a cadeia recomeça
+                # da mensalidade efetivamente paga ali. Isso só pode REDUZIR a
+                # restituição — aceita como legítimo o que se pagou até aquele ponto —,
+                # nunca inflá-la. Dentro da janela, aí sim bloqueia.
+                if c.chave >= inicio_da_janela:
+                    res.bloqueios.append(str(erro))
+                    return res
+                devido = c.valor_pago
+                devido_pct = Decimal(0)
+                res.avisos.append(
+                    f"sem índice ANS para o período maio/{erro.periodo}–abril/"
+                    f"{erro.periodo+1}: a cadeia do valor devido recomeça em "
+                    f"{c.rotulo}, a partir da mensalidade paga. Isso reduz a "
+                    f"restituição — preencha o índice em references/indices-ans.md "
+                    f"e recalcule para obter o valor cheio.")
 
         elif not primeira and aplicado > Decimal("0.005"):
             # Reajuste fora do aniversário: faixa etária legítima entra no devido,

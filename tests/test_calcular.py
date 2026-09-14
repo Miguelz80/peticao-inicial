@@ -216,6 +216,45 @@ def test_faixa_etaria_aceita_nao_e_rotulada_como_anual_na_peca():
     assert linha[3] == "Faixa etária", linha
 
 
+
+
+
+def test_indice_ausente_antes_da_janela_trunca_em_vez_de_travar():
+    """Ano pendente não pode impedir o escritório de trabalhar. A cadeia recomeça da
+    mensalidade paga, o que só reduz a restituição — nunca a infla."""
+    comps = serie([(2012, 1, 2017, 12, "500,00"), (2018, 1, 2026, 7, "900,00")])
+    res = calcular(comps, mes_aniversario=7, faixa_etaria_aceita={(2018, 1): d("0")})
+    assert res.bloqueios == []
+    assert res.avisos and "recomeça" in res.avisos[0]
+    assert "reduz a restituição" in res.avisos[0]
+
+
+def test_indice_ausente_dentro_da_janela_continua_travando():
+    """Dentro dos três anos que o pedido alcança, truncar falsearia o valor pedido."""
+    res = calcular(serie([(2012, 1, 2013, 12, "500,00")]), mes_aniversario=7)
+    assert res.bloqueios and "2012" in res.bloqueios[0]
+
+
+def test_restituicao_nunca_e_negativa():
+    """Competência paga abaixo do devido não gera crédito para a operadora nesta ação:
+    cada pagamento indevido é uma pretensão própria. Deixar a negativa abater as
+    positivas reduzia o pedido sem base."""
+    comps = serie([(2012, 1, 2017, 12, "500,00"), (2018, 1, 2026, 7, "900,00")])
+    res = calcular(comps, 7, {(2018, 1): d("0")})
+    assert res.restituicao() >= 0
+    assert any("pagou menos" in a or "ABAIXO" in a for a in res.avisos), res.avisos
+
+
+def test_competencia_negativa_nao_abate_a_positiva():
+    comps = [Competencia(2023, 6, d("1.000,00")), Competencia(2023, 7, d("2.000,00")),
+             Competencia(2023, 8, d("500,00"))]
+    res = calcular(comps, mes_aniversario=7)
+    positiva = [l for l in res.linhas if l.diferenca > 0]
+    negativa = [l for l in res.linhas if l.diferenca < 0]
+    assert positiva and negativa, "o caso de teste precisa dos dois sinais"
+    assert res.restituicao() == sum((l.diferenca for l in positiva), d("0"))
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

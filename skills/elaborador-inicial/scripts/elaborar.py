@@ -167,6 +167,7 @@ def elaborar(caso: Caso) -> Etapa:
         if resultado.pendencias:
             etapa.perguntas = [p.pergunta for p in resultado.pendencias]
             return etapa
+        etapa.avisos += resultado.avisos   # série truncada por índice ANS ausente
         resultado.restituicao()
         if regime == "CALCULO_PRONTO":
             for pl in planilhas:
