@@ -431,6 +431,41 @@ def test_pedido_sem_o_capitulo_correspondente_e_sinalizado():
             r.revisoes
 
 
+
+
+
+def test_mensagem_de_campo_ausente_e_legivel_por_quem_opera():
+    """Lista de nome de variável não é pergunta: quem lê é a colega do processual."""
+    res = resultado()
+    try:
+        montar_peca("CASSI_AUTOGESTAO", {"F6": "ATIVO", "F9": "81", "F10": "NAO"},
+                    {"comarca": "Salvador/BA", **{k: "x" for k in
+                     ("valor_pago_atual", "valor_devido_atual", "diferenca_mensal",
+                      "restituicao", "competencia_atual", "maior_reajuste",
+                      "valor_da_causa", "narrativa_hipossuficiencia")}},
+                    resultado_calculo=res)
+        assert False
+    except CampoAusente as erro:
+        texto = str(erro)
+        assert "nome do plano de saúde" in texto
+        assert "carteira do plano" in texto, "tem que dizer onde achar"
+        assert "idade da parte autora" in texto
+
+
+def test_campo_do_calculo_ausente_aponta_para_o_calculo_nao_para_a_operadora():
+    res = resultado()
+    try:
+        montar_peca("INDIVIDUAL_COMUM", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
+                    {k: "x" for k in ("plano", "inicio_contrato", "comarca", "idade",
+                                      "competencia_atual", "maior_reajuste",
+                                      "valor_da_causa", "narrativa_hipossuficiencia")},
+                    resultado_calculo=res)
+        assert False
+    except CampoAusente as erro:
+        assert "saem do cálculo" in str(erro)
+        assert "restituição" in str(erro)
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

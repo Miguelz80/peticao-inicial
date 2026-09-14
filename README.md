@@ -54,6 +54,8 @@ inteiramente por chat.
 
 ## Documentação
 
+- `CLAUDE.md` — regras de trabalho no repositório, para quem continuar daqui
+
 - `docs/01-arquitetura.md` — estrutura de pastas e fronteira Python × modelo
 - `docs/02-classificador-spec.md` — especificação do Classificador (pseudocódigo)
 - `docs/03-perguntas-abertas.md` — o que precisa ser respondido antes de escrever código

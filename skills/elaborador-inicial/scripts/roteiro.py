@@ -34,6 +34,41 @@ class CampoAusente(Exception):
     pass
 
 
+# Cada campo com o que é e onde achar. Quem lê a mensagem é a colega do processual,
+# não quem escreveu o código: lista de nome de variável não é pergunta.
+CAMPOS = {
+    "plano": ("nome do plano de saúde", "carteira do plano ou contrato"),
+    "inicio_contrato": ("data de início do contrato",
+                        "contrato, proposta de adesão ou carteira"),
+    "comarca": ("comarca onde a ação será distribuída",
+                "domicílio da parte autora, no comprovante de residência"),
+    "idade": ("idade da parte autora, em anos", "documento pessoal"),
+    "competencia_atual": ("mês e ano da mensalidade mais recente",
+                          "última competência da planilha, ex.: julho de 2026"),
+    "maior_reajuste": ("maior percentual de reajuste aplicado",
+                       "coluna de reajuste aplicado da planilha"),
+    "valor_da_causa": ("valor da causa",
+                       "decisão da advogada — a fórmula do escritório ainda não está "
+                       "fechada (pergunta A6)"),
+    "narrativa_hipossuficiencia": (
+        "parágrafo sobre a situação econômica da parte autora",
+        "extratos, IRPF e comprovantes de despesa — é fato do caso, não texto de "
+        "modelo"),
+    "processo_anterior": ("número do processo anterior, que foi desistido",
+                          "comprovante de distribuição da ação anterior"),
+    "comarca_anterior": ("comarca onde a ação anterior foi distribuída",
+                         "autos da ação anterior"),
+}
+
+# Estes não se pedem a ninguém: saem do Calculador. Se faltam, o cálculo não rodou.
+DO_CALCULO = {
+    "valor_pago_atual": "mensalidade atual",
+    "valor_devido_atual": "mensalidade devida",
+    "diferenca_mensal": "diferença mensal",
+    "restituicao": "restituição dos últimos 3 anos",
+}
+
+
 class TeseSemCatalogo(Exception):
     pass
 
@@ -274,11 +309,21 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
     _conferir_coerencia(r)
 
     if faltando_geral:
-        raise CampoAusente(
-            "faltam dados para preencher a peça: "
-            + ", ".join(sorted(faltando_geral))
-            + ". Peça com campo em branco ou com o marcador literal no meio do texto "
-              "passa despercebida na revisão — a geração para aqui.")
+        do_caso = sorted(faltando_geral - set(DO_CALCULO))
+        do_calculo = sorted(faltando_geral & set(DO_CALCULO))
+        linhas = []
+        if do_caso:
+            linhas.append("Para montar a peça ainda preciso destes dados:")
+            for campo in do_caso:
+                o_que, onde = CAMPOS.get(campo, (campo, "—"))
+                linhas.append(f"  · {o_que}  (campo “{campo}”, em: {onde})")
+        if do_calculo:
+            linhas.append("Faltam valores que saem do cálculo — sinal de que o cálculo "
+                          "não rodou ou parou antes do fim:")
+            linhas += [f"  · {DO_CALCULO[c]}  (campo “{c}”)" for c in do_calculo]
+        linhas.append("Não gero com campo em branco: no meio do texto passa "
+                      "despercebido na revisão e vai a protocolo assim.")
+        raise CampoAusente("\n".join(linhas))
 
     r.peca.add(Espaco())
     return r
