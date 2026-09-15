@@ -108,9 +108,12 @@ def elaborar(caso: Caso) -> Etapa:
         for pl in planilhas:
             comps, avisos = tab.competencias_de(
                 {"linhas": pl.linhas, "texto_solto": pl.texto_solto})
+            # O aviso vale mesmo sem competência: é ele que diz POR QUE a leitura
+            # falhou (coluna de valor ilegível, digitalização torta). Descartá-lo
+            # deixava a operadora sem saber o que houve com o arquivo que mandou.
+            avisos_da_serie += [f"{pl.arquivo}: {a}" for a in avisos]
             if comps:
                 caso.competencias = comps
-                avisos_da_serie = avisos
                 break
 
     # Série informada direto pela operadora vale como base de cálculo: o Eixo A não
@@ -148,14 +151,22 @@ def elaborar(caso: Caso) -> Etapa:
 
     # Calcula sempre que houver série, inclusive em CALCULO_PRONTO: recontar é a
     # única verificação independente da planilha que o cliente mandou.
+    # Regime que exige cálculo sem série legível trava aqui. Antes caía na redação e
+    # a operadora acabava digitando restituição e diferença à mão — justamente os
+    # números que esta skill existe para calcular e conferir.
+    if regime in PRECISA_CALCULO and not caso.competencias:
+        etapa.perguntas = [
+            "Não consegui ler competência e valor pago do demonstrativo — sem a "
+            "série não monto a tabela de reajuste devido nem a restituição. "
+            "Informe os meses e valores no campo “competencias” do arquivo do caso "
+            '(ex.: [{"competencia": "2024-01", "valor": "2.238,77"}]) ou mande o '
+            "demonstrativo em versão legível (planilha ou PDF com texto)."]
+        return etapa
+
     if caso.competencias:
         if caso.mes_aniversario is None:
             etapa.perguntas = ["Em que mês cai o aniversário do contrato? "
                                "É ele que define qual índice ANS se aplica a cada ano."]
-            return etapa
-        if not caso.competencias:
-            etapa.perguntas = ["Preciso das competências e valores pagos mês a mês "
-                               "para montar a tabela de reajuste devido."]
             return etapa
 
         resultado = calc.calcular(caso.competencias, caso.mes_aniversario,

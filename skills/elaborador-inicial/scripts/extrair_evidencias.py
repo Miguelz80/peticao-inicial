@@ -90,8 +90,16 @@ def identificar_papel(texto: str) -> tuple[str, list[str]]:
         return "PECA_PROCESSUAL", [f"estrutura de peça: {', '.join(achados_peca)}"]
 
     colunas = [c for c in COLUNAS_CALCULO if c in n]
+    # Nome de coluna solto não é tabela: a proposta de honorários do escritório diz
+    # "valor pago", "valor devido" e "diferença" em prosa corrida e passava como
+    # cálculo pronto. Só é cálculo se também houver linhas de competência legíveis.
     if len(colunas) >= 3:
-        return "CALCULO_PRONTO", [f"colunas de cálculo: {', '.join(colunas)}"]
+        from ler_tabela import linhas_de_texto
+        linhas = linhas_de_texto(texto)
+        if len(linhas) >= 2:
+            return "CALCULO_PRONTO", [
+                f"colunas de cálculo: {', '.join(colunas)}",
+                f"{len(linhas)} linhas de competência legíveis"]
     melhor, achados_melhor = "INDEFINIDO", []
     for papel, marcas in MARCADORES.items():
         achados = [m for m in marcas if m in n]
@@ -106,13 +114,27 @@ def identificar_papel(texto: str) -> tuple[str, list[str]]:
 # Leitores por formato
 # --------------------------------------------------------------------------- #
 
+def _falha_de_biblioteca(caminho: str, lib: str, erro: BaseException) -> str:
+    """Mensagem de arquivo ilegível por problema de biblioteca.
+
+    `except BaseException` é deliberado: uma instalação parcial de `pypdf` levanta
+    `PanicException` do PyO3, que não herda de `Exception` e derrubava o caso inteiro no
+    meio da triagem. Documento ilegível é aviso, nunca queda — quem opera manda outro
+    arquivo ou passa os dados na conversa.
+    """
+    if isinstance(erro, ImportError):
+        return f"{caminho}: {lib} não instalado"
+    return (f"{caminho}: {lib} instalado mas quebrado ({type(erro).__name__}: {erro}) — "
+            f"passe os dados deste arquivo pela conversa")
+
+
 def _ler_pdf(caminho: str, ex: Extracao) -> None:
     """Segmenta por página: um arquivo pode conter vários documentos, e páginas
     com e sem camada de texto costumam conviver no mesmo PDF."""
     try:
         from pypdf import PdfReader
-    except ImportError:
-        ex.ilegiveis.append(f"{caminho}: pypdf não instalado")
+    except BaseException as erro:
+        ex.ilegiveis.append(_falha_de_biblioteca(caminho, "pypdf", erro))
         return
     try:
         paginas = [(p.extract_text() or "") for p in PdfReader(caminho).pages]
@@ -173,8 +195,8 @@ def _fechar(ex, caminho, ini, fim, chave, textos) -> None:
 def _ler_xlsx(caminho: str, ex: Extracao) -> None:
     try:
         import openpyxl
-    except ImportError:
-        ex.ilegiveis.append(f"{caminho}: openpyxl não instalado")
+    except BaseException as erro:
+        ex.ilegiveis.append(_falha_de_biblioteca(caminho, "openpyxl", erro))
         return
     try:
         wb = openpyxl.load_workbook(caminho, data_only=True, read_only=True)
@@ -225,8 +247,8 @@ def _ler_csv(caminho: str, ex: Extracao) -> None:
 def _ler_docx(caminho: str, ex: Extracao) -> None:
     try:
         import docx
-    except ImportError:
-        ex.ilegiveis.append(f"{caminho}: python-docx não instalado")
+    except BaseException as erro:
+        ex.ilegiveis.append(_falha_de_biblioteca(caminho, "python-docx", erro))
         return
     try:
         d = docx.Document(caminho)

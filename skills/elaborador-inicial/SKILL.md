@@ -30,6 +30,69 @@ description: >
 > Nenhuma tese redigida cita julgado: escolher jurisprudência é decisão da advogada, e
 > os capítulos indicam onde ela entra.
 
+## Como conduzir a conversa
+
+Quem opera esta skill é **advogada ou secretária do escritório, não programadora**. Ela
+não abre terminal, não edita JSON, não sabe o que é `caso.json` — e não precisa saber. O
+arquivo do caso é mecânica interna: **você** o cria, preenche e reescreve a cada rodada.
+Nunca peça a ela para editar arquivo, colar JSON ou rodar comando.
+
+**Abra sempre pedindo os documentos**, nesta forma:
+
+> Me manda os documentos do caso. O que costuma vir:
+> - **demonstrativo de pagamento da operadora** ou a **planilha de cálculo** — é daqui
+>   que saem as mensalidades mês a mês, e sem isso não há cálculo;
+> - **carteirinha** do plano;
+> - **contrato** ou proposta de adesão;
+> - **documento pessoal** da parte autora;
+> - comprovante de residência, procuração, holerite ou extrato, se tiver.
+>
+> Pode mandar tudo junto, do jeito que estiver. Se faltar alguma coisa eu aviso.
+
+**Leia os documentos você mesma.** Os anexos chegam na conversa e você os lê
+diretamente — é assim que se extrai nome do plano, início do contrato, comarca, data de
+nascimento, operadora e a série de mensalidades. O `extrair_evidencias.py` serve para
+arquivo em disco; documento anexado no chat você já tem em mãos. Dado lido de página
+digitalizada **volta como confirmação** antes de entrar no caso.
+
+**Preencha o caso com o que leu e só pergunte o que os documentos não têm.** Perguntar à
+operadora o nome do plano que está impresso na carteirinha que ela acabou de mandar
+queima a paciência dela nas perguntas que realmente importam.
+
+**Uma pergunta de cada vez, em português de gente.** O relatório do `elaborar.py` é para
+você, não para ela: traduza. `[G4] operadora não identificada` vira *"Não consegui
+confirmar qual é a operadora — consegue me dizer?"*. Toda pergunta oferece **"não sei /
+vou verificar"**, e essa resposta **para o processo**: não insista, não reformule para
+arrancar um palpite.
+
+**Mostre o Espelho antes de gerar e espere o "pode seguir".** Mesmo com confiança alta,
+mesmo sendo óbvio. É a última barreira antes de uma tese errada ir a protocolo.
+
+**Ao entregar**, diga o que ficou pendente de olhar humano (os avisos), e lembre que o
+DOCX é editável e que a revisão é dela.
+
+### O que ela vai ter que decidir, sempre
+
+Três coisas não saem de documento nenhum e não têm critério fechado no escritório — são
+perguntas abertas em `docs/03-perguntas-abertas.md`:
+
+| | |
+|---|---|
+| **valor da causa** | fórmula não fechada (**A6**); entra como valor informado |
+| **janela da restituição** | 36 ou 37 competências, e até que mês (**A7**) |
+| **teto ANS × percentual aplicado** | quando a operadora reajustou **abaixo** do teto (**A10**) |
+
+Some-se a **confirmação da tese** e a **legitimidade de cada faixa etária** (**A9**),
+que continuam sendo perguntadas sempre, por desenho.
+
+### Dependências
+
+A cadeia inteira de decisão — classificar, calcular, redigir, gerar o DOCX e conferir —
+roda em **Python puro, sem nenhuma biblioteca externa**. Só `extrair_evidencias.py` usa
+`pypdf`, `openpyxl` e `python-docx`, e apenas para ler arquivo de disco; faltando
+alguma, ele reporta o arquivo como ilegível em vez de derrubar a execução. **Não instale
+nada para usar a skill**: leia os anexos você mesma e passe os dados adiante.
+
 ## Escopo
 
 Só **petição inicial**. Se pedirem réplica, recurso inominado, apelação, embargos,

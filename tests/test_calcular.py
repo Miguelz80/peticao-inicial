@@ -5,6 +5,7 @@ from decimal import Decimal
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
                       / "skills" / "elaborador-inicial" / "scripts"))
 
+import calcular_reajuste  # noqa: E402
 from calcular_reajuste import (  # noqa: E402
     Competencia, calcular, periodo_ans, indice_do_aniversario, IndiceAusente,
     d, q, tabela, resumo, FAIXA_ETARIA, INDICES_ANS,
@@ -253,6 +254,58 @@ def test_competencia_negativa_nao_abate_a_positiva():
     negativa = [l for l in res.linhas if l.diferenca < 0]
     assert positiva and negativa, "o caso de teste precisa dos dois sinais"
     assert res.restituicao() == sum((l.diferenca for l in positiva), d("0"))
+
+
+def test_restituicao_corrente_soma_so_positivas_como_restituicao():
+    """Os dois caminhos têm que dar o mesmo número: restituicao() escreve o valor na
+    peça e restituicao_corrente() é a referência da Conferência. Divergindo, a
+    Conferência reprovava em C6 uma peça correta."""
+    # maio/2022 abaixo do teto ANS: as competências seguintes ficam pagas a menor
+    comps = ([Competencia(2022, m, d("2.097,01")) for m in range(1, 5)]
+             + [Competencia(2022, m, d("2.238,77")) for m in range(5, 13)]
+             + [Competencia(2023, m, d("2.238,77")) for m in range(1, 5)]
+             + [Competencia(2023, m, d("2.526,89")) for m in range(5, 13)]
+             + [Competencia(2024, m, d("2.526,89")) for m in range(1, 5)]
+             + [Competencia(2024, m, d("2.886,98")) for m in range(5, 13)])
+    r = calcular(comps, 5, {})
+    assert any(l.diferenca < 0 for l in r.linhas), "o caso precisa ter negativas"
+    assert r.restituicao() == r.restituicao_corrente()
+
+
+def test_indices_vem_do_markdown_nao_do_codigo():
+    """A série é dado da advogada, não constante de código. Editar o .md tem que mudar
+    o cálculo — sem isso o arquivo de referência vira enfeite."""
+    import tempfile, os as _os
+    md = ("| Período | Índice |\n|---|---|\n"
+          "| maio/2015 – abril/2016 | **1,00%** |\n"
+          "| maio/2016 – abril/2017 | **−2,50%** |\n")
+    with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False,
+                                     encoding="utf-8") as f:
+        f.write(md)
+        caminho = f.name
+    try:
+        serie = calcular_reajuste.carregar_indices(caminho)
+        assert serie == {2015: d("0.01"), 2016: d("-0.025")}, serie
+    finally:
+        _os.unlink(caminho)
+
+
+def test_tabela_de_indices_ilegivel_nao_cai_em_serie_embutida():
+    """Erro claro em vez de calcular com índices que ninguém revisou."""
+    try:
+        calcular_reajuste.carregar_indices("/caminho/que/nao/existe.md")
+    except calcular_reajuste.TabelaIndisponivel:
+        pass
+    else:
+        assert False, "tabela ausente tinha que levantar TabelaIndisponivel"
+
+
+def test_serie_do_escritorio_conferida_em_11_09_2026():
+    """Os doze valores que a advogada confirmou. Guarda contra edição acidental do .md."""
+    esperado = {2015: "0.1355", 2016: "0.1357", 2017: "0.1355", 2018: "0.10",
+                2019: "0.0735", 2020: "0.0814", 2021: "-0.0819", 2022: "0.155",
+                2023: "0.0963", 2024: "0.0691", 2025: "0.0606", 2026: "0.0511"}
+    assert calcular_reajuste.INDICES_ANS == {a: d(v) for a, v in esperado.items()}
 
 
 if __name__ == "__main__":

@@ -20,6 +20,8 @@ juízo jurídico (Temas 952 e 1016 do STJ) — ele identifica e devolve para dec
 
 from __future__ import annotations
 
+import os
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -29,20 +31,56 @@ from decimal import Decimal, ROUND_HALF_UP
 # --------------------------------------------------------------------------- #
 
 # Chave = ano de início do período (maio/ANO a abril/ANO+1).
-INDICES_ANS: dict[int, Decimal] = {
-    2015: Decimal("0.1355"),
-    2016: Decimal("0.1357"),
-    2017: Decimal("0.1355"),
-    2018: Decimal("0.1000"),
-    2019: Decimal("0.0735"),
-    2020: Decimal("0.0814"),
-    2021: Decimal("-0.0819"),   # único negativo da série
-    2022: Decimal("0.1550"),
-    2023: Decimal("0.0963"),
-    2024: Decimal("0.0691"),
-    2025: Decimal("0.0606"),
-    2026: Decimal("0.0511"),
-}
+#
+# A série NÃO mora aqui: mora em references/indices-ans.md, que a advogada edita sem
+# abrir código. Este módulo só lê a tabela de lá. Duplicar os valores em .py criaria
+# duas versões da verdade, e a de baixo é a que ninguém revisa.
+TABELA_INDICES = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "references", "indices-ans.md")
+
+# | maio/2022 – abril/2023 | **15,50%** |   → 2022: 0.1550
+# Aceita o traço de menos tipográfico (−) além do hífen: a linha de 2021 usa o primeiro.
+_LINHA_INDICE = re.compile(
+    r"^\s*\|\s*maio/(\d{4})\s*[–\-]\s*abril/\d{4}\s*\|\s*\**\s*"
+    r"([−\-]?\d+[.,]?\d*)\s*%", re.MULTILINE)
+
+
+class TabelaIndisponivel(Exception):
+    pass
+
+
+def carregar_indices(caminho: str = "") -> dict[int, Decimal]:
+    """Lê a série de índices de references/indices-ans.md.
+
+    Arquivo ilegível ou tabela vazia é erro, nunca fallback silencioso para uma série
+    embutida: calcular com índice que a advogada não vê é o defeito que este módulo
+    inteiro existe para evitar.
+    """
+    caminho = caminho or TABELA_INDICES
+    try:
+        with open(caminho, encoding="utf-8") as f:
+            texto = f.read()
+    except OSError as erro:
+        raise TabelaIndisponivel(
+            f"não consegui ler a tabela de índices ANS em {caminho}: {erro}") from erro
+
+    serie: dict[int, Decimal] = {}
+    for ano, pct in _LINHA_INDICE.findall(texto):
+        # percentual → fração. "15,50%" é 0,1550, não 15,50 — a confusão de unidade já
+        # multiplicou uma mensalidade por onze com teste verde por cima.
+        bruto = pct.replace("\u2212", "-").replace(",", ".")
+        serie[int(ano)] = Decimal(bruto) / Decimal(100)
+
+    if not serie:
+        raise TabelaIndisponivel(
+            f"{caminho} não tem nenhuma linha de índice no formato "
+            f"“| maio/ANO – abril/ANO+1 | **N,NN%** |”. Corrija a tabela antes de "
+            f"calcular — não há série embutida para cair de volta.")
+    return serie
+
+
+INDICES_ANS: dict[int, Decimal] = carregar_indices()
 
 ANUAL, FAIXA_ETARIA, INDEFINIDO = "ANUAL", "FAIXA_ETARIA", ""
 MESES_RESTITUICAO = 36          # Tema 610/STJ — prescrição trienal
@@ -207,7 +245,7 @@ class Resultado:
         antes. Quando há competência negativa, o cálculo avisa.
         """
         negativas = [l for l in linhas if l.diferenca < 0]
-        if negativas and not any("pagou menos" in a for a in self.avisos):
+        if negativas and not any("pagas ABAIXO" in a for a in self.avisos):
             self.avisos.append(
                 f"{len(negativas)} competência(s) da janela foram pagas ABAIXO do valor "
                 f"devido pelos índices ANS (ex.: {negativas[0].competencia.rotulo}). "
@@ -229,7 +267,11 @@ class Resultado:
                 dentro.append(l)
             if l.competencia.rotulo == fim:
                 break
-        return sum((l.diferenca for l in dentro), Decimal(0))
+        # Mesma regra de restituicao(): só as competências pagas a maior. Somando
+        # também as negativas, este caminho — que é o que a Conferência usa como
+        # referência — divergia do número escrito na peça e reprovava em C6 uma peça
+        # correta, sempre que a série tinha alguma competência paga a menor.
+        return self._somar_positivas(dentro)
 
     def _janela(self, meses: int, ate: tuple[int, int] | None) -> list["Linha"]:
         linhas = self.linhas
@@ -304,6 +346,19 @@ def calcular(competencias: list[Competencia], mes_aniversario: int,
             try:
                 devido_pct = indice_do_aniversario(c.ano, c.mes)
                 devido = devido * (1 + devido_pct)
+                # O índice ANS é teto autorizado, não reajuste obrigatório. Quando a
+                # operadora aplicou MENOS que o teto, a cadeia do devido passa acima
+                # da mensalidade efetivamente paga e aquelas competências saem da
+                # restituição. Isso só reduz o pedido, nunca o infla — mas muda o
+                # valor, então nomeia a causa em vez de deixar o sintoma solto.
+                if aplicado < devido_pct - Decimal("0.0005"):
+                    res.avisos.append(
+                        f"em {c.rotulo} a operadora aplicou {_pct(aplicado)}, abaixo do "
+                        f"índice ANS de {_pct(devido_pct)} usado na cadeia do valor "
+                        f"devido. A partir daí o devido fica acima do que se pagou e "
+                        f"essas competências não entram na restituição — decisão da "
+                        f"advogada se a cadeia deve seguir o teto ANS ou o percentual "
+                        f"efetivamente aplicado (pergunta A10).")
             except IndiceAusente as erro:
                 # Ano sem índice não estima e não trava o caso inteiro: se o
                 # aniversário é anterior à janela de restituição, a cadeia recomeça

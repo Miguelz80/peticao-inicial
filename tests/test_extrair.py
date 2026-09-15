@@ -32,6 +32,23 @@ def test_texto_sem_marcador_fica_indefinido_e_nao_chuta():
     assert identificar_papel("bom dia, tudo bem com você")[0] == "INDEFINIDO"
 
 
+def test_proposta_de_honorarios_nao_vira_calculo_pronto():
+    """A proposta do escritório cita "valor pago", "valor devido" e "diferença" em
+    prosa. Sem linhas de competência, não é tabela de cálculo."""
+    texto = ("Proposta de honorários advocatícios\n"
+             "Valor pago (atual): R$ 3.576,39\n"
+             "Valor devido: R$ 3.213,02\n"
+             "Diferença (mensal): R$ 363,37\n")
+    assert identificar_papel(texto)[0] != "CALCULO_PRONTO"
+
+
+def test_tabela_com_colunas_e_competencias_e_calculo_pronto():
+    texto = ("Mês/Ano Valor Pago Reajuste Aplicado Valor Devido Diferença\n"
+             "01/2023 R$ 1.000,00 10,00% R$ 900,00 R$ 100,00\n"
+             "02/2023 R$ 1.000,00 10,00% R$ 900,00 R$ 100,00\n")
+    assert identificar_papel(texto)[0] == "CALCULO_PRONTO"
+
+
 def test_cabecalho_abaixo_de_linhas_de_titulo():
     linhas = [["DEMONSTRATIVO DE CÁLCULO", None, None],
               [None, None, None],
