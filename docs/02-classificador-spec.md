@@ -1,6 +1,8 @@
 # 02 — Módulo Classificador (especificação)
 
-> Status: **especificação para validação**. Ainda não é código final.
+> Status: **especificação para validação**, revisada após o primeiro caso real.
+> Ainda não é código final. As correções do §10 vieram do dossiê CASSI analisado em
+> `docs/04-achados-caso-cassi.md` e ainda não foram reescritas no corpo das seções 2–4.
 > Objetivo: decidir (a) o regime de cálculo e (b) a tese/modelo aplicável — e,
 > principalmente, **saber quando não decidir**.
 
@@ -147,7 +149,7 @@ vier de narrativa, **citação literal**. Regra absoluta:
 
 | ID | Fato | Fonte preferencial |
 |----|------|--------------------|
-| F1 | Natureza jurídica da operadora ré (autogestão × comercial) | Cadastro `references/operadoras.md`, por CNPJ |
+| F1 | Natureza jurídica da operadora ré (autogestão × comercial) | Cadastro `references/operadoras.md`, por CNPJ ou CNPJ raiz. **Só a natureza vem do cadastro** — CNPJ, endereço e razão social da ré são extraídos do documento do caso |
 | F2 | Quem é o contratante (PJ / PF via associação-sindicato / PF direto) | Contrato do plano, carteirinha, boleto |
 | F3 | A PJ tem atividade econômica real | Contrato social, transcrição, extrato |
 | F4 | Beneficiários são exclusivamente do mesmo núcleo familiar | Carteirinha, transcrição |
@@ -155,6 +157,8 @@ vier de narrativa, **citação literal**. Regra absoluta:
 | F6 | Plano ativo ou já cancelado pela parte autora | Transcrição, boletos recentes |
 | F7 | Houve reajuste por faixa etária no período | Planilha (coluna "Tipo de Reajuste") |
 | F8 | Comarca / domicílio do autor | Documento pessoal, contrato |
+| F9 | Idade do autor | Documento pessoal, qualificação |
+| F10 | Houve ação anterior desistida (reajuizamento) | Informação da operadora, autos anexos |
 
 ### 4.2 Árvore de decisão (discriminantes duros primeiro)
 
@@ -202,6 +206,8 @@ Confiança **média ou baixa em fato que sustenta a tese ⇒ vira pergunta**, me
 skill não pode inventar o fato que a peça vai afirmar em juízo.
 
 ### 4.4 Mapa tese → modelo → blocos obrigatórios
+
+As quatro teses abaixo estão **confirmadas no escopo** desta fase (08/09/2026).
 
 | Tese | Modelo DOCX | Blocos que a peça **tem** que ter |
 |---|---|---|
@@ -313,3 +319,100 @@ O Classificador **nunca**:
 - 1 fixture de operadora fora do cadastro (G4);
 - 1 fixture de transcrição silenciosa sobre vínculo empregatício → tem que perguntar,
   não concluir.
+
+
+---
+
+## 10. Correções pendentes (caso real CASSI — `docs/04-achados-caso-cassi.md`)
+
+O primeiro dossiê real invalidou quatro suposições. Registradas aqui; a reescrita das
+seções 2–4 fica para depois das respostas do Bloco D.
+
+**10.1 Eixo A precisa de um terceiro regime.** O insumo de cálculo chegou como PDF
+digitalizado ("BEN120 — Demonstrativo de Pagamento de Faturas"), não como planilha.
+Pela regra do §3.2 o caso cairia em `AUSENTE` e seria bloqueado sem motivo.
+
+```
+REGIMES = { CALCULO_PRONTO, FATURAMENTO_BRUTO, DEMONSTRATIVO_OPERADORA,
+            AUSENTE, AMBIGUO }
+```
+
+`DEMONSTRATIVO_OPERADORA`: série de competências com um valor por mês, emitida pela
+própria operadora, **sem** colunas de reajuste. Detecção por marcadores de layout
+(`Competência` · `Vencimento` · `Data Baixa` · `Tipo Lançamento` · `Mensalidade`), não
+por cabeçalho de planilha.
+
+**10.2 Documento digitalizado é caminho de primeira classe, não exceção.**
+Metade dos PDFs do caso não tinha camada de texto. Consequências:
+
+- toda extração passa a declarar a **origem** (`texto_nativo` × `ocr` × `imagem`);
+- fato originado de OCR nasce com confiança reduzida e **sempre** vira item de
+  confirmação no Espelho;
+- número lido de OCR **nunca** serve de contraprova para o módulo 4 sem confirmação
+  humana — no caso real o OCR do demonstrativo era ruim demais para isso.
+
+**10.3 Um arquivo pode conter vários documentos.** A triagem do §2 assume um papel por
+arquivo; o caso trouxe demonstrativo (pgs. 1–3) e regulamento (pgs. 4–13) no mesmo PDF.
+A triagem passa a segmentar por página e a devolver **lista** de papéis por arquivo.
+
+**10.4 ~~Os eixos são acoplados~~ — descartado (resposta D8, 08/09/2026).**
+A peça CASSI real não calcula reajuste devido: remete à liquidação de sentença. Eu
+tinha lido isso como regra da tese. **Não é** — é característica daquela peça. O
+Calculador roda em **todas** as teses, sempre por índices ANS ano a ano.
+
+A própria peça de referência sustenta isso: a tabela da tutela afirma que os reajustes
+estão "em manifesta desproporcionalidade com os índices autorizados pela ANS, conforme
+planilha histórica de reajuste". O parâmetro ANS já era usado como régua na autogestão —
+só não havia a tabela calculada.
+
+Consequência prática: a peça de autogestão gerada pelo `elaborador-inicial` passa a ter
+uma tabela de reajuste devido que a peça atual não tem. Os eixos voltam a ser
+independentes.
+
+**10.5 Blocos condicionais por fato processual.** F9 (idade) dispara prioridade de
+tramitação; F10 (reajuizamento) dispara o capítulo de competência concorrente. Não
+decorrem da tese e precisam de trilho próprio no dossiê.
+
+**10.6 Acréscimos à cobertura de teste do §9.**
+
+- demonstrativo de operadora em PDF digitalizado → tem que dar
+  `DEMONSTRATIVO_OPERADORA`, nunca `AUSENTE`;
+- PDF com dois documentos de papéis diferentes → dois papéis, não um;
+- extrato bancário sem camada de texto → fato de gratuidade marcado como
+  origem-imagem e confirmação obrigatória;
+- **caso CASSI real como fixture de regressão do módulo 4**: duas tabelas com
+  percentuais divergentes (12,79% × 12,88%), valor de tutela ausente da tabela de
+  histórico, valor da causa em desacordo com a própria justificativa. A Conferência
+  tem que acusar os três.
+
+**10.7 Faixa etária entra no valor devido (resposta A1/A2).** Confirmado: o valor devido
+acumula **índice ANS e reajuste por faixa etária**, sobre a base já corrigida do ano
+anterior.
+
+```
+devido[ano] = devido[ano-1] × (1 + indice_ans[ano]) × (1 + faixa_etaria[ano])
+                                                       # faixa_etaria = 0 se não houver
+```
+
+Isso cria um problema que o cálculo sozinho não resolve: **só entra no devido a faixa
+etária legítima** (previsão contratual expressa, observância das normas da ANS,
+percentual não desarrazoado — Temas 952 e 1016 do STJ). Um reajuste de faixa etária
+abusivo é justamente o que a peça impugna; incluí-lo no devido apagaria o pedido.
+
+> A legitimidade de cada faixa etária é **decisão jurídica, não cálculo**. O Calculador
+> identifica as competências com reajuste de faixa etária (coluna "Tipo de Reajuste" ou
+> salto fora do aniversário do contrato), e **pergunta** caso a caso antes de incluir.
+> Nunca decide sozinho. Ver pergunta A9.
+
+**10.8 Detecção do Eixo A fica provisória (resposta A5).** Não há planilhas reais dos
+Tipos 1 e 2 disponíveis. Os conjuntos de cabeçalho do §3.1 seguem escritos sobre a
+estrutura descrita no briefing, com sinônimos generosos. Para que isso não vire falha
+silenciosa:
+
+- cabeçalho que não casa **não** é erro fatal: cai em `AMBIGUO` e o Classificador
+  mostra à operadora os cabeçalhos que encontrou, perguntando qual coluna é qual;
+- toda resposta dessas é gravada no log, e vira sinônimo novo em `references/`;
+- a primeira planilha real de cada tipo calibra os conjuntos definitivamente.
+
+Em outras palavras: a falta da amostra deixa de bloquear, ao custo de mais perguntas nas
+primeiras execuções.

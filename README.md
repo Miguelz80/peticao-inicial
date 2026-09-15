@@ -15,13 +15,22 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 
 | # | Módulo | Papel | Status |
 |---|--------|-------|--------|
-| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | Em especificação — `docs/02-classificador-spec.md` |
-| 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | Não iniciado |
-| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | Não iniciado |
-| 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | Não iniciado |
+| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
+| 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
+| 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 50 testes |
+| — | **Leitor de tabela** | Lê a tabela de cálculo do texto do PDF e devolve as competências mês a mês | **Implementado** — `scripts/ler_tabela.py`, 11 testes |
+| — | **Orquestrador** | Costura os quatro módulos numa máquina de estados retomável, com porteiro humano em cada fase; dirigido por um `caso.json` de texto simples | **Implementado** — `scripts/elaborar.py`, 28 testes |
+| 4 | **Conferência** | Compara os valores da peça final com os valores de origem antes de liberar | **Implementado** — `scripts/conferir.py`, 22 testes |
 
 A ordem é deliberada: o Classificador é o módulo de maior risco (uma tese errada numa
 peça protocolada é o pior cenário do projeto) e é validado primeiro.
+
+O texto jurídico de cada tese fica em `skills/elaborador-inicial/references/teses.md` —
+editável pela advogada, sem tocar em código. As quatro teses geram petição completa, com
+procedências distintas: **autogestão** e **coletivo por adesão** vieram de peças reais
+protocoladas; **empresarial familiar** e **individual comum** foram redigidas a partir
+dos fundamentos documentados e ficam marcadas para revisão da advogada até que uma peça
+real dessas teses substitua o texto.
 
 ## Requisito não negociável: DOCX 100% editável
 
@@ -45,6 +54,27 @@ inteiramente por chat.
 
 ## Documentação
 
+- `CLAUDE.md` — regras de trabalho no repositório, para quem continuar daqui
+
 - `docs/01-arquitetura.md` — estrutura de pastas e fronteira Python × modelo
 - `docs/02-classificador-spec.md` — especificação do Classificador (pseudocódigo)
 - `docs/03-perguntas-abertas.md` — o que precisa ser respondido antes de escrever código
+
+
+## Rodar os testes
+
+```
+python3 tests/test_classificar.py
+python3 tests/test_extrair.py
+python3 tests/test_calcular.py
+python3 tests/test_conferir.py
+python3 tests/test_gerar.py
+python3 tests/test_roteiro.py
+python3 tests/test_elaborar.py
+python3 tests/test_ler_tabela.py
+python3 tests/test_suite.py
+```
+
+Sem dependências para a lógica de decisão. A extração completa (PDF, XLSX, DOCX) usa
+`pypdf`, `openpyxl` e `python-docx` — faltando alguma, o arquivo é reportado como
+ilegível em vez de derrubar a execução.

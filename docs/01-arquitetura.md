@@ -83,8 +83,8 @@ Registradas aqui para não se perderem entre fases:
   justificado, recuo de primeira linha `1417`.
 - A4 `11906×16838`; margens sup. `2037`, dir. `1562`, inf. `1560`, esq. `1560`.
 - Cabeçalho azul-escuro **#2E4057**.
-- Ordem de assinatura: **Tatiana antes de Gabriel** em saúde/consumidor na Bahia;
-  **Gabriel primeiro** fora da Bahia. (Ver pergunta B7 em `03-perguntas-abertas.md`:
-  "na Bahia" = comarca da ação ou domicílio do cliente?)
+- Ordem de assinatura: **sem regra condicional** — mantém-se a ordem do modelo DOCX
+  de base. (Decidido em 08/09/2026; o briefing inicial previa uma regra por UF/matéria,
+  descartada.)
 - Tabela de cálculo como `w:tbl` nativa, células com texto editável — nunca imagem.
 - Sem `w:documentProtection`, sem content controls, sem campos travados.
