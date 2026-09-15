@@ -7,9 +7,14 @@
 *.xlsx
 *.xls
 *.pdf
-!skills/elaborador-inicial/assets/modelos/*.docx
+# Sem exceção para assets/modelos/: o DOCX timbrado sai de peça real do
+# escritório e fica na máquina de quem usa. Prepare com
+# scripts/preparar_modelo.py; não commite.
 !tests/fixtures/**/anon-*.xlsx
 !tests/fixtures/**/anon-*.docx
+
+# Pacote da skill: gerado por ./empacotar.sh, não versionado.
+/elaborador-inicial.zip
 
 __pycache__/
 *.py[cod]

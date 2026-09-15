@@ -11,6 +11,7 @@ from gerar_peticao import (  # noqa: E402
     CABECALHO_TABELA, ZEBRA, LINHA_TOTAL, TEXTO_DESTAQUE, FONTE,
 )
 from conferir import conferir_editabilidade  # noqa: E402
+from preparar_modelo import preparar  # noqa: E402
 from calcular_reajuste import calcular, d  # noqa: E402
 from test_calcular import CASO_REAL  # noqa: E402
 
@@ -201,6 +202,56 @@ def test_xml_gerado_e_bem_formado():
             Paragrafo("Autora & Ré"), tabela_de_reajuste(res),
             CaixaDestaque("Resumo", ["**a:** b"]))))
         ET.fromstring(doc)     # levanta se estiver malformado
+
+
+def test_preparar_modelo_esvazia_o_corpo_e_mantem_o_timbre():
+    """O modelo do escritório sai de uma peça já protocolada: corpo vazio, sectPr e
+    cabeçalho intactos, imagem de tabela antiga fora."""
+    with tempfile.TemporaryDirectory() as t:
+        origem = modelo(t)
+        destino = os.path.join(t, "timbre.docx")
+        preparar(origem, destino)
+        z = zipfile.ZipFile(destino)
+        doc = z.read("word/document.xml").decode("utf-8")
+        assert "modelo antigo" not in doc, "texto do caso anterior sobreviveu"
+        assert "<w:sectPr>" in doc, "sectPr é o que carrega o timbre"
+        assert "headerReference" in doc
+        nomes = z.namelist()
+        assert "word/media/timbre.png" in nomes, "timbre do cabeçalho tem que ficar"
+        assert "word/media/tabela.png" not in nomes, "tabela em imagem tem que sair"
+
+
+def test_modelo_preparado_ainda_gera_peca():
+    """De nada adianta esvaziar bonito se o gerador não consegue usar o resultado."""
+    with tempfile.TemporaryDirectory() as t:
+        destino = os.path.join(t, "timbre.docx")
+        preparar(modelo(t), destino)
+        saida = os.path.join(t, "peca.docx")
+        montar(destino, Peca().add(Paragrafo("texto novo")), saida)
+        assert "texto novo" in zipfile.ZipFile(saida).read(
+            "word/document.xml").decode("utf-8")
+        assert not conferir_editabilidade(saida)
+
+
+def test_preparar_modelo_esvazia_autoria_sem_quebrar_o_pacote():
+    """Remover docProps quebra o pacote — o _rels continua apontando para ele. Esvaziar
+    o campo resolve sem tornar o arquivo ilegível para o Word."""
+    with tempfile.TemporaryDirectory() as t:
+        origem = os.path.join(t, "com-autor.docx")
+        base = modelo(t)
+        with zipfile.ZipFile(base) as zin, zipfile.ZipFile(origem, "w") as zout:
+            for it in zin.infolist():
+                zout.writestr(it, zin.read(it.filename))
+            zout.writestr("docProps/core.xml",
+                          '<?xml version="1.0"?><cp:coreProperties '
+                          'xmlns:cp="http://x" xmlns:dc="http://y">'
+                          "<dc:creator>Fulana de Tal</dc:creator>"
+                          "<dc:title>Cliente Beltrano</dc:title></cp:coreProperties>")
+        destino = os.path.join(t, "timbre.docx")
+        preparar(origem, destino)
+        core = zipfile.ZipFile(destino).read("docProps/core.xml").decode("utf-8")
+        assert "docProps/core.xml" in zipfile.ZipFile(destino).namelist()
+        assert "Fulana de Tal" not in core and "Cliente Beltrano" not in core
 
 
 if __name__ == "__main__":

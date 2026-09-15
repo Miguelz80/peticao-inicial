@@ -4,6 +4,16 @@ Skill da **BM Advocacia** (Borges Macedo Advocacia e Consultoria — Salvador/BA
 recebe os documentos de um caso de saúde suplementar e devolve uma **petição inicial
 em DOCX**, no padrão do escritório, pronta para revisão humana antes do protocolo.
 
+## Para quem vai usar
+
+**[`INSTALAR.md`](INSTALAR.md)** — passo a passo de instalação no Claude, escrito para
+quem não mexe com código. Gere o pacote com `./empacotar.sh` (roda os testes antes e
+recusa publicar se algum falhar).
+
+O DOCX timbrado **não vem no pacote**: ele sai de peça real do escritório e fica na
+máquina de quem usa. `scripts/preparar_modelo.py` prepara um a partir de uma petição já
+protocolada, esvaziando o corpo e a autoria.
+
 ## Escopo desta fase
 
 **Apenas petições iniciais.** Réplica, recurso inominado, apelação, embargos,
