@@ -255,6 +255,22 @@ def test_competencia_negativa_nao_abate_a_positiva():
     assert res.restituicao() == sum((l.diferenca for l in positiva), d("0"))
 
 
+def test_restituicao_corrente_soma_so_positivas_como_restituicao():
+    """Os dois caminhos têm que dar o mesmo número: restituicao() escreve o valor na
+    peça e restituicao_corrente() é a referência da Conferência. Divergindo, a
+    Conferência reprovava em C6 uma peça correta."""
+    # maio/2022 abaixo do teto ANS: as competências seguintes ficam pagas a menor
+    comps = ([Competencia(2022, m, d("2.097,01")) for m in range(1, 5)]
+             + [Competencia(2022, m, d("2.238,77")) for m in range(5, 13)]
+             + [Competencia(2023, m, d("2.238,77")) for m in range(1, 5)]
+             + [Competencia(2023, m, d("2.526,89")) for m in range(5, 13)]
+             + [Competencia(2024, m, d("2.526,89")) for m in range(1, 5)]
+             + [Competencia(2024, m, d("2.886,98")) for m in range(5, 13)])
+    r = calcular(comps, 5, {})
+    assert any(l.diferenca < 0 for l in r.linhas), "o caso precisa ter negativas"
+    assert r.restituicao() == r.restituicao_corrente()
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

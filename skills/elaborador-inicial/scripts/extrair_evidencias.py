@@ -90,8 +90,16 @@ def identificar_papel(texto: str) -> tuple[str, list[str]]:
         return "PECA_PROCESSUAL", [f"estrutura de peça: {', '.join(achados_peca)}"]
 
     colunas = [c for c in COLUNAS_CALCULO if c in n]
+    # Nome de coluna solto não é tabela: a proposta de honorários do escritório diz
+    # "valor pago", "valor devido" e "diferença" em prosa corrida e passava como
+    # cálculo pronto. Só é cálculo se também houver linhas de competência legíveis.
     if len(colunas) >= 3:
-        return "CALCULO_PRONTO", [f"colunas de cálculo: {', '.join(colunas)}"]
+        from ler_tabela import linhas_de_texto
+        linhas = linhas_de_texto(texto)
+        if len(linhas) >= 2:
+            return "CALCULO_PRONTO", [
+                f"colunas de cálculo: {', '.join(colunas)}",
+                f"{len(linhas)} linhas de competência legíveis"]
     melhor, achados_melhor = "INDEFINIDO", []
     for papel, marcas in MARCADORES.items():
         achados = [m for m in marcas if m in n]

@@ -199,6 +199,24 @@ competências com faixa etária e **pergunta** caso a caso antes de incluir. Exi
 critério objetivo do escritório que permita decidir sem perguntar (ex.: faixa etária
 após os 60 anos é sempre impugnada), ou pergunta sempre?
 
+**A10. Índice ANS é teto ou é o reajuste da cadeia?** 🔴 *agora com caso concreto*
+No caso CASSI a operadora aplicou **6,76% em maio/2022**, bem abaixo do teto ANS de
+**15,50%** daquele período. A cadeia do valor devido aplica o índice ANS cheio, então o
+devido passa **acima** da mensalidade efetivamente paga e 16 competências de 2023/2024
+ficam com diferença negativa — saem da restituição e aparecem na tabela da peça com
+valor negativo, mostrando a operadora cobrando menos do que podia.
+
+As duas leituras dão números bem diferentes na mesma série:
+
+| cadeia do devido | mensalidade devida | diferença mensal | restituição (36 meses) |
+|---|---|---|---|
+| teto ANS sempre (como está hoje) | R$ 3.010,80 | R$ 565,59 | R$ 5.103,24 |
+| o menor entre teto ANS e o aplicado | R$ 2.782,98 | R$ 793,41 | maior |
+
+Como está hoje só **reduz** o pedido, nunca o infla — por isso não travei o caso e não
+mudei a fórmula por conta própria. Mas a diferença passa de **R$ 227 por mês** e a
+tabela vai a protocolo com linhas negativas. Qual das duas é a do escritório?
+
 **D9. Cor do cabeçalho: `#2E4057` ou `#2C3E6B`?**
 O briefing fixa `#2E4057`; a tabela da peça real usa `#2C3E6B`. São próximos, mas
 diferentes. Como a decisão D5 foi "não mudar a aparência", estou usando `#2C3E6B`.

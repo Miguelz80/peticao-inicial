@@ -207,7 +207,7 @@ class Resultado:
         antes. Quando há competência negativa, o cálculo avisa.
         """
         negativas = [l for l in linhas if l.diferenca < 0]
-        if negativas and not any("pagou menos" in a for a in self.avisos):
+        if negativas and not any("pagas ABAIXO" in a for a in self.avisos):
             self.avisos.append(
                 f"{len(negativas)} competência(s) da janela foram pagas ABAIXO do valor "
                 f"devido pelos índices ANS (ex.: {negativas[0].competencia.rotulo}). "
@@ -229,7 +229,11 @@ class Resultado:
                 dentro.append(l)
             if l.competencia.rotulo == fim:
                 break
-        return sum((l.diferenca for l in dentro), Decimal(0))
+        # Mesma regra de restituicao(): só as competências pagas a maior. Somando
+        # também as negativas, este caminho — que é o que a Conferência usa como
+        # referência — divergia do número escrito na peça e reprovava em C6 uma peça
+        # correta, sempre que a série tinha alguma competência paga a menor.
+        return self._somar_positivas(dentro)
 
     def _janela(self, meses: int, ate: tuple[int, int] | None) -> list["Linha"]:
         linhas = self.linhas
@@ -304,6 +308,19 @@ def calcular(competencias: list[Competencia], mes_aniversario: int,
             try:
                 devido_pct = indice_do_aniversario(c.ano, c.mes)
                 devido = devido * (1 + devido_pct)
+                # O índice ANS é teto autorizado, não reajuste obrigatório. Quando a
+                # operadora aplicou MENOS que o teto, a cadeia do devido passa acima
+                # da mensalidade efetivamente paga e aquelas competências saem da
+                # restituição. Isso só reduz o pedido, nunca o infla — mas muda o
+                # valor, então nomeia a causa em vez de deixar o sintoma solto.
+                if aplicado < devido_pct - Decimal("0.0005"):
+                    res.avisos.append(
+                        f"em {c.rotulo} a operadora aplicou {_pct(aplicado)}, abaixo do "
+                        f"índice ANS de {_pct(devido_pct)} usado na cadeia do valor "
+                        f"devido. A partir daí o devido fica acima do que se pagou e "
+                        f"essas competências não entram na restituição — decisão da "
+                        f"advogada se a cadeia deve seguir o teto ANS ou o percentual "
+                        f"efetivamente aplicado (pergunta A10).")
             except IndiceAusente as erro:
                 # Ano sem índice não estima e não trava o caso inteiro: se o
                 # aniversário é anterior à janela de restituição, a cadeia recomeça
