@@ -16,6 +16,13 @@ for f in tests/test_*.py; do
 done
 echo "testes: ok"
 
+# Carimbo de versão: sem ele não há como saber, olhando um relatório, se quem rodou
+# usou a cópia instalada ou a do repositório — e cópias dessincronizadas fazem testar
+# uma coisa e corrigir outra.
+printf '%s (commit %s)\n' "$(date +%d/%m/%Y)" "$(git rev-parse --short HEAD)" \
+    > skills/elaborador-inicial/VERSAO
+trap 'rm -f skills/elaborador-inicial/VERSAO' EXIT
+
 cd skills
 zip -qr "../$DESTINO" elaborador-inicial \
     -x '*/__pycache__/*' '*.pyc' '*/assets/modelos/*' '*/assets/timbre/*' '*/.gitkeep'

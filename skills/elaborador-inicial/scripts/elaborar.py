@@ -265,6 +265,35 @@ def elaborar(caso: Caso) -> Etapa:
     return etapa
 
 
+VERSAO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                      "VERSAO")
+
+
+def versao() -> str:
+    """Qual cópia da skill está rodando.
+
+    Existe porque há sempre duas: a do repositório e a instalada na conta de quem
+    opera. São arquivos separados, e quando dessincronizam testa-se uma e corrige-se a
+    outra. O `empacotar.sh` grava o VERSAO; rodando do repositório o arquivo não existe
+    e a resposta é o git.
+    """
+    try:
+        with open(VERSAO, encoding="utf-8") as f:
+            return f.read().strip()
+    except OSError:
+        pass
+    try:
+        import subprocess
+        raiz = os.path.dirname(os.path.dirname(os.path.dirname(VERSAO)))
+        git = subprocess.run(["git", "-C", raiz, "describe", "--always", "--dirty"],
+                             capture_output=True, text=True, timeout=5)
+        if git.returncode == 0 and git.stdout.strip():
+            return f"repositório {git.stdout.strip()} (não empacotada)"
+    except Exception:
+        pass
+    return "versão desconhecida"
+
+
 def _respondeu_nao_sei(pergunta: dict, resposta: str) -> bool:
     """A última opção de toda pergunta bloqueante é sempre `NAO_SEI`.
 
@@ -471,7 +500,7 @@ def _pct_texto(fracao) -> str:
 
 
 def relatorio(etapa: Etapa) -> str:
-    L = [f"FASE: {etapa.fase}", ""]
+    L = [f"FASE: {etapa.fase}    [skill: {versao()}]", ""]
     if etapa.espelho:
         L += [etapa.espelho, ""]
     if etapa.avisos:
