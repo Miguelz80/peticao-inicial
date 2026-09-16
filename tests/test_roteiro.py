@@ -50,6 +50,7 @@ def dados_todas(res):
               "processo_anterior": "0000000-00.0000.0.00.0000",
               "comarca_anterior": "Outra/BA",
               "diferenca_mensal": _brl(res.diferenca_mensal),
+              "restituicao_dobro": _brl(res.restituicao_corrente() * 2),
               "valor_da_causa": _brl(res.restituicao() + res.diferenca_mensal * 12)})
     return d
 
@@ -82,12 +83,12 @@ def test_toda_tese_do_catalogo_tem_texto_em_todos_os_blocos():
 
 
 def test_procedencia_do_texto_esta_declarada():
-    """Duas teses vieram de peça real protocolada; duas foram redigidas a partir dos
+    """Três teses vieram de peça real protocolada; uma ainda foi redigida a partir dos
     fundamentos. A diferença não pode ficar implícita."""
     t = carregar()
-    for nome in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO"):
+    for nome in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO", "EMPRESARIAL_FAMILIAR"):
         assert not t[nome].revisar, f"{nome} veio de peça real, não deveria pedir revisão"
-    for nome in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
+    for nome in ("INDIVIDUAL_COMUM",):
         assert t[nome].revisar, f"{nome} foi redigida e precisa declarar isso"
 
 
@@ -295,11 +296,11 @@ def test_teses_redigidas_avisam_que_precisam_de_revisao():
     """Autogestão e adesão vieram de peça real; as outras duas foram redigidas a
     partir dos fundamentos e não podem sair como se tivessem a mesma procedência."""
     res = resultado()
-    for tese in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO"):
+    for tese in ("CASSI_AUTOGESTAO", "COLETIVO_POR_ADESAO", "EMPRESARIAL_FAMILIAR"):
         r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
                         dados_todas(res), resultado_calculo=res)
         assert not r.precisa_revisao, tese
-    for tese in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
+    for tese in ("INDIVIDUAL_COMUM",):
         r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "45"},
                         dados_todas(res), resultado_calculo=res)
         assert r.precisa_revisao, tese
@@ -331,20 +332,23 @@ def test_capitulos_excludentes_do_empresarial_familiar():
     assert "RESCISÃO" in t_canc and "TUTELA" not in t_canc
 
 
-def test_empresarial_familiar_fundamenta_o_cdc_por_equiparacao():
-    """A incidência não vem da Súmula 608 isolada — vem dos arts. 2º e 29 do CDC."""
+def test_empresarial_familiar_fundamenta_o_cdc_e_o_falso_coletivo():
+    """Como a peça real do escritório fundamenta: Súmula 608/STJ para a incidência do
+    CDC, e ausência de poder de negociação para o falso coletivo. O teste antes exigia
+    arts. 2º e 29, que era o raciocínio do texto redigido — não o do escritório."""
     res = resultado()
     r = montar_peca("EMPRESARIAL_FAMILIAR", {"F6": "ATIVO", "F7": "NAO", "F9": "45"},
                     dados_todas(res), resultado_calculo=res)
     corpo = "".join(b.xml() for b in r.peca.blocos)
-    assert "art. 2º" in corpo and "art. 29" in corpo
+    assert "Súmula 608" in corpo
+    assert "falso coletivo" in corpo.lower()
     assert "equipara" in corpo.lower()
 
 
 def test_nenhuma_tese_redigida_cita_julgado():
     """Escolher julgado é da advogada. Texto redigido aqui não inventa citação."""
     t = carregar()
-    for nome in ("EMPRESARIAL_FAMILIAR", "INDIVIDUAL_COMUM"):
+    for nome in ("INDIVIDUAL_COMUM",):
         for bloco in t[nome].blocos:
             for p in bloco.paragrafos:
                 assert not p.startswith("> "), (nome, bloco.titulo)
@@ -366,8 +370,8 @@ def test_toda_tese_tem_pedidos_e_valor_da_causa():
         r = montar_peca(tese, {"F6": "ATIVO", "F7": "SIM", "F9": "81", "F10": "NAO"},
                         dados_todas(res), resultado_calculo=res)
         assert pedidos(r.peca), tese
-        assert any("Dá-se à causa" in b.texto for b in r.peca.blocos
-                   if hasattr(b, "texto")), tese
+        corpo = " ".join(b.texto for b in r.peca.blocos if hasattr(b, "texto"))
+        assert "à causa" in corpo and "292" in corpo, tese
 
 
 def test_pedidos_saem_em_lista_por_letras_na_ordem():

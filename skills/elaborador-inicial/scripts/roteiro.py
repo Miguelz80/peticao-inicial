@@ -66,6 +66,10 @@ DO_CALCULO = {
     "valor_devido_atual": "mensalidade devida",
     "diferenca_mensal": "diferença mensal",
     "restituicao": "restituição dos últimos 3 anos",
+    # A peça real pede a restituição em dobro e escreve o valor dobrado por extenso,
+    # no capítulo e no pedido. Deixar quem opera dobrar à mão é convidar divergência
+    # entre os dois — e a Conferência reprovaria, com razão.
+    "restituicao_dobro": "restituição em dobro",
 }
 
 

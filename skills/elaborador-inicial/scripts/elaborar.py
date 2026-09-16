@@ -204,7 +204,13 @@ def elaborar(caso: Caso) -> Etapa:
         caso.dados.setdefault("valor_devido_atual",
                               calc._brl(resultado.valor_devido_atual))
         caso.dados.setdefault("diferenca_mensal", calc._brl(resultado.diferenca_mensal))
-        caso.dados.setdefault("restituicao", calc._brl(resultado.restituicao()))
+        # O dobro sai do valor JÁ ARREDONDADO, não do dobro da precisão cheia. A regra
+        # de arredondar só na exibição vale para a cadeia de anos, onde o erro se
+        # acumula; aqui os dois números aparecem na MESMA peça e o leitor confere a
+        # conta. Dobrando a precisão cheia dava R$ 23.335,25 ao lado de R$ 11.667,62.
+        restituicao = calc.q(resultado.restituicao())
+        caso.dados.setdefault("restituicao", calc._brl(restituicao))
+        caso.dados.setdefault("restituicao_dobro", calc._brl(restituicao * 2))
 
     # ---- REDACAO ---------------------------------------------------------- #
     etapa.fase = REDACAO

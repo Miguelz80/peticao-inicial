@@ -166,45 +166,63 @@ Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos term
 
 
 ## TESE: EMPRESARIAL_FAMILIAR
-@revisar: texto redigido a partir dos fundamentos documentados na skill `corretor-inicial-empresarial-familiar`, NÃO extraído de peça real do escritório. Gera peça completa, mas precisa de leitura da advogada antes do primeiro protocolo. Substituir assim que houver uma peça dessa tese.
 
-Contratante é pessoa jurídica sem atividade econômica real, criada para viabilizar o
-plano da família. A **autora é a PJ**, representada pelo sócio administrador — conferir
-que a qualificação não foi trocada pela da pessoa física.
+Contratante é pessoa jurídica sem atividade econômica real, criada ou mantida para
+viabilizar o plano da família. A **autora é a PJ**, representada pelo sócio
+administrador — conferir que a qualificação não foi trocada pela da pessoa física.
 
-Sem ementas: citar julgado exige escolher julgado, e essa escolha é da advogada. Os
-capítulos indicam onde a jurisprudência entra.
+Texto e julgados extraídos de peça real do escritório (modelo empresarial familiar
+atualizado). Dois caminhos, excludentes entre si: **plano ativo** pede tutela de
+urgência e exibição de documentos; **plano cancelado** pede rescisão indireta e danos
+morais, e não pede tutela.
 
-### BLOCO: I | Dos fatos
+### BLOCO: I | Síntese processual
 @condicao: sempre
-@fundamentos: qualificação da PJ autora representada pelo sócio; contratação do plano para o núcleo familiar; reajustes sucessivos
-A Autora, pessoa jurídica qualificada na epígrafe, representada por seu sócio administrador, é titular do contrato coletivo empresarial de plano de saúde **{plano}**, celebrado com a Ré em {inicio_contrato}.
+@fundamentos: abre a peça resumindo o ônus mensal, o total pago a maior e os requisitos da tutela. É o primeiro parágrafo que o juiz lê
+A parte Autora suporta ônus mensal excessivo de **{diferenca_mensal}**, decorrente da aplicação de reajustes abusivos. O montante pago indevidamente totaliza **{restituicao}**, desembolsado a maior nos últimos anos, conforme planilha de cálculos em anexo, que evidencia as abusividades encontradas.
 
-A contratação, embora formalmente empresarial, teve por finalidade exclusiva viabilizar a assistência à saúde dos membros de um mesmo núcleo familiar, únicos beneficiários do plano desde a adesão.
+Os requisitos para a tutela de urgência, que ora se requer, estão presentes: há verossimilhança, pois os documentos atestam a disparidade entre o reajuste que incide nas mensalidades da parte Autora e os valores determinados pela ANS; e o perigo na demora decorre do comprometimento à subsistência da parte Autora, que gera risco iminente de inadimplência e consequente cancelamento do plano, deixando a entidade familiar desamparada de assistência médica.
 
-Ao longo da contratualidade, a mensalidade sofreu majorações sucessivas e expressivas, alcançando **{valor_pago_atual}** em {competencia_atual}, sem que fosse apresentada qualquer demonstração técnica ou atuarial que justificasse os percentuais aplicados.
-
-### BLOCO: II | Da aplicabilidade do Código de Defesa do Consumidor por equiparação
+### BLOCO: II | Dos fatos
 @condicao: sempre
-@fundamentos: arts. 2º e 29 do CDC — consumidor por equiparação. A incidência NÃO decorre diretamente da Súmula 608, que trata do consumidor pessoa física; os dois argumentos coexistem
-@revisar: jurisprudência sobre consumidor por equiparação a incluir
-A relação jurídica em exame submete-se ao Código de Defesa do Consumidor. Ainda que a contratante seja pessoa jurídica, sua posição no contrato é de destinatária final do serviço, sem qualquer finalidade de incremento de atividade econômica.
+@fundamentos: qualificação da PJ autora representada pelo sócio; contratação para o núcleo familiar; reajustes sucessivos sem demonstração técnica
+A parte Autora firmou com a Requerida contrato de prestação de serviços de assistência à saúde **{plano}**, celebrado em {inicio_contrato}, cujos beneficiários são exclusivamente membros de um mesmo grupo familiar.
 
-O art. 2º do Código de Defesa do Consumidor define consumidor como toda pessoa física ou jurídica que adquire ou utiliza produto ou serviço como destinatário final. O art. 29, por sua vez, equipara a consumidor todas as pessoas, determináveis ou não, expostas às práticas nele previstas.
+A Ré, valendo-se da roupagem formal de contrato empresarial, vem aplicando reajustes anuais expressivos baseados em suposta sinistralidade e em livre negociação. Tais reajustes são desproporcionais e descolados da realidade econômica da parte Autora.
 
-A empresa contratante não explora atividade econômica relevante e foi constituída, em caráter predominante, para viabilizar a contratação do plano de saúde dos membros da família. Não há, portanto, a vulnerabilidade mitigada que caracteriza a contratação empresarial genuína, mas a mesma hipossuficiência técnica e informacional que o Código protege.
+Ao longo da contratualidade, a mensalidade alcançou **{valor_pago_atual}** em {competencia_atual}, quando, à luz dos parâmetros jurídicos aplicáveis, deveria situar-se em **{valor_devido_atual}**, resultando em excesso mensal de **{diferenca_mensal}**.
 
-### BLOCO: III | Do reconhecimento do plano empresarial na modalidade familiar
+Esse quadro revela que o problema não se limita a um reajuste isolado ou pontual, mas traduz elevação sistêmica e progressiva das mensalidades, que ao longo do tempo deslocou o contrato para patamar econômico incompatível com os critérios legais e regulatórios que regem os planos individuais. Não se trata de variação gradual ou previsível: trata-se de ruptura do padrão histórico de evolução do contrato.
+
+E aqui reside o ponto mais grave. Apesar da magnitude dos aumentos, não há nos documentos fornecidos qualquer informação mínima que permita compreender a formação do preço. A parte Autora é colocada em situação de completa opacidade informacional: paga valores substancialmente superiores sem qualquer condição de verificar sua legitimidade.
+
+### BLOCO: III | Da aplicabilidade do Código de Defesa do Consumidor e da natureza de falso coletivo
 @condicao: sempre
-@fundamentos: bloco central da tese. Os quatro elementos fáticos têm que vir do caso concreto, não de fórmula genérica — se faltarem, a peça não se sustenta
-@revisar: jurisprudência sobre falso coletivo empresarial a incluir
-O contrato em exame, embora formalmente classificado como coletivo empresarial, funciona na prática como plano individual ou familiar, o que impõe seu reconhecimento como tal para fins de controle de reajuste.
+@fundamentos: Súmula 608/STJ; ausência de poder de negociação caracteriza contrato de adesão
+A relação jurídica entre as partes é inequivocamente de consumo, atraindo a incidência do Código de Defesa do Consumidor, conforme pacificado pela Súmula 608 do Superior Tribunal de Justiça.
 
-Quatro elementos, demonstrados pela documentação anexa, sustentam essa conclusão: a empresa estipulante não possui movimentação financeira relevante nem atividade econômica efetiva; os beneficiários do plano são exclusivamente membros de um mesmo núcleo familiar; inexiste vínculo empregatício entre os beneficiários e a pessoa jurídica; e a constituição da empresa teve por propósito predominante viabilizar a contratação do plano de saúde.
+O contrato em tela, embora formalmente classificado como coletivo empresarial, na prática funciona como plano familiar. A parte Autora aderiu ao plano sem qualquer poder de negociação sobre as cláusulas contratuais, caracterizando-se contrato de falso coletivo. Tal artifício é frequentemente utilizado pelas operadoras para se esquivar da fiscalização da ANS, que estabelece tetos para os reajustes de planos individuais.
 
-A prevalecer a forma sobre a substância, o resultado prático seria permitir que a operadora se subtraia aos limites de reajuste fixados pela Agência Nacional de Saúde Suplementar para os planos individuais, submetendo um grupo familiar a majorações sem teto e sem controle — exatamente o que a qualificação empresarial, nesse contexto, encobre.
+A jurisprudência pátria é uníssona em reconhecer a abusividade dessa prática, determinando que tais contratos sejam equiparados aos planos individuais para fins de reajuste, aplicando-se, por analogia, os índices anuais fixados pela ANS.
 
-### BLOCO: IV | Da equiparação a plano individual para fins de reajuste
+### BLOCO: IV | Do reconhecimento do plano empresarial na modalidade familiar
+@condicao: sempre
+@fundamentos: bloco central da tese. Os elementos fáticos têm que vir do caso concreto, não de fórmula genérica — se faltarem, a peça não se sustenta
+Embora formalmente classificado pela Ré como plano coletivo empresarial, o contrato em questão possui características nítidas e inafastáveis de plano familiar, configurando o que a doutrina e a jurisprudência convencionaram denominar falso coletivo.
+
+O plano foi formalmente vinculado à pessoa jurídica qualificada na epígrafe. Todavia, a realidade fática desmascara a natureza corporativa da contratação: a empresa estipulante não possui movimentação financeira relevante nem atividade econômica efetiva; os beneficiários são exclusivamente membros de um mesmo núcleo familiar; inexiste vínculo empregatício entre os beneficiários e a pessoa jurídica; e não há negociação coletiva real que caracterize o mutualismo empresarial.
+
+Resta evidente que a pessoa jurídica foi mantida pela Operadora unicamente como meio formal para viabilizar a contratação, com o nítido propósito de afastar a incidência do teto regulatório da Agência Nacional de Saúde Suplementar sobre os reajustes anuais.
+
+A jurisprudência do Superior Tribunal de Justiça e dos tribunais pátrios consolidou o entendimento de que contratos coletivos com número irrisório de vidas, sem efetiva negociação coletiva e abrigando um núcleo familiar, devem ser submetidos ao controle judicial de abusividade para evitar a onerosidade excessiva (art. 51, IV, do CDC). Destarte, o presente contrato deve ser equiparado à disciplina protetiva dos planos individuais e familiares, aplicando-se-lhe rigorosamente os tetos de reajuste autorizados anualmente pela ANS.
+
+> PROCESSUAL CIVIL. CONTRATOS. AGRAVO INTERNO NO RECURSO ESPECIAL. PLANO DE SAÚDE. MICRO EMPRESA. CDC. REAJUSTE. ÍNDICE DA ANS. PLANO INDIVIDUAL E FAMILIAR ("FALSO COLETIVO"). REEXAME DE CONTEÚDO FÁTICO-PROBATÓRIO. INADMISSIBILIDADE. SÚMULAS N. 5 E 7 DO STJ. DECISÃO MANTIDA. (...) 4. Ademais, esta Corte Superior tem jurisprudência no sentido de que "é possível, excepcionalmente, que o contrato de plano de saúde coletivo ou empresarial, que possua número diminuto de participantes, como no caso, por apresentar natureza de contrato coletivo atípico, seja tratado como plano individual ou familiar" (AgInt no REsp n. 1.880.442/SP, Relator Marco Buzzi, Quarta Turma, julgado em 2/5/2022, DJe de 6/5/2022). 5. Agravo interno a que se nega provimento. (STJ — AgInt no REsp 1.989.638/SP, 2022/0064468-5, Quarta Turma, julgado em 13/06/2022, DJe 21/06/2022)
+
+> APELAÇÃO. Plano de saúde. Ação revisional de mensalidade e indenização por danos materiais. Sentença de improcedência na origem. Contrato coletivo empresarial com apenas quatro beneficiários. "Falso coletivo". Equiparação ao contrato de plano de saúde individual/familiar. Previsão de reajustes por sinistralidade e VCMH que devem ser substituídos pelos índices de reajustes anuais autorizados pela ANS. Nulidade das cláusulas contratuais que autorizam o reajuste anual por sinistralidade e VCMH. Restituição dos valores pagos em excesso devida. Prazo prescricional trienal aplicável na repetição de indébito. Sentença reformada. Recurso da autora provido. (TJ-SP — Apelação Cível 1122013-72.2023.8.26.0100, Relator Paulo Sergio Mangerona, julgado em 08/01/2025)
+
+Diante do reduzido número de beneficiários, da inexistência de empregados vinculados à empresa estipulante e da ausência de negociação coletiva real, resta evidente que o contrato não se enquadra na lógica econômica dos planos empresariais tradicionais, impondo-se sua equiparação material à modalidade individual para fins de controle judicial dos reajustes aplicados.
+
+### BLOCO: V | Da equiparação a plano individual para fins de reajuste
 @condicao: sempre
 @fundamentos: consequência do reconhecimento — aplicação dos índices ANS de planos individuais. O pedido tem que estar entrelaçado com a causa de pedir, não pedir "redução genérica"
 @tabela: reajuste
@@ -212,101 +230,178 @@ Reconhecida a natureza familiar do contrato, impõe-se a aplicação, como parâ
 
 A tabela a seguir demonstra a evolução da mensalidade efetivamente cobrada e o valor que seria devido caso os reajustes tivessem observado os índices da ANS ano a ano:
 
-A mensalidade atual de **{valor_pago_atual}** contrasta com o valor devido de **{valor_devido_atual}** — diferença mensal de **{diferenca_mensal}** suportada indevidamente pela Autora.
+Verifica-se clara divergência entre os reajustes aplicados pela Ré e aqueles autorizados pela ANS nos períodos mencionados. Enquanto os índices da Agência Reguladora baseiam-se em estudos técnicos e imparciais, a Ré não comprovou a necessidade dos aumentos realizados, limitando-se a alegações genéricas.
 
-### BLOCO: V | Da abusividade dos reajustes por sinistralidade e VCMH
+### BLOCO: VI | Da abusividade dos reajustes em plano coletivo empresarial de natureza familiar
 @condicao: sempre
-@fundamentos: art. 17-A, §2º, II, da Lei 9.656/98; arts. 6º, III e V, e 51 do CDC. Exige base atuarial do próprio grupo, não da carteira
-@revisar: jurisprudência sobre ausência de comprovação atuarial a incluir
-Ainda que se admita, em tese, o reajuste fundado em sinistralidade ou em variação de custos médico-hospitalares, sua validade depende da demonstração técnica específica da base atuarial utilizada, com dados concretos e individualizados referentes ao grupo de beneficiários do próprio contrato.
+@fundamentos: atipicidade afasta a lógica atuarial de risco coletivo e impõe maior rigor no controle
+O contrato em análise, embora formalmente classificado como coletivo empresarial, apresenta características de plano familiar, por abranger núcleo restrito de beneficiários, sem grupo heterogêneo ou atividade empresarial efetiva que justifique a lógica atuarial típica dessa modalidade.
 
-Relatórios genéricos, referentes a outras coletividades ou à carteira da operadora como um todo, não suprem essa exigência: impedem a aferição da necessidade e da razoabilidade dos percentuais e transferem ao consumidor o risco inerente à atividade econômica da operadora.
+Tal atipicidade afasta a justificativa para reajustes elevados baseados em suposta variação de risco coletivo, impondo maior rigor no controle de sua legalidade e razoabilidade.
 
-A ausência dessa comprovação caracteriza abusividade, por impor desvantagem excessiva e impedir o controle da onerosidade contratual, em afronta aos arts. 6º, III e V, e 51 do Código de Defesa do Consumidor.
+Ainda que se trate de plano coletivo, os reajustes devem observar critérios técnicos objetivos e devidamente demonstrados, incumbindo à operadora comprovar a metodologia utilizada, com memória de cálculo e fundamentos atuariais idôneos. No caso, os aumentos aplicados mostram-se desproporcionais e desacompanhados de comprovação técnica adequada, evidenciando abusividade.
 
-### BLOCO: VI | Da abusividade do reajuste por faixa etária
+Dessa forma, impõe-se o controle judicial dos reajustes, com a finalidade de restabelecer o equilíbrio contratual e afastar as majorações indevidas.
+
+### BLOCO: VII | Da ausência de comprovação da sinistralidade e do VCMH
+@condicao: sempre
+@fundamentos: sinistralidade e VCMH exigem apuração técnica vinculada ao próprio grupo segurado, não à carteira da operadora
+Em que pese a operadora justifique os reajustes com base na variação da sinistralidade e do VCMH (Variação de Custos Médico-Hospitalares), tais fatores não podem ser invocados de forma genérica, sendo indispensável a demonstração concreta dos critérios utilizados, o que não é possível vislumbrar no caso concreto.
+
+A sinistralidade corresponde à relação entre os custos assistenciais e as receitas do contrato, enquanto o VCMH reflete a variação dos custos médicos ao longo do tempo. Ambos exigem apuração técnica específica e vinculada ao grupo segurado.
+
+Assim, para que sejam válidos, os reajustes baseados nesses parâmetros devem estar acompanhados de documentação idônea, incluindo memória de cálculo, série histórica de receitas e despesas, metodologia de apuração e demonstração da efetiva variação dos custos.
+
+No caso em análise, inexiste comprovação detalhada dos índices de sinistralidade e do VCMH utilizados, tampouco demonstração de como tais fatores impactaram concretamente o contrato. A mera invocação abstrata desses conceitos não supre o dever de transparência nem legitima a aplicação de percentuais elevados.
+
+Dessa forma, ausente a demonstração técnica adequada, os reajustes baseados em sinistralidade e VCMH mostram-se indevidos e devem ser afastados.
+
+### BLOCO: VIII | Da abusividade do reajuste de faixa etária
 @condicao: F7==SIM
-@fundamentos: Temas 952 e 1016 do STJ — requisitos cumulativos: previsão contratual expressa, observância das normas da ANS, ausência de percentuais desarrazoados sem base atuarial idônea
-@revisar: jurisprudência sobre faixa etária a incluir
-O reajuste por mudança de faixa etária somente é válido quando cumpridos, cumulativamente, três requisitos: previsão contratual expressa do percentual aplicável; observância das normas expedidas pelos órgãos governamentais reguladores; e ausência de percentuais desarrazoados ou aleatórios que, sem base atuarial idônea, onerem excessivamente o consumidor ou discriminem o idoso.
+@fundamentos: requisitos cumulativos consolidados no STJ — previsão contratual expressa, observância das normas da ANS, ausência de percentuais desarrazoados sem base atuarial idônea
+A validade do reajuste por faixa etária está condicionada ao preenchimento de requisitos objetivos, especialmente a existência de previsão contratual expressa dos percentuais aplicáveis.
 
-Na hipótese, a Ré não apresentou o percentual contratualmente previsto para a faixa etária aplicada, tampouco a base atuarial que o sustentaria, o que impede o controle jurisdicional de sua razoabilidade e caracteriza violação ao dever de informação adequada.
+Conforme entendimento consolidado do Superior Tribunal de Justiça, o reajuste por mudança de faixa etária somente é válido quando (I) haja previsão contratual, (II) sejam observadas as normas expedidas pelos órgãos governamentais reguladores e (III) não sejam aplicados percentuais desarrazoados ou aleatórios que, concretamente e sem base atuarial idônea, onerem excessivamente o consumidor ou discriminem o idoso.
 
-### BLOCO: VII | Da rescisão indireta por onerosidade excessiva
+No caso em análise, não há comprovação da existência de cláusula contratual válida que estabeleça, de forma expressa, os percentuais de variação por faixa etária, o que inviabiliza o controle de legalidade do reajuste aplicado. A ausência de previsão contratual específica impede a verificação da regularidade da majoração, tornando o reajuste abusivo:
+
+> DIREITO CIVIL. APELAÇÃO. PLANO DE SAÚDE. REAJUSTE POR FAIXA ETÁRIA. ABUSIVIDADE RECONHECIDA. (...) 4. Na parte conhecida, o apelo comporta acolhimento, pois a operadora não apresentou a documentação atuarial necessária para verificar a razoabilidade dos reajustes, conforme exigido pelo acórdão anterior. 5. A falta de base atuarial impede a aplicação dos reajustes, conforme precedentes do TJSP, reconhecendo a abusividade dos aumentos. (...) Tese de julgamento: 1. A ausência de documentação atuarial impede a aplicação de reajustes por faixa etária, sendo reconhecida a abusividade dos reajustes. (TJ-SP — Apelação Cível 1088739-54.2022.8.26.0100, Relatora Lucilia Alcione Prata, 6ª Câmara de Direito Privado, julgado em 16/04/2025)
+
+Dessa forma, requer-se o afastamento do reajuste por faixa etária aplicado, com a consequente recomposição do valor da mensalidade e restituição dos valores pagos a maior.
+
+### BLOCO: IX | Da violação ao dever regulatório de transparência e ausência de extrato pormenorizado
+@condicao: sempre
+@fundamentos: RN 509/2022 da ANS — dever de fornecer extrato pormenorizado do reajuste com critérios técnicos auditáveis
+A Agência Nacional de Saúde Suplementar, por meio da RN nº 509/2022, estabeleceu o dever das operadoras de planos de saúde de fornecer aos beneficiários o extrato pormenorizado do reajuste, contendo, de forma clara e auditável, os critérios técnicos utilizados para a apuração dos índices aplicados.
+
+Tal obrigação regulatória não se limita a mera formalidade, constituindo instrumento essencial para viabilizar o controle da legalidade dos reajustes, especialmente nos contratos coletivos.
+
+No caso em análise, verifica-se flagrante descumprimento desse dever. Embora tenham sido aplicados reajustes expressivos nas mensalidades do plano, não foi disponibilizado qualquer extrato pormenorizado, tampouco apresentados a memória de cálculo dos índices aplicados, os demonstrativos de sinistralidade do grupo segurado, os critérios de apuração do VCMH ou a metodologia utilizada para definição dos percentuais.
+
+A ausência dessas informações impede a verificação da origem e da legitimidade dos reajustes, configurando violação direta à RN 509/2022 e inviabilizando o exercício do contraditório.
+
+### BLOCO: X | Da demonstração concreta da abusividade pelos documentos acostados
+@condicao: sempre
+@fundamentos: amarra a tese à prova documental — boletos, extratos e planilha de cálculo. É o capítulo que transforma alegação em demonstração
+A abusividade dos reajustes não se revela apenas em tese, mas está concretamente demonstrada nos documentos acostados aos autos.
+
+Os boletos de cobrança evidenciam a evolução abrupta das mensalidades, com aumentos sucessivos e desproporcionais, especialmente nos últimos anos. Os extratos de utilização e histórico financeiro confirmam os valores efetivamente exigidos pela operadora, demonstrando a elevação progressiva do custo do plano sem qualquer transparência quanto à sua formação.
+
+Por sua vez, as planilhas de cálculo anexas realizam a reconstituição da evolução contratual com base em parâmetros objetivos, evidenciando a divergência entre os reajustes aplicados e os índices autorizados pela ANS, o crescimento exponencial das mensalidades e o valor pago a maior pela parte autora ao longo do período analisado.
+
+Há, portanto, perfeita correlação entre os valores efetivamente cobrados, a evolução financeira do contrato e a apuração técnica do excesso. Tal conjunto probatório evidencia que os reajustes aplicados não decorrem de critérios transparentes ou verificáveis, mas de majorações unilaterais desprovidas de demonstração técnica idônea.
+
+### BLOCO: XI | Da rescisão indireta por onerosidade excessiva
 @condicao: F6==CANCELADO
 @fundamentos: usar SOMENTE quando o plano já foi cancelado pela parte autora em razão dos reajustes. Excludente do capítulo de tutela de urgência
-@revisar: confirmar com a advogada a redação deste caminho
-A Autora viu-se compelida a cancelar o plano de saúde em razão da onerosidade excessiva decorrente dos reajustes impugnados, o que caracteriza rescisão motivada pela conduta da Ré e não afasta o direito à restituição dos valores pagos a maior durante a vigência do contrato.
+O cancelamento do plano não decorreu de mera liberalidade da parte Autora, mas de imposição econômica: os reajustes sucessivos e abusivos elevaram a contraprestação a patamar incompatível com sua capacidade financeira, tornando insustentável a manutenção do vínculo.
 
-### BLOCO: VIII | Da tutela de urgência
+Configura-se, assim, hipótese de rescisão indireta do contrato por onerosidade excessiva decorrente de conduta abusiva da operadora. Não se pode atribuir à parte Autora as consequências de uma ruptura que a própria Ré provocou ao exigir valores desprovidos de demonstração técnica idônea.
+
+O reconhecimento da abusividade dos reajustes, portanto, não se esvazia com o cancelamento: subsiste o direito à restituição dos valores pagos a maior durante toda a vigência do contrato, no período alcançado pela prescrição.
+
+### BLOCO: XII | Da tutela de urgência
 @condicao: F6==ATIVO
-@fundamentos: art. 300 do CPC; probabilidade do direito e perigo da demora; reversibilidade da medida
-A concessão da tutela de urgência encontra fundamento no art. 300 do Código de Processo Civil, diante da presença simultânea da probabilidade do direito e do perigo de dano.
+@fundamentos: art. 300 do CPC; probabilidade do direito e perigo da demora. O valor pedido na tutela tem que ser o mesmo valor devido da tabela — peça real já pediu valor ausente da própria tabela
+A probabilidade do direito encontra-se demonstrada pelos documentos anexados, que comprovam a existência da relação contratual entre as partes, bem como a aplicação de reajustes manifestamente excessivos nas mensalidades do plano de saúde.
 
-A probabilidade do direito decorre da documentação anexa, que demonstra a natureza familiar da contratação e a aplicação de reajustes desacompanhados de justificativa técnica. O perigo da demora reside no risco concreto de inadimplência e consequente cancelamento do plano, com perda da cobertura assistencial construída ao longo da contratualidade.
+Tais aumentos mostram-se desproporcionais e incompatíveis com os parâmetros de razoabilidade adotados pela jurisprudência e pelos princípios que regem as relações de consumo, notadamente a boa-fé objetiva e o equilíbrio contratual, previstos no Código de Defesa do Consumidor.
 
-A medida é reversível, pois eventual diferença poderá ser ajustada ao final. Requer-se, assim, a limitação provisória da mensalidade ao patamar de **{valor_devido_atual}**, apurado com a aplicação dos índices da ANS.
+O perigo da demora igualmente se faz presente, uma vez que a manutenção das cobranças em valores abusivos compromete significativamente a capacidade financeira da parte autora, expondo-a ao risco concreto de inadimplência e consequente cancelamento do plano de saúde.
 
-### BLOCO: IX | Da exibição de documentos e da distribuição dinâmica do ônus da prova
-@condicao: sempre
-@fundamentos: arts. 396 a 404 e art. 400 do CPC; art. 373, §1º, do CPC; art. 6º, VIII, do CDC
-A Autora não detém os documentos indispensáveis à apuração da regularidade dos reajustes, que permanecem sob guarda exclusiva da Ré: memória de cálculo, relatórios de sinistralidade do grupo, premissas atuariais e histórico completo de mensalidades.
+Considerando tratar-se de serviço essencial, cuja continuidade é indispensável para a preservação da assistência médica, eventual interrupção da cobertura pode gerar prejuízos graves e de difícil reparação, além de esvaziar o resultado útil do processo caso a parte Autora seja compelida a suportar os valores excessivos até o julgamento final da demanda.
 
-Impõe-se, por isso, a exibição documental nos termos dos arts. 396 a 404 do Código de Processo Civil e do art. 6º, VIII, do Código de Defesa do Consumidor, sob pena de aplicação do art. 400 do mesmo diploma, bem como a distribuição dinâmica do ônus da prova (art. 373, §1º, do CPC), por ser a prova da regularidade dos reajustes de produção muito mais fácil para a Ré.
+Diante do exposto, requer-se a concessão da tutela de urgência, inaudita altera pars, para determinar que a Ré emita o próximo boleto de cobrança recalculando a mensalidade, expurgando os reajustes impugnados e aplicando apenas os reajustes anuais autorizados pela ANS, resultando no valor de **{valor_devido_atual}**, conforme planilha de cálculo anexa.
 
-### BLOCO: X | Do direito à restituição dos valores pagos a maior
+### BLOCO: XIII | Da exibição de documentos e da distribuição dinâmica do ônus da prova
+@condicao: F6==ATIVO
+@fundamentos: arts. 396 a 404 e art. 400 do CPC; art. 373, §1º, do CPC; art. 6º, VIII, do CDC; Tema 610/STJ para a prescrição
+A parte Autora não possui acesso integral aos documentos necessários à apuração da evolução das mensalidades, dos índices de reajuste aplicados e da composição das cobranças realizadas pela Ré, os quais permanecem sob guarda exclusiva da operadora.
+
+Trata-se de evidente assimetria informacional, própria da relação de consumo, razão pela qual se impõe a exibição documental pela Ré, nos termos dos arts. 396 a 404 do Código de Processo Civil e do art. 6º, VIII, do Código de Defesa do Consumidor.
+
+Além disso, o Superior Tribunal de Justiça, no julgamento do Tema 610, firmou entendimento de que, na vigência dos contratos de plano ou seguro de assistência à saúde, a pretensão condenatória decorrente da declaração de nulidade de cláusula de reajuste prescreve em 20 anos ou em 3 anos, conforme o regime jurídico aplicável, observada a regra de transição do art. 2.028 do Código Civil.
+
+Assim, a apresentação do histórico de cobranças e reajustes é indispensável para permitir a correta análise da abusividade alegada, a identificação da mensalidade efetivamente devida e a apuração dos valores eventualmente cobrados a maior.
+
+Diante disso, requer-se a intimação da Ré para apresentar os extratos mensais de cobrança e o histórico de reajustes aplicados nos últimos 10 (dez) anos de vigência contratual, com indicação dos índices utilizados em cada período, sob pena de aplicação do art. 400 do Código de Processo Civil.
+
+### BLOCO: XIV | Do direito à restituição dos valores pagos a maior
 @condicao: sempre
 @fundamentos: art. 42, parágrafo único, do CDC (dobro) OU art. 876 do CC (simples) — a escolha é decisão humana, o Classificador não decide; Tema 610/STJ para a prescrição trienal
-Reconhecida a abusividade dos reajustes, surge o direito à restituição dos valores pagos a maior, sob pena de enriquecimento sem causa da Ré.
+O parágrafo único do art. 42 do Código de Defesa do Consumidor estabelece que o consumidor cobrado em quantia indevida tem direito à repetição do indébito, por valor igual ao dobro do que pagou em excesso, acrescido de correção monetária e juros legais, salvo hipótese de engano justificável.
 
-Observada a prescrição trienal firmada no Tema 610 do Superior Tribunal de Justiça, a restituição alcança os valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, apurado na tabela anexa e sujeito a conferência em liquidação, acrescido de correção monetária desde cada desembolso e juros de mora a partir da citação.
+Uma vez reconhecida a abusividade dos reajustes, surge para a parte Autora o direito à devolução dos valores pagos a maior ao longo da contratualidade, nos termos também do art. 876 do Código Civil.
 
-### BLOCO: XI | Da gratuidade de justiça da pessoa jurídica
+Conforme demonstrado, a parte Autora pagou **{restituicao}** a mais do que era efetivamente devido nos últimos 3 (três) anos, período alcançado pela prescrição trienal fixada no Tema 610 do Superior Tribunal de Justiça.
+
+Considerando que a conduta da operadora não se enquadra em engano justificável, requer-se a restituição em dobro, no importe de **{restituicao_dobro}**, devidamente corrigida monetariamente desde cada desembolso e acrescida de juros de mora a partir da citação.
+
+### BLOCO: XV | Dos danos morais
+@condicao: F6==CANCELADO
+@fundamentos: usar quando o plano foi perdido — a lesão vai além do inadimplemento contratual. Valor do pedido é decisão da advogada, não sai do cálculo
+@revisar: confirmar com a advogada se os danos morais são pedidos em todos os casos de plano cancelado, e sob que valor
+A conduta da Ré extrapola o mero inadimplemento contratual. A imposição de reajustes desprovidos de demonstração técnica idônea, em patamar que inviabilizou a manutenção do vínculo, privou a parte Autora e seu núcleo familiar da assistência à saúde contratada.
+
+O contrato de plano de saúde possui natureza existencial: é firmado para assegurar proteção e continuidade assistencial justamente nos momentos de maior vulnerabilidade. A perda da cobertura por conduta abusiva da operadora, portanto, não configura mero aborrecimento.
+
+### BLOCO: XVI | Da gratuidade de justiça da pessoa jurídica
 @condicao: sempre
-@fundamentos: arts. 98 e 99 do CPC. A fundamentação NÃO pode ser a hipossuficiência genérica de pessoa física — a presunção do art. 99, §3º não alcança a PJ, que precisa demonstrar a insuficiência
-@revisar: confirmar se a gratuidade é pedida em todos os casos de PJ
-A Autora requer a concessão dos benefícios da gratuidade de justiça, nos termos dos arts. 98 e 99 do Código de Processo Civil.
-
-Tratando-se de pessoa jurídica, a Autora não se vale da presunção do art. 99, §3º, do Código de Processo Civil, e demonstra concretamente sua insuficiência de recursos: a empresa não possui receita relevante além do necessário à manutenção do próprio plano de saúde, cujos custos consomem os recursos disponíveis, não restando margem para o recolhimento de custas, despesas processuais e eventuais honorários periciais.
+@fundamentos: arts. 98 e seguintes do CPC c/c Súmula 481/STJ. A presunção do art. 99, §3º NÃO alcança a pessoa jurídica, que precisa demonstrar concretamente a insuficiência — por isso a narrativa é fato do caso
+A parte Autora, pessoa jurídica de direito privado qualificada na epígrafe, não possui condições financeiras de arcar com as custas processuais, despesas judiciais e honorários advocatícios sucumbenciais sem comprometer o regular funcionamento de suas atividades.
 
 {narrativa_hipossuficiencia}
 
-### BLOCO: XII | Da prioridade de tramitação
+Diante desse quadro, nos termos dos arts. 98 e seguintes do Código de Processo Civil, c/c a Súmula 481 do Superior Tribunal de Justiça — segundo a qual "faz jus ao benefício da justiça gratuita a pessoa jurídica com ou sem fins lucrativos que demonstrar sua impossibilidade de arcar com os encargos processuais" —, requer-se a concessão dos benefícios da Justiça Gratuita, declarando, para tanto, sob as penas da lei, não possuir condições de suportar as despesas processuais sem prejuízo à continuidade de suas atividades empresariais.
+
+### BLOCO: XVII | Da produção de provas
+@condicao: sempre
+@fundamentos: perícia atuarial/contábil às expensas da Ré ou com inversão do ônus, diante da posse exclusiva dos dados técnicos pela operadora
+Requer-se a produção das provas por todos os meios admitidos em direito, especialmente a oitiva de testemunhas, a juntada de novos documentos e a nomeação de perito para realização de perícia técnica, respondendo aos quesitos formulados. Protesta-se pela apresentação de quesitos suplementares ao perito judicial.
+
+Subsidiariamente, caso Vossa Excelência entenda necessária dilação técnica, seja determinada a realização de perícia atuarial e contábil, às expensas da Ré ou com inversão e dinamização do ônus probatório, diante da posse exclusiva dos dados técnicos pela operadora.
+
+### BLOCO: XVIII | Da prioridade de tramitação
 @condicao: F9>=60
 @fundamentos: art. 71 da Lei 10.741/2003; art. 1.048, I, do CPC. Independe da tese — decorre da idade da parte
-A parte Autora, contando com {idade} anos de idade, faz jus à prioridade de tramitação, nos termos do art. 71 da Lei nº 10.741/2003 (Estatuto da Pessoa Idosa) c/c art. 1.048, inciso I, do Código de Processo Civil.
+Requer-se a prioridade de tramitação do presente feito, uma vez que a parte Autora conta com {idade} anos de idade, nos termos do art. 71 da Lei nº 10.741/2003 (Estatuto da Pessoa Idosa) e do art. 1.048, I, do Código de Processo Civil.
 
-### BLOCO: XIII | Do processo 100% digital
+Requer-se, assim, que o processo tenha regular processamento prioritário, com a adoção das anotações e providências cabíveis.
+
+### BLOCO: XIX | Do processo 100% digital
 @condicao: sempre
 @fundamentos: padrão do escritório
-A parte Autora manifesta expressa concordância com a tramitação do feito em formato 100% digital.
+Requer a parte Autora que eventual audiência de conciliação seja realizada por videoconferência, medida plenamente admitida pela legislação processual vigente.
 
----
+A utilização de meios tecnológicos para a prática de atos processuais encontra respaldo no Código de Processo Civil, bem como nos princípios da celeridade, simplicidade, efetividade e economia processual.
 
-### BLOCO: XIV | Dos pedidos
+Dessa forma, inexistindo impedimento legal e considerando a ampla adoção dessa modalidade pelos tribunais, requer-se que eventual audiência designada seja realizada por meio virtual, dispensando-se o comparecimento presencial das partes, ressalvada eventual necessidade reconhecida por este juízo.
+
+### BLOCO: XX | Dos pedidos
 @condicao: sempre
 @tipo: pedidos
-@fundamentos: cada pedido carrega a mesma condição do capítulo que o sustenta — pedido sem capítulo é incoerência que o leitor nota
-Diante do exposto, requer:
+- [sempre] a citação da Ré para, querendo, responder à presente demanda no prazo legal;
+- [F6==ATIVO] a concessão da tutela de urgência, em forma de liminar, determinando que a Ré realize a cobrança das mensalidades vincendas com a utilização dos índices de reajuste autorizados pela ANS, no valor de **{valor_devido_atual}**, sob pena de multa diária a ser arbitrada por este MM. Juízo;
+- [F6==ATIVO] que a Ré seja obrigada a emitir os boletos mensais com o valor provisoriamente fixado, sem encargos, multas ou restrições decorrentes da diferença discutida nestes autos;
+- [sempre] no mérito, a procedência do pedido para declarar a abusividade dos reajustes anuais aplicados, substituindo-os pelos índices de reajuste anual previstos pela ANS, e declarar a ilegalidade da aplicação, sem comprovação técnica idônea, de percentuais relativos à variação de custos médico-hospitalares que ultrapassem os limites anuais fixados pela ANS para os contratos individuais, em respeito à Lei nº 9.656/98, ao Código de Defesa do Consumidor e aos princípios da boa-fé e do equilíbrio contratual;
+- [sempre] o reconhecimento da natureza familiar e atípica do contrato para fins de controle dos reajustes;
+- [sempre] a condenação da Ré a recalcular a mensalidade nos moldes fixados na sentença, apresentando planilha descritiva, inclusive do valor pago a maior, sob pena de multa diária a ser arbitrada por este MM. Juízo;
+- [F6==ATIVO] que a Ré seja proibida de cancelar, suspender, rescindir, restringir cobertura, impor carência, negativar o nome da parte Autora ou praticar qualquer ato de cobrança coercitiva em razão da diferença entre o valor cobrado com o reajuste impugnado e o valor provisoriamente fixado judicialmente;
+- [sempre] a condenação da Ré à devolução em dobro dos valores cobrados indevidamente, no importe de **{restituicao_dobro}**, acrescido de juros de 1% ao mês desde a citação e correção monetária a contar de cada desembolso;
+- [sempre] subsidiariamente, caso Vossa Excelência não entenda cabível a restituição em dobro, a restituição simples no montante de **{restituicao}**, acrescido de juros de 1% ao mês desde a citação e correção monetária a contar de cada desembolso;
+- [F7==SIM] declarar a abusividade do reajuste de faixa etária, extirpando-o integralmente da mensalidade, e determinar a expedição das mensalidades vincendas respeitando apenas os reajustes anuais previstos pela ANS, sob pena de multa mensal a ser arbitrada por este MM. Juízo;
+- [F6==CANCELADO] o reconhecimento da rescisão indireta do contrato por onerosidade excessiva decorrente da conduta abusiva da Ré;
+- [F6==CANCELADO] a condenação da Ré ao pagamento de indenização por danos morais, em valor a ser arbitrado por este MM. Juízo;
+- [F6==ATIVO] a determinação de exibição dos documentos indispensáveis à análise da legalidade do reajuste, especialmente contrato integral vigente, cláusulas de reajuste aplicáveis, extrato pormenorizado dos reajustes dos últimos dez anos, memória de cálculo do percentual aplicado, metodologia atuarial utilizada, demonstrativo de sinistralidade, base de beneficiários considerada, índices utilizados, estudo técnico que fundamentou a majoração, comunicações enviadas à beneficiária e documentos encaminhados à ANS;
+- [sempre] a aplicação dos efeitos da decisão aos demais beneficiários do plano de saúde;
+- [sempre] a distribuição dinâmica do ônus da prova, nos termos do art. 373, §1º, do Código de Processo Civil, atribuindo-se à Ré o dever de comprovar a regularidade, a necessidade, a proporcionalidade e a base técnica do reajuste aplicado;
+- [sempre] cumprindo a previsão do art. 319, VII, do Código de Processo Civil, a parte Autora declara que opta pela não realização de audiência de conciliação;
+- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios.
 
-- [F9>=60] o reconhecimento e a anotação da **prioridade de tramitação**, nos termos do art. 71 da Lei nº 10.741/2003 c/c art. 1.048, I, do Código de Processo Civil, por contar a parte Autora com {idade} anos de idade
-- [sempre] o deferimento dos benefícios da **gratuidade de justiça**, nos termos dos arts. 98 e 99 do Código de Processo Civil
-- [F6==ATIVO] a concessão da **tutela de urgência**, nos termos do art. 300 do Código de Processo Civil, para limitar a mensalidade ao patamar de **{valor_devido_atual}** até o julgamento final
-- [F6==ATIVO] que a Ré se abstenha de suspender, cancelar ou rescindir o plano, impor carências ou negar cobertura em razão da discussão judicial, desde que mantido o pagamento do valor fixado
-- [F6==ATIVO] a fixação de **multa diária** em caso de descumprimento da tutela de urgência
-- [sempre] a **citação** da Ré para, querendo, apresentar contestação, sob pena de revelia
-- [sempre] a determinação para que a Ré **exiba** o contrato e regulamento aplicáveis, o histórico completo de mensalidades, os índices de reajuste ano a ano, a memória de cálculo, os demonstrativos atuariais e os documentos de sinistralidade, sob pena do art. 400 do Código de Processo Civil
-- [sempre] a **distribuição dinâmica do ônus da prova**, nos termos do art. 373, §1º, do Código de Processo Civil
-- [sempre] no mérito, a **procedência total dos pedidos**, para declarar a abusividade dos reajustes aplicados e revisar a mensalidade mediante a aplicação dos índices anuais divulgados pela ANS
-- [sempre] a condenação da Ré à **restituição** dos valores pagos a maior nos três anos anteriores ao ajuizamento, no montante de **{restituicao}**, com correção monetária desde cada desembolso e juros de mora a partir da citação
-- [sempre] a produção de todos os meios de prova admitidos, especialmente documental suplementar e **pericial contábil ou atuarial**
-- [sempre] a condenação da Ré ao pagamento das custas processuais e dos honorários advocatícios
-
-### BLOCO: XV | Do valor da causa
+### BLOCO: XXI | Do valor da causa
 @condicao: sempre
-@fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
-Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
-
+@fundamentos: art. 292 do CPC. Na peça real o valor da causa é o próprio valor do pedido de restituição em dobro — confirmar com a advogada se é a regra (pergunta A6)
+Atribui-se à causa o valor de **{valor_da_causa}**, em conformidade com o art. 292 do Código de Processo Civil.
 
 ## TESE: COLETIVO_POR_ADESAO
 

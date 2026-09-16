@@ -384,6 +384,29 @@ def test_resposta_de_verdade_destrava_o_gate():
     assert elaborar(caso).fase != TRIAGEM
 
 
+def test_dobro_bate_com_o_valor_simples_escrito_na_peca():
+    """Os dois números aparecem na mesma petição e o leitor confere a conta. Dobrar a
+    precisão cheia dava R$ 23.335,25 ao lado de R$ 11.667,62 — um centavo que, numa peça
+    protocolada, é a advogada quem explica."""
+    caso = Caso(fatos={"F1": cls.Fato("COMERCIAL", "doc", confianca=0.95),
+                       "F2": cls.Fato("PJ", "doc", confianca=0.95),
+                       "F3": cls.Fato("NAO", "doc", confianca=0.95),
+                       "F4": cls.Fato("SIM", "doc", confianca=0.95),
+                       "F5": cls.Fato("NAO", "doc", confianca=0.95),
+                       "F6": cls.Fato("ATIVO", "doc", confianca=0.95),
+                       "F7": cls.Fato("NAO", "doc", confianca=0.95),
+                       "F9": cls.Fato("45", "doc", confianca=0.95)},
+                mes_aniversario=1, tese_confirmada="EMPRESARIAL_FAMILIAR",
+                competencias=[calc.Competencia(2023, m, calc.d("1.111,11"))
+                              for m in range(1, 13)]
+                + [calc.Competencia(2024, m, calc.d("1.333,33")) for m in range(1, 13)])
+    elaborar(caso)
+    simples = calc.d(caso.dados["restituicao"])
+    dobro = calc.d(caso.dados["restituicao_dobro"])
+    assert dobro == simples * 2, (caso.dados["restituicao"],
+                                  caso.dados["restituicao_dobro"])
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())
