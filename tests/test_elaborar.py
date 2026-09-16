@@ -6,6 +6,8 @@ RAIZ = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ / "skills" / "elaborador-inicial" / "scripts"))
 sys.path.insert(0, str(RAIZ / "tests"))
 
+import classificar as cls  # noqa: E402
+import calcular_reajuste as calc  # noqa: E402
 from classificar import Fato  # noqa: E402
 from elaborar import (  # noqa: E402
     Caso, elaborar, TRIAGEM, CONFIRMACAO, CALCULO, REDACAO, GERACAO, CONCLUIDO,
@@ -348,6 +350,38 @@ def test_cli_sem_arquivo_ensina_o_proximo_passo(capsys=None):
 
 def test_exemplo_e_um_caso_valido():
     caso_de_json(dict(EXEMPLO))          # não pode levantar
+
+
+def test_nao_sei_para_o_processo_em_vez_de_avancar():
+    """A regra do projeto: "não sei" PARA o processo. Antes, bastava a chave existir em
+    `respostas` — responder "não sei" empurrava para a CONFIRMACAO, que então pedia para
+    confirmar uma tese NÃO DEFINIDA, e quem opera lê isso como "tenta alguma coisa"."""
+    caso = Caso(fatos={"F1": cls.Fato("COMERCIAL", "doc"), "F2": cls.Fato("PJ", "doc"),
+                       "F4": cls.Fato("SIM", "doc"), "F5": cls.Fato("NAO", "doc")},
+                competencias=[calc.Competencia(2024, m, calc.d("1.000,00"))
+                              for m in range(1, 13)])
+    primeira = elaborar(caso)
+    assert primeira.fase == TRIAGEM
+    trava = [p for p in primeira.dossie["perguntas"] if p["bloqueante"]][0]
+
+    for resposta in (str(len(trava["opcoes"])), "não sei", "nao sei, vou verificar"):
+        caso.respostas = {trava["id"]: resposta}
+        etapa = elaborar(caso)
+        assert etapa.fase == TRIAGEM, f"“{resposta}” avançou para {etapa.fase}"
+        assert any("não sei" in q for q in etapa.perguntas), etapa.perguntas
+        assert not any("Confirma a tese" in q for q in etapa.perguntas)
+
+
+def test_resposta_de_verdade_destrava_o_gate():
+    """O contrapeso do teste acima: responder de fato tem que seguir adiante."""
+    caso = Caso(fatos={"F1": cls.Fato("COMERCIAL", "doc"), "F2": cls.Fato("PJ", "doc"),
+                       "F4": cls.Fato("SIM", "doc"), "F5": cls.Fato("NAO", "doc")},
+                competencias=[calc.Competencia(2024, m, calc.d("1.000,00"))
+                              for m in range(1, 13)])
+    travas = [p for p in elaborar(caso).dossie["perguntas"] if p["bloqueante"]]
+    # Responde TODAS com a primeira opção — nenhuma é o "não sei", que é sempre a última.
+    caso.respostas = {p["id"]: "1" for p in travas}
+    assert elaborar(caso).fase != TRIAGEM
 
 
 if __name__ == "__main__":

@@ -127,11 +127,27 @@ def elaborar(caso: Caso) -> Etapa:
     dossie = cls.classificar(documentos, planilhas, caso.fatos)
     etapa = Etapa(fase=TRIAGEM, dossie=dossie, avisos=list(avisos_da_serie))
 
-    pendentes = [p for p in dossie["perguntas"] if p["id"] not in caso.respostas]
+    # "Não sei / vou verificar" NÃO resolve o gate: é o contrário disso. Antes, bastava
+    # a chave existir em `respostas` para a pergunta sair da lista, e responder "não sei"
+    # empurrava o fluxo para a fase seguinte, que então pedia para confirmar uma tese
+    # NÃO DEFINIDA. Quem opera lê isso como "tenta alguma coisa" — e o chute vira tese.
+    nao_sei = [p for p in dossie["perguntas"]
+               if _respondeu_nao_sei(p, caso.respostas.get(p["id"], ""))]
+    pendentes = [p for p in dossie["perguntas"]
+                 if p["id"] not in caso.respostas or p in nao_sei]
     bloqueantes = [p for p in pendentes if p["bloqueante"]]
     if bloqueantes:
-        etapa.perguntas = [_formatar(p) for p in pendentes]
         etapa.espelho = cls.espelho(dossie, caso.cliente)
+        travas = [p for p in nao_sei if p["bloqueante"]]
+        if travas:
+            etapa.perguntas = [
+                "Você respondeu “não sei / vou verificar” em: "
+                + "; ".join(f"“{p['texto']}”" for p in travas)
+                + ". Paro aqui — é a resposta certa quando o dado não está confirmado. "
+                "Não vou gerar nada nem seguir por outro caminho. Levante o dado e "
+                "volte; enquanto isso o resto do caso fica guardado."]
+            return etapa
+        etapa.perguntas = [_formatar(p) for p in pendentes]
         return etapa
 
     # ---- CONFIRMACAO (G8: sempre) ----------------------------------------- #
@@ -247,6 +263,27 @@ def elaborar(caso: Caso) -> Etapa:
 
     etapa.fase = CONCLUIDO
     return etapa
+
+
+def _respondeu_nao_sei(pergunta: dict, resposta: str) -> bool:
+    """A última opção de toda pergunta bloqueante é sempre `NAO_SEI`.
+
+    Aceita tanto o número da opção quanto o texto, porque a resposta atravessa uma
+    conversa: quem opera escreve "3" ou escreve "não sei".
+    """
+    r = (resposta or "").strip().lower()
+    if not r:
+        return False
+    opcoes = pergunta.get("opcoes") or []
+    if opcoes and r == str(len(opcoes)):
+        return True
+    return "nao sei" in _sem_acento(r) or "vou verificar" in _sem_acento(r)
+
+
+def _sem_acento(t: str) -> str:
+    import unicodedata
+    return "".join(c for c in unicodedata.normalize("NFD", t)
+                   if unicodedata.category(c) != "Mn")
 
 
 def _formatar(pergunta: dict) -> str:
