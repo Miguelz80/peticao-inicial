@@ -42,6 +42,20 @@ CAMPOS = {
                         "contrato, proposta de adesão ou carteira"),
     "comarca": ("comarca onde a ação será distribuída",
                 "domicílio da parte autora, no comprovante de residência"),
+    "juizo": ("juízo a que a peça é endereçada, ex.: “Vara Cível” ou “Juizado "
+              "Especial Cível do Consumidor”",
+              "decisão da advogada — depende do valor da causa e da comarca; o "
+              "Juizado tem teto de 40 salários mínimos"),
+    "qualificacao_autor": ("qualificação completa da parte autora, como vai na peça",
+                           "documento pessoal, contrato social e comprovante de "
+                           "residência"),
+    "qualificacao_re": ("qualificação completa da parte ré, como vai na peça",
+                        "carteirinha, contrato ou boleto — razão social, CNPJ e "
+                        "endereço saem do documento do caso, nunca de cadastro"),
+    "advogados": ("advogados que assinam, um por linha, no formato “Nome | OAB/UF "
+                  "00.000”", "procuração"),
+    "data_peca": ("local e data da peça, ex.: “Salvador/BA, 23 de setembro de 2026”",
+                  "data em que a peça será protocolada"),
     "idade": ("idade da parte autora, em anos", "documento pessoal"),
     "competencia_atual": ("mês e ano da mensalidade mais recente",
                           "última competência da planilha, ex.: julho de 2026"),
@@ -253,6 +267,44 @@ class Roteiro:
         return bool(self.revisoes)
 
 
+def _abertura_ou_fecho(r: "Roteiro", bloco, dados: dict[str, str]) -> set[str]:
+    """Renderiza o cabeçalho e o rodapé da peça.
+
+    Linha começando com "!" vira endereçamento (negrito, sem recuo); "=" vira
+    assinatura centralizada, no formato "Nome | OAB"; o resto é parágrafo corrido sem
+    recuo, que é como a qualificação das partes aparece na peça do escritório.
+    """
+    from gerar_peticao import Enderecamento, Assinatura, Espaco
+
+    faltando_geral: set[str] = set()
+    for paragrafo in bloco.paragrafos:
+        marca, corpo = "", paragrafo
+        if paragrafo[:1] in ("!", "="):
+            marca, corpo = paragrafo[0], paragrafo[1:].lstrip()
+        texto, faltando = preencher(corpo, dados)
+        faltando_geral |= faltando
+        if marca == "!":
+            r.peca.add(Enderecamento(texto))
+        elif marca == "=":
+            nome, _, oab = texto.partition("|")
+            r.peca.add(Espaco(), Assinatura(nome.strip(), oab.strip()))
+        else:
+            r.peca.add(Paragrafo(texto, recuo=False))
+    return faltando_geral
+
+
+def titulos_do_catalogo(tese_nome: str, catalogo: str = CATALOGO) -> list[str]:
+    """Todos os títulos de capítulo previstos para a tese, aplicáveis ou não.
+
+    É a lista contra a qual a Conferência mede o documento: capítulo fora dela é
+    improviso ou veio de outra tese.
+    """
+    teses = carregar(catalogo)
+    if tese_nome not in teses:
+        return []
+    return [b.titulo for b in teses[tese_nome].blocos]
+
+
 def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
                 resultado_calculo=None, catalogo: str = CATALOGO) -> Roteiro:
     teses = carregar(catalogo)
@@ -279,6 +331,16 @@ def montar_peca(tese_nome: str, fatos: dict[str, str], dados: dict[str, str],
             r.perguntas.append(
                 f"O capítulo “{bloco.titulo}” depende de “{bloco.condicao}”, e esse "
                 f"dado não está definido. Ele entra na peça ou não?")
+            continue
+
+        # Abertura (endereçamento, qualificação das partes, nome da ação) e fecho
+        # (local, data e assinaturas) NÃO são capítulos: não recebem numeral romano nem
+        # título. Sem eles a peça começava em "I. DOS FATOS" — sem juízo, sem partes,
+        # sem nome de ação e sem assinatura. Saiu assim em todas as peças geradas até
+        # aqui, porque eu conferia capítulos, valores e editabilidade, nunca se o
+        # documento abria como petição.
+        if bloco.tipo in ("abertura", "fecho"):
+            faltando_geral |= _abertura_ou_fecho(r, bloco, dados)
             continue
 
         numero += 1

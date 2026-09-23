@@ -25,7 +25,14 @@ FATOS = {"F1": Fato("AUTOGESTAO", "carteira", "CASSI", 0.95),
 DADOS = {"plano": "PLANO X", "inicio_contrato": "07/05/2001", "idade": "81",
          "comarca": "Salvador/BA", "competencia_atual": "julho de 2026",
          "maior_reajuste": "29,90%", "valor_da_causa": "R$ 51.170,42",
-         "narrativa_hipossuficiencia": "Demonstrada nos autos."}
+         "narrativa_hipossuficiencia": "Demonstrada nos autos.",
+         "juizo": "Vara Cível",
+         "qualificacao_autor": "FULANA DE TAL, brasileira, inscrita no CPF sob o "
+                               "nº 000.000.000-00, residente em Salvador/BA",
+         "qualificacao_re": "OPERADORA X S.A., inscrita no CNPJ sob o "
+                            "nº 00.000.000/0001-00, com sede em Salvador/BA",
+         "advogados": "FULANO DE TAL | OAB/BA 00.000",
+         "data_peca": "Salvador/BA, 23 de setembro de 2026"}
 ACEITA = {(2018, 4): Decimal("0"), (2021, 1): Decimal("0")}
 
 

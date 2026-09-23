@@ -25,7 +25,14 @@ def resultado():
 
 def dados_completos(res):
     return {"plano": "PLANO X", "inicio_contrato": "07/05/2001", "idade": "81",
-            "comarca": "Salvador/BA", "processo_anterior": "0000000-00.0000.0.00.0000",
+            "juizo": "Vara Cível", "comarca": "Salvador/BA",
+            "qualificacao_autor": "FULANA DE TAL, brasileira, inscrita no CPF sob o "
+                                  "nº 000.000.000-00, residente em Salvador/BA",
+            "qualificacao_re": "OPERADORA X S.A., inscrita no CNPJ sob o "
+                               "nº 00.000.000/0001-00, com sede em Salvador/BA",
+            "advogados": "FULANO DE TAL | OAB/BA 00.000",
+            "data_peca": "Salvador/BA, 23 de setembro de 2026",
+            "processo_anterior": "0000000-00.0000.0.00.0000",
             "comarca_anterior": "Outra/BA",
             "valor_pago_atual": _brl(res.valor_pago_atual),
             "valor_devido_atual": _brl(res.valor_devido_atual),
@@ -37,6 +44,14 @@ def dados_completos(res):
 def dados_adesao(res):
     return {"plano": "PLANO X", "inicio_contrato": "março/2018",
             "competencia_atual": "julho de 2026", "maior_reajuste": "29,90%",
+            "juizo": "Vara Cível", "comarca": "Salvador/BA",
+            "qualificacao_autor": "FULANA DE TAL, brasileira, inscrita no CPF sob o "
+                                  "nº 000.000.000-00, residente em Salvador/BA",
+            "qualificacao_re": "OPERADORA X S.A., inscrita no CNPJ sob o "
+                               "nº 00.000.000/0001-00, com sede em Salvador/BA",
+            "advogados": "FULANO DE TAL | OAB/BA 00.000",
+            "data_peca": "Salvador/BA, 23 de setembro de 2026",
+
             "valor_pago_atual": _brl(res.valor_pago_atual),
             "valor_devido_atual": _brl(res.valor_devido_atual),
             "restituicao": _brl(res.restituicao()),

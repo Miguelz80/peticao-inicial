@@ -188,6 +188,7 @@ def test_peca_gerada_passa_na_conferencia_de_editabilidade():
             Titulo("I.", "Dos fatos"),
             Paragrafo("Reajustes acima dos índices da ANS."),
             caixa_de_resumo(res), tabela_de_reajuste(res),
+            Paragrafo("Nestes termos, pede deferimento."),
             Espaco(), Assinatura("NOME", "OAB/BA 1")))
         achados = conferir_editabilidade(caminho)
         assert achados == [], [str(a) for a in achados]
@@ -230,7 +231,8 @@ def test_modelo_preparado_ainda_gera_peca():
         montar(destino, Peca().add(Paragrafo("texto novo")), saida)
         assert "texto novo" in zipfile.ZipFile(saida).read(
             "word/document.xml").decode("utf-8")
-        assert not conferir_editabilidade(saida)
+        assert not [a for a in conferir_editabilidade(saida)
+                    if a.codigo != "C16"]  # fragmento não tem abertura
 
 
 def test_preparar_modelo_esvazia_autoria_sem_quebrar_o_pacote():

@@ -290,6 +290,67 @@ def test_valores_de_origem_nao_reescreve_a_janela_escolhida():
     assert "C4" in codigos(conferir_calculo(res))
 
 
+def _docx(diretorio, corpo_xml):
+    import zipfile, os as _os
+    caminho = _os.path.join(diretorio, "p.docx")
+    with zipfile.ZipFile(caminho, "w") as z:
+        z.writestr("word/document.xml",
+                   '<w:document xmlns:w="http://schemas.openxmlformats.org/'
+                   'wordprocessingml/2006/main"><w:body>' + corpo_xml +
+                   "</w:body></w:document>")
+    return caminho
+
+
+def _titulo(texto):
+    return ("<w:p><w:r><w:rPr><w:b/></w:rPr><w:t>" + texto + "</w:t></w:r></w:p>")
+
+
+def _texto(t):
+    return "<w:p><w:r><w:t>" + t + "</w:t></w:r></w:p>"
+
+
+def test_peca_sem_enderecamento_bloqueia():
+    """Toda peça gerada até 23/09/2026 abria em "I. DOS FATOS": sem juízo, sem partes,
+    sem nome de ação e sem assinatura. Nada conferia isso."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        c = _docx(t, _titulo("I.\tDOS FATOS") + _texto("Nestes termos, pede deferimento."))
+        assert "C16" in codigos(conferir_editabilidade(c))
+
+
+def test_peca_com_enderecamento_e_fecho_passa():
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        c = _docx(t, _texto("Ao Juízo da Vara Cível da Comarca de Salvador/BA")
+                  + _titulo("I.\tDOS FATOS")
+                  + _texto("Nestes termos, pede deferimento."))
+        assert "C16" not in codigos(conferir_editabilidade(c))
+
+
+def test_capitulo_de_outra_tese_bloqueia():
+    """A peça que voltou do escritório trazia capítulos que não existem na tese
+    confirmada — sinal de peça montada à mão, misturando teses."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        c = _docx(t, _texto("Ao Juízo da Vara Cível da Comarca de Salvador/BA")
+                  + _titulo("I.\tDOS FATOS")
+                  + _titulo("II.\tDOS DANOS MORAIS")
+                  + _texto("Nestes termos, pede deferimento."))
+        achados = conferir_editabilidade(c, ["Dos fatos", "Da tutela de urgência"])
+        assert "C17" in codigos(achados)
+        assert "DANOS MORAIS" in " ".join(a.encontrado for a in achados)
+
+
+def test_capitulo_do_catalogo_nao_bloqueia_por_numeral_ou_caixa():
+    """O catálogo escreve "Dos fatos" e a peça imprime "I.\tDOS FATOS"."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        c = _docx(t, _texto("Ao Juízo da Vara Cível da Comarca de Salvador/BA")
+                  + _titulo("I.\tDOS FATOS")
+                  + _texto("Nestes termos, pede deferimento."))
+        assert "C17" not in codigos(conferir_editabilidade(c, ["Dos fatos"]))
+
+
 if __name__ == "__main__":
     import traceback
     testes = [(n, o) for n, o in sorted(globals().items())

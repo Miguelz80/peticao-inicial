@@ -30,6 +30,23 @@ description: >
 > Nenhuma tese redigida cita julgado: escolher jurisprudência é decisão da advogada, e
 > os capítulos indicam onde ela entra.
 
+## A peça sai do gerador. Sempre.
+
+**Nunca monte a petição à mão.** Não escreva capítulos no chat, não use a skill `docx`
+para compor o documento, não copie trechos de um modelo e cole em outro, não junte
+blocos de teses diferentes. A peça é produzida por `scripts/elaborar.py`, que lê
+`references/teses.md`, e por mais nada.
+
+Uma peça real que voltou do escritório provava o estrago: abria em "I. DOS FATOS" — sem
+juízo, sem qualificação das partes, sem nome da ação, sem assinatura —, trazia "DOS
+DANOS MORAIS" logo após os fatos num caso de plano **ativo**, e mais quatro subcapítulos
+que não existem em tese nenhuma. Foi montada à mão, misturando teses. A Conferência
+agora reprova isso (**C16** e **C17**), mas o certo é não chegar lá.
+
+Se faltar capítulo para o caso, o conserto é **acrescentar o bloco em
+`references/teses.md`** e gerar de novo — não improvisar no documento. Texto que não
+está no catálogo não foi lido por advogado.
+
 ## Como conduzir a conversa
 
 Quem opera esta skill é **advogada ou secretária do escritório, não programadora**. Ela
@@ -70,6 +87,21 @@ mesmo sendo óbvio. É a última barreira antes de uma tese errada ir a protocol
 
 **Ao entregar**, diga o que ficou pendente de olhar humano (os avisos), e lembre que o
 DOCX é editável e que a revisão é dela.
+
+### O endereçamento não se adivinha
+
+A peça abre com **juízo, comarca, qualificação das partes e nome da ação**. Três desses
+saem dos documentos; um é decisão:
+
+| | |
+|---|---|
+| **juízo** | Vara Cível ou Juizado Especial Cível do Consumidor — **pergunte**. Depende do valor da causa (o Juizado tem teto de 40 salários mínimos) e da praxe da comarca |
+| **comarca** | domicílio da parte autora, no comprovante de residência |
+| **qualificação da autora** | documento pessoal, contrato social e comprovante de residência |
+| **qualificação da ré** | razão social, CNPJ e endereço **saem do documento do caso** — carteirinha, contrato ou boleto —, nunca de cadastro |
+| **advogados e data** | procuração, e a data em que a peça será protocolada |
+
+O nome da ação é do catálogo, por tese — não se inventa nem se copia de outra peça.
 
 ### O que ela vai ter que decidir, sempre
 

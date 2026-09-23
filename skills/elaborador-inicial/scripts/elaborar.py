@@ -259,7 +259,11 @@ def elaborar(caso: Caso) -> Etapa:
         resultado or calc.Resultado(), texto_peca=texto, caminho_docx=saida,
         declarados={k: caso.dados[k] for k in
                     ("restituicao", "diferenca_mensal", "valor_pago_atual",
-                     "valor_devido_atual") if k in caso.dados})
+                     "valor_devido_atual") if k in caso.dados},
+        # Do CATÁLOGO da tese, não da peça gerada: comparar o documento com a lista de
+        # títulos que o próprio gerador acabou de produzir nunca acusaria nada. É
+        # contra o catálogo que se detecta capítulo improvisado ou vindo de outra tese.
+        titulos_da_tese=rot.titulos_do_catalogo(tese))
     etapa.conferencia = conferencia
     etapa.espelho = espelho_completo(dossie, resultado, roteiro, conferencia,
                                      caso.cliente)

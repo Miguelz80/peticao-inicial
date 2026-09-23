@@ -31,6 +31,21 @@ Regras de segurança do preenchimento:
 Texto extraído de peça real do escritório, protocolada. Vale para qualquer autogestão —
 muda a qualificação da ré e o estatuto citado.
 
+### BLOCO: 0 | Endereçamento e qualificação das partes
+@condicao: sempre
+@tipo: abertura
+@fundamentos: abre a peça. O juízo NÃO é inferido: Vara Cível ou Juizado Especial do Consumidor depende do valor da causa e da praxe da comarca, e é decisão da advogada. Razão social, CNPJ e endereço da ré saem do documento do caso, nunca de cadastro
+
+!Ao Juízo da {juizo} da Comarca de {comarca}
+
+!competente por distribuição
+
+{qualificacao_autor}, por seus advogados legalmente constituídos, conforme procuração em anexo, vem, respeitosamente, à presença de Vossa Excelência propor a presente
+
+!AÇÃO REVISIONAL DE PLANO DE SAÚDE COM PEDIDO DE TUTELA DE URGÊNCIA, EXIBIÇÃO DE DOCUMENTOS, DISTRIBUIÇÃO DINÂMICA DO ÔNUS DA PROVA E RESTITUIÇÃO DE VALORES PAGOS A MAIOR
+
+em face de {qualificacao_re}, pelos fatos e fundamentos a seguir expostos.
+
 ### BLOCO: I | Dos fatos
 @condicao: sempre
 @fundamentos: vínculo longo, reajustes sucessivos, opacidade da metodologia
@@ -165,6 +180,16 @@ Diante do exposto, requer:
 Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
 
 
+### BLOCO: 999 | Fecho e assinaturas
+@condicao: sempre
+@tipo: fecho
+@fundamentos: encerra a peça. Sem isto o documento terminava no valor da causa, sem local, data nem assinatura — e petição sem assinatura não se protocola
+Nestes termos, pede deferimento.
+
+{data_peca}
+
+={advogados}
+
 ## TESE: EMPRESARIAL_FAMILIAR
 
 Contratante é pessoa jurídica sem atividade econômica real, criada ou mantida para
@@ -175,6 +200,21 @@ Texto e julgados extraídos de peça real do escritório (modelo empresarial fam
 atualizado). Dois caminhos, excludentes entre si: **plano ativo** pede tutela de
 urgência e exibição de documentos; **plano cancelado** pede rescisão indireta e danos
 morais, e não pede tutela.
+
+### BLOCO: 0 | Endereçamento e qualificação das partes
+@condicao: sempre
+@tipo: abertura
+@fundamentos: abre a peça. O juízo NÃO é inferido: Vara Cível ou Juizado Especial do Consumidor depende do valor da causa e da praxe da comarca, e é decisão da advogada. Razão social, CNPJ e endereço da ré saem do documento do caso, nunca de cadastro
+
+!Ao Juízo da {juizo} da Comarca de {comarca}
+
+!competente por distribuição
+
+{qualificacao_autor}, por seus advogados legalmente constituídos, conforme procuração em anexo, vem, respeitosamente, à presença de Vossa Excelência propor a presente
+
+!AÇÃO REVISIONAL DE PLANO DE SAÚDE COM PEDIDO DE DANOS MATERIAIS CUMULADOS COM PEDIDO DE ANTECIPAÇÃO DE TUTELA
+
+em face de {qualificacao_re}, pelos fatos e fundamentos a seguir expostos.
 
 ### BLOCO: I | Síntese processual
 @condicao: sempre
@@ -403,11 +443,36 @@ Dessa forma, inexistindo impedimento legal e considerando a ampla adoção dessa
 @fundamentos: art. 292 do CPC. Na peça real o valor da causa é o próprio valor do pedido de restituição em dobro — confirmar com a advogada se é a regra (pergunta A6)
 Atribui-se à causa o valor de **{valor_da_causa}**, em conformidade com o art. 292 do Código de Processo Civil.
 
+### BLOCO: 999 | Fecho e assinaturas
+@condicao: sempre
+@tipo: fecho
+@fundamentos: encerra a peça. Sem isto o documento terminava no valor da causa, sem local, data nem assinatura — e petição sem assinatura não se protocola
+Nestes termos, pede deferimento.
+
+{data_peca}
+
+={advogados}
+
 ## TESE: COLETIVO_POR_ADESAO
 
 Texto extraído de peça real do escritório, protocolada — pessoa física aderente a plano
 coletivo por adesão via administradora de benefícios. As ementas vêm da própria peça;
 o que começa com `>` sai recuado e em itálico, no padrão do escritório para julgados.
+
+### BLOCO: 0 | Endereçamento e qualificação das partes
+@condicao: sempre
+@tipo: abertura
+@fundamentos: abre a peça. O juízo NÃO é inferido: Vara Cível ou Juizado Especial do Consumidor depende do valor da causa e da praxe da comarca, e é decisão da advogada. Razão social, CNPJ e endereço da ré saem do documento do caso, nunca de cadastro
+
+!Ao Juízo da {juizo} da Comarca de {comarca}
+
+!competente por distribuição
+
+{qualificacao_autor}, por seus advogados legalmente constituídos, conforme procuração em anexo, vem, respeitosamente, à presença de Vossa Excelência propor a presente
+
+!AÇÃO REVISIONAL DE PLANO DE SAÚDE COM PEDIDO DE TUTELA DE URGÊNCIA C/C REPETIÇÃO DE INDÉBITO
+
+em face de {qualificacao_re}, pelos fatos e fundamentos a seguir expostos.
 
 ### BLOCO: I | Dos fatos
 @condicao: sempre
@@ -593,12 +658,37 @@ Diante do exposto, requer:
 Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
 
 
+### BLOCO: 999 | Fecho e assinaturas
+@condicao: sempre
+@tipo: fecho
+@fundamentos: encerra a peça. Sem isto o documento terminava no valor da causa, sem local, data nem assinatura — e petição sem assinatura não se protocola
+Nestes termos, pede deferimento.
+
+{data_peca}
+
+={advogados}
+
 ## TESE: INDIVIDUAL_COMUM
 @revisar: texto redigido a partir dos fundamentos documentados, NÃO extraído de peça real do escritório. Gera peça completa, mas precisa de leitura da advogada antes do primeiro protocolo. Substituir assim que houver uma peça dessa tese.
 
 Plano individual ou familiar contratado diretamente com a operadora. É a tese mais
 simples das quatro: o plano já é regulado, o teto da ANS já se aplica por direito
 próprio, e o reajuste acima dele é abusivo sem necessidade de equiparação.
+
+### BLOCO: 0 | Endereçamento e qualificação das partes
+@condicao: sempre
+@tipo: abertura
+@fundamentos: abre a peça. O juízo NÃO é inferido: Vara Cível ou Juizado Especial do Consumidor depende do valor da causa e da praxe da comarca, e é decisão da advogada. Razão social, CNPJ e endereço da ré saem do documento do caso, nunca de cadastro
+
+!Ao Juízo da {juizo} da Comarca de {comarca}
+
+!competente por distribuição
+
+{qualificacao_autor}, por seus advogados legalmente constituídos, conforme procuração em anexo, vem, respeitosamente, à presença de Vossa Excelência propor a presente
+
+!AÇÃO REVISIONAL DE PLANO DE SAÚDE COM PEDIDO DE TUTELA DE URGÊNCIA C/C REPETIÇÃO DE INDÉBITO C/C EXIBIÇÃO DE DOCUMENTOS E DISTRIBUIÇÃO DINÂMICA DO ÔNUS DA PROVA
+
+em face de {qualificacao_re}, pelos fatos e fundamentos a seguir expostos.
 
 ### BLOCO: I | Dos fatos
 @condicao: sempre
@@ -691,4 +781,14 @@ Diante do exposto, requer:
 @condicao: sempre
 @fundamentos: art. 292, §3º, do CPC quando por estimativa. A fórmula do escritório ainda não está fechada (pergunta A6) — o valor é informado, não calculado pela skill
 Dá-se à causa o valor de **{valor_da_causa}**, fixado por estimativa, nos termos do art. 292, §3º, do Código de Processo Civil, considerando o proveito econômico pretendido na demanda.
+
+### BLOCO: 999 | Fecho e assinaturas
+@condicao: sempre
+@tipo: fecho
+@fundamentos: encerra a peça. Sem isto o documento terminava no valor da causa, sem local, data nem assinatura — e petição sem assinatura não se protocola
+Nestes termos, pede deferimento.
+
+{data_peca}
+
+={advogados}
 

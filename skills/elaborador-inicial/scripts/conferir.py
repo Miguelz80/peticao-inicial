@@ -261,7 +261,31 @@ FONTE_PADRAO = "Segoe UI"
 TAMANHO_IMAGEM_DE_TABELA = 60_000     # bytes; acima disso não é ícone nem timbre
 
 
-def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
+def _chave_titulo(t: str) -> str:
+    """Compara título ignorando numeral, caixa, acento e pontuação."""
+    import unicodedata
+    t = re.sub(r"^[IVXLC]+[.\s\t-]*", "", t.strip())
+    sem = "".join(c for c in unicodedata.normalize("NFD", t)
+                  if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9 ]", "", sem.lower()).strip()
+
+
+def _titulos_numerados(doc: str) -> list[str]:
+    """Os títulos de capítulo da peça, como o gerador os escreve: numeral romano,
+    tabulação e o título, tudo em negrito."""
+    titulos = []
+    for par in re.findall(r"<w:p[ >].*?</w:p>", doc, re.S):
+        if "<w:b/>" not in par:
+            continue
+        texto = "".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", par)).strip()
+        if re.match(r"^[IVXLC]+\.\s*\t?", texto):
+            titulos.append(texto)
+    return titulos
+
+
+def conferir_editabilidade(caminho_docx: str,
+                           titulos_da_tese: list[str] | None = None,
+                           ) -> list[Achado]:
     """O requisito não negociável: a colega precisa conseguir corrigir qualquer valor
     no Word. Tabela em imagem, proteção ou campo travado quebram isso."""
     achados: list[Achado] = []
@@ -322,6 +346,43 @@ def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
                 esperado="todos os capítulos redigidos",
                 encontrado=f"{doc.count('⟦PENDENTE')} marcador(es)"))
 
+        # C16 — peça sem endereçamento ou sem assinatura. Toda petição gerada até aqui
+        # abria em "I. DOS FATOS": sem juízo, sem qualificação das partes, sem nome de
+        # ação e sem assinatura. Passava em tudo porque nada conferia se o documento
+        # abre e fecha como petição.
+        texto_visivel = " ".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", doc))
+        # O escritório escreve tanto "Ao Juízo" quanto "AO JUÍZO", conforme a peça.
+        visivel_min = texto_visivel.lower()
+        if "ao juízo" not in visivel_min and "excelentíssimo" not in visivel_min:
+            achados.append(Achado(
+                "C16", BLOQUEIA, "document.xml",
+                "a peça não tem endereçamento — começa sem juízo, sem qualificação "
+                "das partes e sem nome da ação",
+                esperado="abertura com “Ao Juízo da … Comarca de …”",
+                encontrado=texto_visivel[:60].strip() or "(vazio)"))
+        if "pede deferimento" not in visivel_min:
+            achados.append(Achado(
+                "C16", BLOQUEIA, "document.xml",
+                "a peça não tem fecho — termina sem local, data nem assinatura",
+                esperado="“Nestes termos, pede deferimento”, data e OAB",
+                encontrado="(ausente)"))
+
+        # C17 — capítulo que não pertence à tese confirmada. A peça real que voltou do
+        # escritório trazia "DOS DANOS MORAIS" logo após os fatos num caso de plano
+        # ATIVO, mais quatro subcapítulos que não existem em nenhuma tese — sinal de
+        # peça montada à mão, misturando teses, em vez de gerada pelo catálogo.
+        if titulos_da_tese is not None:
+            permitidos = {_chave_titulo(t) for t in titulos_da_tese}
+            intrusos = sorted({t for t in _titulos_numerados(doc)
+                               if _chave_titulo(t) not in permitidos})
+            if intrusos:
+                achados.append(Achado(
+                    "C17", BLOQUEIA, "document.xml",
+                    "há capítulo que não pertence à tese confirmada — peça montada à "
+                    "mão ou mistura de teses",
+                    esperado="somente capítulos do catálogo da tese",
+                    encontrado="; ".join(intrusos[:4])))
+
         # C14 — fonte fora do padrão do escritório.
         fontes = set(re.findall(r'w:ascii="([^"]+)"', doc))
         estranhas = {f for f in fontes if not f.startswith("Segoe UI")}
@@ -337,12 +398,13 @@ def conferir_editabilidade(caminho_docx: str) -> list[Achado]:
 
 def conferir(res: Resultado, texto_peca: str = "", caminho_docx: str = "",
              declarados: dict[str, str] | None = None,
-             formula_valor_da_causa: str = "", valor_da_causa: str = "") -> Conferencia:
+             formula_valor_da_causa: str = "", valor_da_causa: str = "",
+             titulos_da_tese: list[str] | None = None) -> Conferencia:
     c = Conferencia()
     c.achados += conferir_calculo(res)
     if texto_peca:
         c.achados += conferir_peca(texto_peca, res, declarados,
                                    formula_valor_da_causa, valor_da_causa)
     if caminho_docx:
-        c.achados += conferir_editabilidade(caminho_docx)
+        c.achados += conferir_editabilidade(caminho_docx, titulos_da_tese)
     return c
