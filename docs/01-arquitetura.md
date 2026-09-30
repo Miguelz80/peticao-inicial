@@ -40,7 +40,7 @@ peticao-inicial/
 
 ### Por que assim
 
-- **`skills/elaborador-inicial/` isolado do resto.** O que a colega usa no Claude
+- **`skills/peticao-inicial/` isolado do resto.** O que a colega usa no Claude
   Desktop é só essa pasta. `docs/` e `tests/` são do desenvolvimento e não poluem o
   contexto da skill em produção.
 - **`SKILL.md` curto, `references/` sob demanda.** O `SKILL.md` carrega em toda

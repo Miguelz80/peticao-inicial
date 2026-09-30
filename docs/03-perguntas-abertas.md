@@ -128,7 +128,7 @@ Só a lista de perguntas, ou também um rascunho parcial (fatos + cálculo já f
 a operadora adiantar? Risco: rascunho parcial vira peça protocolada por engano.
 
 **C5. Nome e instalação da skill.**
-`elaborador-inicial` fica no repositório em `skills/elaborador-inicial/`. Como ela
+`elaborador-inicial` fica no repositório em `skills/peticao-inicial/`. Como ela
 chega no Claude Desktop da colega — pelo mesmo caminho das skills atuais do escritório?
 
 

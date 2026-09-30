@@ -2,7 +2,7 @@
 
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
-                      / "skills" / "elaborador-inicial" / "scripts"))
+                      / "skills" / "peticao-inicial" / "scripts"))
 
 from classificar import (  # noqa: E402
     Planilha, Fato, normalizar, classificar_planilha, decidir_eixo_a,

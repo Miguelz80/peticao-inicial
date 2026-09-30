@@ -22,7 +22,7 @@ para o processo — se "não sei" tiver atrito, quem opera chuta para destravar,
 chute vira tese na peça.
 
 **Regra é dado, não código.** Índices ANS, natureza das operadoras, texto das teses e
-paleta das tabelas ficam em `skills/elaborador-inicial/references/`, editáveis pela
+paleta das tabelas ficam em `skills/peticao-inicial/references/`, editáveis pela
 advogada. Nada disso é hardcoded em `.py`.
 
 **Nunca versionar documento de caso real.** O `.gitignore` bloqueia `.pdf`, `.docx` e

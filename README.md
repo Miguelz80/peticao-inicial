@@ -1,4 +1,4 @@
-# elaborador-inicial
+# peticao-inicial
 
 Skill da **BM Advocacia** (Borges Macedo Advocacia e Consultoria — Salvador/BA) que
 recebe os documentos de um caso de saúde suplementar e devolve uma **petição inicial
@@ -25,7 +25,7 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 
 | # | Módulo | Papel | Status |
 |---|--------|-------|--------|
-| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/elaborador-inicial/scripts/`, 31 testes |
+| 1 | **Classificador** | Decide o regime de cálculo (pronto × bruto) e a tese/modelo aplicável; pergunta quando houver dúvida | **Implementado** — `skills/peticao-inicial/scripts/`, 31 testes |
 | 2 | **Calculador atuarial** | Monta a tabela de reajuste devido aplicando os índices ANS ano a ano | **Implementado** — `scripts/calcular_reajuste.py`, 17 testes |
 | 3 | **Gerador de petição** | Preenche o modelo DOCX certo com os dados do caso | **Implementado** — `scripts/gerar_peticao.py` + `scripts/roteiro.py`, 50 testes |
 | — | **Leitor de tabela** | Lê a tabela de cálculo do texto do PDF e devolve as competências mês a mês | **Implementado** — `scripts/ler_tabela.py`, 11 testes |
@@ -35,7 +35,7 @@ tipo de peça, isso deve ser apenas **mencionado**, nunca implementado neste rep
 A ordem é deliberada: o Classificador é o módulo de maior risco (uma tese errada numa
 peça protocolada é o pior cenário do projeto) e é validado primeiro.
 
-O texto jurídico de cada tese fica em `skills/elaborador-inicial/references/teses.md` —
+O texto jurídico de cada tese fica em `skills/peticao-inicial/references/teses.md` —
 editável pela advogada, sem tocar em código. As quatro teses geram petição completa, com
 procedências distintas: **autogestão** e **coletivo por adesão** vieram de peças reais
 protocoladas; **empresarial familiar** e **individual comum** foram redigidas a partir

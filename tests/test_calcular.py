@@ -3,7 +3,7 @@
 import sys, pathlib
 from decimal import Decimal
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
-                      / "skills" / "elaborador-inicial" / "scripts"))
+                      / "skills" / "peticao-inicial" / "scripts"))
 
 import calcular_reajuste  # noqa: E402
 from calcular_reajuste import (  # noqa: E402

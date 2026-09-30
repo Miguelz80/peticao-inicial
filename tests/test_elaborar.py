@@ -3,7 +3,7 @@
 import sys, pathlib, tempfile, os
 from decimal import Decimal
 RAIZ = pathlib.Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(RAIZ / "skills" / "elaborador-inicial" / "scripts"))
+sys.path.insert(0, str(RAIZ / "skills" / "peticao-inicial" / "scripts"))
 sys.path.insert(0, str(RAIZ / "tests"))
 
 import classificar as cls  # noqa: E402

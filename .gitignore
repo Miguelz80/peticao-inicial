@@ -14,7 +14,7 @@
 !tests/fixtures/**/anon-*.docx
 
 # Pacote da skill: gerado por ./empacotar.sh, não versionado.
-/elaborador-inicial.zip
+/peticao-inicial.zip
 
 __pycache__/
 *.py[cod]
@@ -24,4 +24,4 @@ venv/
 .DS_Store
 
 # Gerado pelo empacotar.sh a cada build.
-/skills/elaborador-inicial/VERSAO
+/skills/peticao-inicial/VERSAO

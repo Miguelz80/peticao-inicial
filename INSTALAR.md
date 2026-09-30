@@ -7,7 +7,7 @@ uso é conversa normal.
 
 ## Etapa 1 — Pegar o arquivo da skill
 
-O arquivo chama **`elaborador-inicial.zip`**. Salve no computador, em qualquer pasta.
+O arquivo chama **`peticao-inicial.zip`**. Salve no computador, em qualquer pasta.
 Não precisa descompactar.
 
 > Se ele não estiver com você, quem cuida do repositório gera com `./empacotar.sh`.
@@ -19,8 +19,8 @@ Não precisa descompactar.
 1. Abra o **Claude** (aplicativo no computador ou `claude.ai` no navegador).
 2. Vá em **Configurações** (o ícone de engrenagem, ou seu nome no canto).
 3. Procure a seção de **Recursos / Capabilities**, e dentro dela **Skills**.
-4. Clique em **enviar** ou **adicionar skill** e escolha o `elaborador-inicial.zip`.
-5. Confirme que **"Elaborador de Petição Inicial"** aparece na lista e está **ligada**.
+4. Clique em **enviar** ou **adicionar skill** e escolha o `peticao-inicial.zip`.
+5. Confirme que **`peticao-inicial`** aparece na lista e está **ligada**.
 
 Ainda nas configurações, deixe **ligada a execução de código** (pode aparecer como
 *análise de dados*, *code execution* ou *criação e análise de arquivos*). A skill faz o
@@ -29,6 +29,12 @@ cálculo e monta o DOCX rodando um programa — sem isso ela não funciona.
 > Os nomes dos menus mudam de versão para versão. Se algum não estiver escrito
 > exatamente assim, procure o mais parecido. O que importa é: **Skills → enviar o zip**,
 > e **execução de código ligada**.
+
+> **Atualizando uma versão já instalada?** Envie o zip pelo **mesmo** plugin/skill
+> que já está lá, com o mesmo nome (`peticao-inicial`). Instalar com nome diferente
+> cria uma **segunda** skill e a antiga continua ativa — e aí não há como saber qual
+> das duas respondeu. O relatório abre com a versão (`[skill: DD/MM/AAAA (commit …)]`);
+> se ela não bater com a que você acabou de enviar, a antiga é que atendeu.
 
 ---
 
@@ -122,7 +128,7 @@ chutar. Quando der, peça o demonstrativo em planilha ou em PDF de texto.
 
 | O que aparece | O que fazer |
 |---|---|
-| A skill não é acionada sozinha | Escreva "usa a skill elaborador-inicial" no começo |
+| A skill não é acionada sozinha | Escreva "usa a skill peticao-inicial" no começo |
 | "não consegui ler competência e valor pago" | O demonstrativo veio escaneado. Peça um legível, ou passe os valores na conversa |
 | "documento não liberado, corrija os bloqueios" | A conferência achou divergência entre a peça e o cálculo. A mensagem diz qual — não force |
 | A petição sai sem timbre | Faltou anexar o modelo da Etapa 3 |

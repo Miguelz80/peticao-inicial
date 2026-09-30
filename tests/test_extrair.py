@@ -2,7 +2,7 @@
 
 import sys, pathlib, tempfile, os
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]
-                      / "skills" / "elaborador-inicial" / "scripts"))
+                      / "skills" / "peticao-inicial" / "scripts"))
 
 from extrair_evidencias import (  # noqa: E402
     identificar_papel, _linha_de_cabecalho, extrair,

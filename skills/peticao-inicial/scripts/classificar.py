@@ -1,4 +1,4 @@
-"""Classificador do elaborador-inicial — Eixo A (regime de cálculo) e Eixo B (tese).
+"""Classificador do peticao-inicial — Eixo A (regime de cálculo) e Eixo B (tese).
 
 Trabalha sobre evidências já extraídas (ver extrair_evidencias.py), nunca sobre
 arquivos. Isso mantém a decisão testável sem depender de leitura de PDF/XLSX.

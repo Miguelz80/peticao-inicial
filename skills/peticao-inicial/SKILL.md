@@ -1,5 +1,5 @@
 ---
-name: elaborador-inicial
+name: peticao-inicial
 description: >
   Skill da BM Advocacia que recebe os documentos de um caso de saúde suplementar
   (planilha de cálculo, faturamento ou demonstrativo da operadora, transcrição de
